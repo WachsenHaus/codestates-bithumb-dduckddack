@@ -1,0 +1,64 @@
+@keyframes ask-effect {
+  from {
+    opacity: 1;
+    /* background-color: blue; */
+  }
+  to {
+    opacity: 0.1;
+    /* background-color: white; */
+  }
+}
+
+@keyframes bid-effect {
+  from {
+    opacity: 1;
+    /* background-color: red; */
+  }
+  to {
+    opacity: 0.1;
+    /* background-color: white; */
+  }
+}
+
+@keyframes up-effect {
+  0% {
+    /* opacity: 0; */
+    /* border-color: red; */
+  }
+  100% {
+    opacity: 0;
+    /* border-color: white; */
+  }
+}
+
+@keyframes down-effect {
+  0% {
+    /* opacity: 0; */
+    /* border-color: blue; */
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0);
+
+    /* border-color: white; */
+  }
+}
+
+.askEffect {
+  animation: ask-effect 0.2s forwards;
+}
+
+.bidEffect {
+  animation: bid-effect 0.2s forwards;
+}
+.upEffect {
+  animation: up-effect 0.2s;
+}
+
+.downEffect {
+  animation: down-effect 0.2s;
+}
+
+.effect {
+  animation: down-effect 0.2s forwards;
+}
