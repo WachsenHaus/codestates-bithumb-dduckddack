@@ -5,6 +5,7 @@ import React from 'react';
 import CI from '../../asset/img/sp_main_new.png';
 import bg_main from '../../asset/img/bg_main.png';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -34,7 +35,36 @@ const Header = () => {
             navigate('/');
           }}
         />
-        <Box sx={{ flexGrow: 1 }} />
+        <Box sx={{ flexGrow: 1 }}>
+          <button
+            onClick={async () => {
+              try {
+                const result = await axios.get('http://54.226.150.41:8080/');
+                console.log(result);
+              } catch (err) {
+                console.log(err);
+              }
+            }}
+          >
+            get요청
+          </button>
+          <button
+            onClick={async () => {
+              try {
+                const result = await axios.post('http://54.226.150.41:8080/', {
+                  params: {
+                    test: '테스트 메시지입니다.',
+                  },
+                });
+                console.log(result);
+              } catch (err) {
+                console.log(err);
+              }
+            }}
+          >
+            post요청
+          </button>
+        </Box>
       </Toolbar>
     </AppBar>
   );
