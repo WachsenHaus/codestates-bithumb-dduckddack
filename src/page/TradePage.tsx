@@ -1,16 +1,14 @@
 import { Box } from '@mui/material';
-import classNames from 'classnames';
 import React from 'react';
 import CoinBar from '../components/CoinBar/CoinBar';
-import Header from '../components/Header/Header';
 import MainContent from '../components/MainContent';
 import Orderbook from '../components/Orderbook/Orderbook';
 import Ticker from '../components/Ticker/Ticker';
 import Transaction from '../components/Transaction/Transaction';
 import useChangeWebTitle from '../hooks/useChangeWebTitle';
+import useInitialize from '../hooks/useInitialize';
 import useResetObserverDrawData from '../hooks/useResetDrawData';
 import { useGenerateBitThumbSocket } from '../hooks/useWebSocket';
-import useInitialize from '../hooks/useInitialize';
 
 const TradePage = () => {
   useInitialize();
@@ -23,25 +21,15 @@ const TradePage = () => {
 
   return (
     <>
-      <Box
-        className={classNames(`grid grid-cols-12 h-screen`)}
-        style={{
-          gridTemplateRows: 'auto 1fr',
-        }}
-      >
-        <Box gridColumn={`span 12`}>
-          <Header />
-        </Box>
-        <Box gridColumn={`span 7`}>
-          <CoinBar />
-          <MainContent />
-          <Ticker />
-        </Box>
+      <Box gridColumn={`span 7`}>
+        <CoinBar />
+        <MainContent />
+        <Ticker />
+      </Box>
 
-        <Box gridColumn={`span 5`}>
-          <Orderbook />
-          <Transaction />
-        </Box>
+      <Box gridColumn={`span 5`}>
+        <Orderbook />
+        <Transaction />
       </Box>
     </>
   );

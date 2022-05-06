@@ -6,14 +6,18 @@ import CI from '../../asset/img/sp_main_new.png';
 import bg_main from '../../asset/img/bg_main.png';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import AvatarWrapper from '../Avatar/AvatarWrapper';
+import HeaderSignIn from './HeaderSignIn';
+import HedaerNavTab from './HedaerNavTab';
 
 const Header = () => {
   const navigate = useNavigate();
+  const isLogin = false;
+  // 로그인된 사용자 정보를 가져온다.
   return (
     <AppBar
       position="static"
       sx={{
-        width: '100vw',
         backgroundImage: `url(${bg_main})`,
       }}
     >
@@ -35,35 +39,36 @@ const Header = () => {
             navigate('/');
           }}
         />
-        <Box sx={{ flexGrow: 1 }}>
+        <Box>
+          <HedaerNavTab />
+        </Box>
+        <Box className={'absolute right-0 flex-grow'}>
           <button
             onClick={async () => {
               try {
-                const result = await axios.get('http://54.226.150.41:8080/');
+                const result = await axios.get('/user/test');
                 console.log(result);
               } catch (err) {
                 console.log(err);
               }
             }}
           >
-            get요청
+            회원get요청
           </button>
           <button
             onClick={async () => {
               try {
-                const result = await axios.post('http://54.226.150.41:8080/', {
-                  params: {
-                    test: '테스트 메시지입니다.',
-                  },
-                });
+                const result = await axios.get('/chatting/test');
                 console.log(result);
               } catch (err) {
                 console.log(err);
               }
             }}
           >
-            post요청
+            웹켓get요청
           </button>
+
+          {isLogin ? <AvatarWrapper /> : <HeaderSignIn />}
         </Box>
       </Toolbar>
     </AppBar>

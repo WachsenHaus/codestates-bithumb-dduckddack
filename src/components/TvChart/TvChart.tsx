@@ -9,7 +9,7 @@ const TvChart = () => {
   const [wrapperRef, candleRef] = useGenerateChart();
   useParsingAndUpdateWebSocketChart(candleRef);
 
-  return <div className={classNames(`w-11/12 h-full`)} ref={wrapperRef} />;
+  return <div className={classNames(`w-11/12`)} ref={wrapperRef} />;
 };
 
 export default React.memo(TvChart);
