@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
-import React from 'react';
+import classNames from 'classnames';
+import React, { useEffect, useRef } from 'react';
 import CoinBar from '../components/CoinBar/CoinBar';
 import MainContent from '../components/MainContent';
 import Orderbook from '../components/Orderbook/Orderbook';
@@ -21,16 +22,15 @@ const TradePage = () => {
 
   return (
     <>
-      <Box gridColumn={`span 7`}>
+      <div className={classNames(`col-span-9`)}>
         <CoinBar />
         <MainContent />
         <Ticker />
-      </Box>
-
-      <Box gridColumn={`span 5`}>
+      </div>
+      <div className={classNames(`col-span-3`)}>
         <Orderbook />
         <Transaction />
-      </Box>
+      </div>
     </>
   );
 };

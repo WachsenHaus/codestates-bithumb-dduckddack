@@ -4,12 +4,22 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useRecoilValue, useRecoilState, useRecoilValueLoadable } from 'recoil';
 import { atomSelectChartSetup } from '../atom/selectChart.atom';
-import { atomWsStBar, iStBar, atomDrawStBars, selectorDrawStBars } from '../atom/tvChart.atom';
+import {
+  atomWsStBar,
+  iStBar,
+  atomDrawStBars,
+  selectorDrawStBars,
+} from '../atom/tvChart.atom';
 
 const CONST_KR_UTC = 9 * 60 * 60 * 1000;
 
-const useParsingAndUpdateWebSocketChart = (candleRef: React.MutableRefObject<ISeriesApi<'Candlestick'> | null | undefined>) => {
+const useParsingAndUpdateWebSocketChart = (
+  candleRef: React.MutableRefObject<
+    ISeriesApi<'Candlestick'> | null | undefined
+  >
+) => {
   // websocket stbar
+  const [pause, setPause] = useState(false);
   const wsStBar = useRecoilValue(atomWsStBar);
   const [currentBar, setCurrentBar] = useState<iStBar | undefined>(undefined);
   const { chartTime } = useRecoilValue(atomSelectChartSetup);
@@ -54,13 +64,15 @@ const useParsingAndUpdateWebSocketChart = (candleRef: React.MutableRefObject<ISe
    * 웹소켓으로 들어오는 데이터는 updae
    */
   useEffect(() => {
-    currentBar && candleRef.current?.update(currentBar);
+    pause === false && currentBar && candleRef.current?.update(currentBar);
+    // currentBar && candleRef.current?.update(currentBar);
   }, [currentBar]);
 
   /**
    * 주기적으로 변경하는 차트데이터는 set
    */
   useEffect(() => {
+    // pause && drawStBars && candleRef.current?.setData(drawStBars);
     drawStBars && candleRef.current?.setData(drawStBars);
   }, [drawStBars]);
 
@@ -70,8 +82,11 @@ const useParsingAndUpdateWebSocketChart = (candleRef: React.MutableRefObject<ISe
   useEffect(() => {
     if (wsStBar) {
       const { o, t, e } = wsStBar;
-      const currentTime = moment(t, 'YYYYMMDDHHmmss').utc().valueOf() as UTCTimestamp;
-      const int = ((((currentTime + CONST_KR_UTC) / 1000 / divideTime) | 0) * divideTime) as UTCTimestamp;
+      const currentTime = moment(t, 'YYYYMMDDHHmmss')
+        .utc()
+        .valueOf() as UTCTimestamp;
+      const int = ((((currentTime + CONST_KR_UTC) / 1000 / divideTime) | 0) *
+        divideTime) as UTCTimestamp;
       const nextTime = int;
       if (currentBar === undefined) {
         setCurrentBar({
@@ -85,14 +100,22 @@ const useParsingAndUpdateWebSocketChart = (candleRef: React.MutableRefObject<ISe
         const cloneStBar = _.clone(currentBar);
         if (currentBar) {
           cloneStBar.close = e;
-          cloneStBar.high = Math.max(Number(cloneStBar?.high), Number(e)).toString();
-          cloneStBar.low = Math.min(Number(cloneStBar?.low), Number(e)).toString();
+          cloneStBar.high = Math.max(
+            Number(cloneStBar?.high),
+            Number(e)
+          ).toString();
+          cloneStBar.low = Math.min(
+            Number(cloneStBar?.low),
+            Number(e)
+          ).toString();
           cloneStBar.open = o;
         }
         setCurrentBar(cloneStBar);
       }
     }
   }, [wsStBar]);
+
+  return [pause, setPause] as const;
 };
 
 export default useParsingAndUpdateWebSocketChart;

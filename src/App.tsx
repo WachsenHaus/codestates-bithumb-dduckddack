@@ -7,8 +7,10 @@ import { StyledEngineProvider, CssBaseline, Box } from '@mui/material';
 import { LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DebugObserver from './RecoilDebug';
-import SignModal from './components/Modal/SignModal';
 import RoutePage from './page/RoutePage';
+import SignModal from './components/Modal/SignModal';
+// import SignModal from './components/Modal/SignModal';
+// import RoutePage from './page/RoutePage';
 
 // import { Home } from 'grommet-icons';
 // <Route path={`:coinName`} element={<TradePage />} />

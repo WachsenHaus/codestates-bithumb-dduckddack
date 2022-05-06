@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AvatarWrapper from '../Avatar/AvatarWrapper';
 import HeaderSignIn from './HeaderSignIn';
-import HedaerNavTab from './HedaerNavTab';
+import HeaderNavTab from './HeaderNavTab';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -40,34 +40,9 @@ const Header = () => {
           }}
         />
         <Box>
-          <HedaerNavTab />
+          <HeaderNavTab />
         </Box>
         <Box className={'absolute right-0 flex-grow'}>
-          <button
-            onClick={async () => {
-              try {
-                const result = await axios.get('/user/test');
-                console.log(result);
-              } catch (err) {
-                console.log(err);
-              }
-            }}
-          >
-            회원get요청
-          </button>
-          <button
-            onClick={async () => {
-              try {
-                const result = await axios.get('/chatting/test');
-                console.log(result);
-              } catch (err) {
-                console.log(err);
-              }
-            }}
-          >
-            웹켓get요청
-          </button>
-
           {isLogin ? <AvatarWrapper /> : <HeaderSignIn />}
         </Box>
       </Toolbar>

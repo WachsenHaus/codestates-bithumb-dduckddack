@@ -8,9 +8,18 @@ const useGenerateChart = () => {
   const chartRef = useRef<IChartApi | null | undefined>();
 
   const onResize = useCallback(
-    (chart: React.MutableRefObject<IChartApi | null | undefined>, ref: React.MutableRefObject<HTMLDivElement | null>) => () => {
-      chart.current && ref.current && chart.current.resize(ref?.current?.offsetWidth, 340);
-    },
+    (
+        chart: React.MutableRefObject<IChartApi | null | undefined>,
+        ref: React.MutableRefObject<HTMLDivElement | null>
+      ) =>
+      () => {
+        chart.current &&
+          ref.current &&
+          chart.current.resize(
+            ref?.current?.offsetWidth,
+            ref?.current?.offsetHeight
+          );
+      },
     []
   );
 
@@ -18,6 +27,7 @@ const useGenerateChart = () => {
     if (wrapperRef.current) {
       chartRef.current = createChart(wrapperRef.current, {
         height: 340,
+
         crosshair: {
           mode: 0,
         },
@@ -26,7 +36,6 @@ const useGenerateChart = () => {
           borderColor: 'rgba(197, 203, 206, 0.8)',
         },
       });
-
       chartRef.current.applyOptions({
         timeScale: {
           timeVisible: true,
@@ -57,7 +66,7 @@ const useGenerateChart = () => {
     };
   }, [wrapperRef]);
 
-  return [wrapperRef, candleChart] as const;
+  return [wrapperRef, candleChart, chartRef] as const;
 };
 
 export default useGenerateChart;
