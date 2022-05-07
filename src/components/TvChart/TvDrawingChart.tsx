@@ -1,3 +1,4 @@
+import { width } from '@mui/material/node_modules/@mui/system';
 import classNames from 'classnames';
 import { LogicalRange } from 'lightweight-charts';
 import { useRef, useState, useEffect } from 'react';
@@ -23,6 +24,34 @@ const TvDrawingChart = () => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [priceRange, setPriceRange] = useState();
   const [drawingMode, setDrawingMode] = useState(false);
+  const [moveAxis, setMoveAxis] = useState<{
+    x: any;
+    y: any;
+  }>({
+    x: 0,
+    y: 0,
+  });
+
+  const [copyDraw, setCopyDraw] = useState<
+    Array<{
+      x: any;
+      y: any;
+      originX: any;
+      originY: any;
+      rateX: any;
+      rateY: any;
+    }>
+  >([]);
+  const [drawArr, setDrawArr] = useState<
+    Array<{
+      x: any;
+      y: any;
+      originX: any;
+      originY: any;
+      rateX: any;
+      rateY: any;
+    }>
+  >([]);
 
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
     e.persist();
@@ -56,12 +85,27 @@ const TvDrawingChart = () => {
 
   const drawing = (e: any) => {
     const { offsetX, offsetY } = e.nativeEvent;
-    if (ctx) {
+    if (ctx && canvasRef.current) {
       if (!isDrawing) {
         ctx.beginPath();
         ctx.moveTo(offsetX, offsetY);
+        setMoveAxis({
+          x: offsetX,
+          y: offsetY,
+        });
       } else {
         ctx.lineTo(offsetX, offsetY);
+        const prevCopyDraw = JSON.parse(JSON.stringify(copyDraw));
+        prevCopyDraw.push({
+          x: offsetX,
+          y: offsetY,
+          originX: moveAxis.x,
+          originY: moveAxis.y,
+          rateX: offsetX / canvasRef.current?.clientWidth,
+          rateY: offsetY / canvasRef.current?.clientHeight,
+        });
+
+        setCopyDraw(prevCopyDraw);
         ctx.stroke();
       }
     }
@@ -102,6 +146,7 @@ const TvDrawingChart = () => {
       <div
         className={'border-2 hover:cursor-pointer'}
         onClick={(e) => {
+          // 트레이딩뷰 좌표 기억
           if (candleRef.current) {
             const range = chartRef.current?.timeScale().getVisibleRange();
             const range2 = chartRef.current
@@ -114,9 +159,72 @@ const TvDrawingChart = () => {
               setRecordRange(range2);
             }
           }
+
+          // 드로잉한 그림 기억
+          if (canvasRef.current) {
+            const ctx = canvasRef.current.getContext('2d');
+            if (ctx) {
+              ctx.clearRect(
+                0,
+                0,
+                canvasRef.current.clientWidth,
+                canvasRef.current.clientHeight
+              );
+            }
+
+            console.log(copyDraw);
+          }
         }}
       >
         드로잉 저장하기
+      </div>
+      <div
+        onClick={(e) => {
+          setDrawingMode(true);
+          if (candleRef.current) {
+            if (recordRange) {
+              chartRef.current?.timeScale().setVisibleLogicalRange(recordRange);
+            }
+          }
+
+          if (canvasRef.current) {
+            const ctx = canvasRef.current.getContext('2d');
+            if (ctx) {
+              ctx.clearRect(
+                0,
+                0,
+                canvasRef.current.clientWidth,
+                canvasRef.current.clientHeight
+              );
+              ctx.lineWidth = 1;
+              ctx.strokeStyle = 'red';
+
+              if (copyDraw.length > 0) {
+                console.log(copyDraw);
+                console.log('copy');
+                ctx.beginPath();
+                let prevX = copyDraw[0].originX;
+                let prevY = copyDraw[0].originY;
+
+                ctx.moveTo(prevX, prevY);
+                copyDraw.forEach((item) => {
+                  if (prevX !== item.originX || prevY !== item.originY) {
+                    prevX = item.originX;
+                    prevY = item.originY;
+                    ctx.moveTo(prevX, prevY);
+                  }
+
+                  ctx.lineTo(item.x, item.y);
+                  ctx.stroke();
+                });
+                ctx.closePath();
+                // ctx.save();
+              }
+            }
+          }
+        }}
+      >
+        드로잉 불러오기
       </div>
       <div
         onClick={(e) => {
