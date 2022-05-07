@@ -8,7 +8,12 @@ import useParsingAndUpdateWebSocketChart from '../../hooks/useParsingAndUpdateWe
 const TvDrawingChart = () => {
   useGetChartDatas();
   const [wrapperRef, candleRef, chartRef] = useGenerateChart();
-  const [pause, setPause] = useParsingAndUpdateWebSocketChart(candleRef);
+  const [recordRange, setRecordRange] = useState<LogicalRange>();
+  const [pause, setPause] = useParsingAndUpdateWebSocketChart(
+    candleRef,
+    recordRange,
+    setRecordRange
+  );
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
@@ -16,9 +21,6 @@ const TvDrawingChart = () => {
 
   const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [recordRange, setRecrodRange] = useState<LogicalRange | undefined>(
-    undefined
-  );
   const [priceRange, setPriceRange] = useState();
   const [drawingMode, setDrawingMode] = useState(false);
 
@@ -85,30 +87,48 @@ const TvDrawingChart = () => {
     }
   }, [drawingMode]);
 
+  useEffect(() => {
+    if (candleRef.current) {
+      if (recordRange) {
+        console.log('변경됨');
+        chartRef.current?.timeScale().setVisibleLogicalRange(recordRange);
+        //   setDrawingMode(true);
+      }
+    }
+  }, [recordRange]);
+
   return (
     <div className={classNames(`w-full bg-red-500 relative z-50`)}>
       <div
+        className={'border-2 hover:cursor-pointer'}
         onClick={(e) => {
           if (candleRef.current) {
             const range = chartRef.current?.timeScale().getVisibleRange();
             const range2 = chartRef.current
               ?.timeScale()
               .getVisibleLogicalRange();
-            console.log(range);
+
+            console.log(chartRef.current?.options());
             console.log(range2);
             if (range2) {
-              setRecrodRange(range2);
+              setRecordRange(range2);
             }
           }
         }}
       >
-        드로잉 기록하기
+        드로잉 저장하기
       </div>
       <div
         onClick={(e) => {
           if (candleRef.current) {
             if (recordRange) {
               chartRef.current?.timeScale().setVisibleLogicalRange(recordRange);
+              chartRef.current?.applyOptions({
+                rightPriceScale: {
+                  autoScale: true,
+                },
+              });
+              setDrawingMode(true);
             }
           }
         }}
@@ -117,7 +137,7 @@ const TvDrawingChart = () => {
       </div>
       <div
         onClick={() => {
-          setPause(!pause);
+          //   setPause(!pause);
           setDrawingMode(!drawingMode);
         }}
       >

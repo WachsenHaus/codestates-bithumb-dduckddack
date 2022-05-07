@@ -51,6 +51,7 @@ const useGenerateChart = () => {
             return convertStringPriceToKRW(f);
           },
         },
+        // priceLineVisible: false,
         upColor: `#ff0000`,
         borderUpColor: `#ff0000`,
         downColor: `#2f00ff`,

@@ -1,4 +1,9 @@
-import { ISeriesApi, UTCTimestamp } from 'lightweight-charts';
+import {
+  ISeriesApi,
+  Logical,
+  LogicalRange,
+  UTCTimestamp,
+} from 'lightweight-charts';
 import _ from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -16,6 +21,10 @@ const CONST_KR_UTC = 9 * 60 * 60 * 1000;
 const useParsingAndUpdateWebSocketChart = (
   candleRef: React.MutableRefObject<
     ISeriesApi<'Candlestick'> | null | undefined
+  >,
+  recordRange?: LogicalRange | undefined,
+  setRecordRange?: React.Dispatch<
+    React.SetStateAction<LogicalRange | undefined>
   >
 ) => {
   // websocket stbar
@@ -74,6 +83,24 @@ const useParsingAndUpdateWebSocketChart = (
   useEffect(() => {
     // pause && drawStBars && candleRef.current?.setData(drawStBars);
     drawStBars && candleRef.current?.setData(drawStBars);
+
+    if (recordRange) {
+      // const prev  = JSON.parse(JSON.stringify(recordRange));
+      const prev = recordRange;
+      const from = Number(prev.from) - 1;
+      const to = Number(prev.to) - 1;
+
+      const nextFrom: Logical = from as Logical;
+      const nextTo: Logical = to as Logical;
+      const result = {
+        from: nextFrom,
+        to: nextTo,
+      };
+      if (setRecordRange) {
+        console.log(result);
+        setRecordRange(result);
+      }
+    }
   }, [drawStBars]);
 
   /**
