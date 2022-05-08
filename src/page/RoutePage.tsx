@@ -5,12 +5,20 @@ import Header from '../components/Header/Header';
 import ChatPage from './ChatPage';
 import TradePage from './TradePage';
 import UserPage from './UserPage';
+import { loadFull } from 'tsparticles';
+import Particles from 'react-tsparticles';
+import bg_all from '../asset/img/bg_all.png';
 
 const RoutePage = () => {
   return (
     <>
       <BrowserRouter>
-        <Box className={classNames(`grid grid-cols-12 `)}>
+        <Box
+          className={classNames(`grid grid-cols-12 w-screen h-screen `)}
+          style={{
+            backgroundImage: `url(${bg_all})`,
+          }}
+        >
           <Box gridColumn={`span 12`}>
             <Header />
           </Box>

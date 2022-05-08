@@ -18,8 +18,12 @@ const Header = () => {
     <AppBar
       position="static"
       sx={{
-        backgroundImage: `url(${bg_main})`,
+        // backgroundImage: `url(${bg_main})`,
+        backgroundColor: 'transparent',
+        zIndex: 99,
+        borderBottom: '1px',
       }}
+      className={classNames(`shadow-2xl`)}
     >
       <Toolbar>
         <motion.div

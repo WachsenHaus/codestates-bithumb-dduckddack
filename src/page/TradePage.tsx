@@ -28,8 +28,8 @@ const TradePage = () => {
         <Ticker />
       </div>
       <div className={classNames(`col-span-3`)}>
-        <Orderbook />
-        <Transaction />
+        {/* <Orderbook /> */}
+        {/* <Transaction /> */}
       </div>
     </>
   );
