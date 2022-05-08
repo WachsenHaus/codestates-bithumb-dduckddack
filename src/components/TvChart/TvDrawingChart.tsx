@@ -17,7 +17,8 @@ import DrawCanvasBar from '../DrawCanvas/DrawCanvasBar';
 import { useRecoilState } from 'recoil';
 import { atomModalState } from '../../atom/modal.atom';
 import { IconButton } from '@mui/material';
-
+import { ReactSketchCanvas } from 'react-sketch-canvas';
+import { HexColorPicker } from 'react-colorful';
 // 1. 새로운 도화지 생성하기를 누르면 해당 도화지를 생성함
 // 각도화지는
 // 2. 드로잉모드를 하게된다면 생성된 마지막 도화지를 기반으로 드로잉이 되며 드로잉값이 차트에 저장되지않음.
@@ -39,6 +40,8 @@ import { IconButton } from '@mui/material';
 
 const TvDrawingChart = () => {
   const [modal, setModal] = useRecoilState(atomModalState);
+  const [color, setColor] = useState('#aabbcc');
+
   useGetChartDatas();
   const [wrapperRef, candleRef, chartRef] = useGenerateChart();
   const [recordRange, setRecordRange] = useState<LogicalRange>();
@@ -52,7 +55,7 @@ const TvDrawingChart = () => {
     canvasRef,
     canvasWrapperRef,
     saveWrapperRef,
-    ctx,
+    // ctx,
     drawingMode,
     isDrawing,
     onDrawToogleClick,
@@ -61,8 +64,10 @@ const TvDrawingChart = () => {
     onMouseDown,
     onMouseLeave,
     onSave,
-    onNewCanvas,
+    // onNewCanvas,
     drawArr,
+    width,
+    height,
   ] = useGenerateDrawCanvas(
     wrapperRef,
     pause,
@@ -174,9 +179,14 @@ const TvDrawingChart = () => {
       >
         드로잉 데이터 보기 모드 끄기
       </div> */}
+      <HexColorPicker color={color} onChange={setColor} />
       <div className={classNames(`flex justify-center items-center`)}>
         <DrawCanvasBar onDraw={onDrawToogleClick} onSave={onSave} />
-        <IconButton onClick={onNewCanvas}>
+        <IconButton
+          onClick={() => {
+            canvasRef.current?.clearCanvas();
+          }}
+        >
           <AddIcon />
         </IconButton>
       </div>
@@ -215,12 +225,23 @@ const TvDrawingChart = () => {
           className={classNames(`w-full  absolute z-10 -tran`)}
           ref={canvasWrapperRef}
         >
-          <canvas
+          <ReactSketchCanvas
             ref={canvasRef}
-            onMouseMove={onDrawing}
-            onMouseUp={onMouseUp}
-            onMouseDown={onMouseDown}
-            onMouseLeave={onMouseLeave}
+            strokeWidth={5}
+            strokeColor={color}
+            canvasColor="rgba(0,0,0,0)"
+            width={`${width.toString()}px`}
+            height={`${height.toString()}px`}
+            // style={{
+            //   background: 'rgba(0,0,0,0)',
+            // }}
+            // onStroke={}
+            // width={wrapperRef.current?.clientWidth || '100'}
+            // height={wrapperRef.current?.clientHeight || '100'}
+            // onMouseMove={onDrawing}
+            // onMouseUp={onMouseUp}
+            // onMouseDown={onMouseDown}
+            // onMouseLeave={onMouseLeave}
             className={classNames(
               `bg-blue-300 bg-opacity-20`,
               drawingMode === true ? 'visible' : 'hidden'

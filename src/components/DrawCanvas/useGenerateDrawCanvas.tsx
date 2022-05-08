@@ -3,6 +3,7 @@ import { IChartApi, LogicalRange } from 'lightweight-charts';
 import _ from 'lodash';
 import moment from 'moment';
 import { useRef, useState } from 'react';
+import { ReactSketchCanvasRef } from 'react-sketch-canvas';
 import useGetContext from './useGetContext';
 import useResizeCanvas from './useResizeCanvas';
 
@@ -13,11 +14,13 @@ const useGenerateDrawCanvas = (
   chartRef: React.MutableRefObject<IChartApi | null | undefined>,
   setRecordRange: React.Dispatch<React.SetStateAction<LogicalRange | undefined>>
 ) => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef = useRef<ReactSketchCanvasRef | null>(null);
   const canvasWrapperRef = useRef<HTMLDivElement | null>(null);
   const saveWrapperRef = useRef<HTMLDivElement | null>(null);
-  const ctx = useGetContext(canvasRef);
 
+  // const ctx = useGetContext(canvasRef);
+
+  // canvasRef.current.
   const [drawingMode, setDrawingMode] = useState(false);
   const [isDrawing, setIsDrawing] = useState(false);
 
@@ -51,18 +54,11 @@ const useGenerateDrawCanvas = (
     y: 0,
   });
 
-  useResizeCanvas(canvasWrapperRef, ctx, tvChartRef);
+  const [width, height] = useResizeCanvas(canvasWrapperRef, tvChartRef);
 
   const onDrawToogleClick = () => {
-    if (canvasRef.current) {
-      const ctx = canvasRef.current.getContext('2d');
-      if (ctx) {
-        ctx.strokeStyle = 'black';
-        ctx.lineWidth = 1;
-        setPause(!pause);
-        setDrawingMode(!drawingMode);
-      }
-    }
+    setDrawingMode(!drawingMode);
+    setPause(!pause);
   };
 
   const onSave = async () => {
@@ -114,26 +110,26 @@ const useGenerateDrawCanvas = (
     }
 
     // 드로잉한 그림 기억
-    if (canvasRef.current) {
-      const ctx = canvasRef.current.getContext('2d');
-      if (ctx) {
-        ctx.clearRect(
-          0,
-          0,
-          canvasRef.current.clientWidth,
-          canvasRef.current.clientHeight
-        );
-      }
-      setPause(false);
-      setDrawingMode(false);
-    }
+    // if (canvasRef.current) {
+    //   const ctx = canvasRef.current.getContext('2d');
+    //   if (ctx) {
+    //     ctx.clearRect(
+    //       0,
+    //       0,
+    //       canvasRef.current.clientWidth,
+    //       canvasRef.current.clientHeight
+    //     );
+    //   }
+    //   setPause(false);
+    //   setDrawingMode(false);
+    // }
   };
 
-  const onNewCanvas = () => {
-    if (ctx && canvasRef.current) {
-      ctx.clearRect(0, 0, 99999, 99999);
-    }
-  };
+  // const onNewCanvas = () => {
+  //   if (ctx && canvasRef.current) {
+  //     ctx.clearRect(0, 0, 99999, 99999);
+  //   }
+  // };
 
   const onSaveAs = (uri: any, filename: any) => {
     console.log('onSaveas');
@@ -146,28 +142,28 @@ const useGenerateDrawCanvas = (
   };
 
   const onDrawing = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-    const { offsetX, offsetY } = e.nativeEvent;
-    if (ctx && canvasRef.current) {
-      if (!isDrawing) {
-        ctx.beginPath();
-        ctx.moveTo(offsetX, offsetY);
-        setMoveAxis({
-          x: offsetX,
-          y: offsetY,
-        });
-      } else {
-        ctx.lineTo(offsetX, offsetY);
-        const prevCopyDraw = JSON.parse(JSON.stringify(drawAxisDatas));
-        prevCopyDraw.push({
-          x: offsetX,
-          y: offsetY,
-          originX: moveAxis.x,
-          originY: moveAxis.y,
-        });
-        setDrawAxisDatas(prevCopyDraw);
-        ctx.stroke();
-      }
-    }
+    // const { offsetX, offsetY } = e.nativeEvent;
+    // if (ctx && canvasRef.current) {
+    //   if (!isDrawing) {
+    //     ctx.beginPath();
+    //     ctx.moveTo(offsetX, offsetY);
+    //     setMoveAxis({
+    //       x: offsetX,
+    //       y: offsetY,
+    //     });
+    //   } else {
+    //     ctx.lineTo(offsetX, offsetY);
+    //     const prevCopyDraw = JSON.parse(JSON.stringify(drawAxisDatas));
+    //     prevCopyDraw.push({
+    //       x: offsetX,
+    //       y: offsetY,
+    //       originX: moveAxis.x,
+    //       originY: moveAxis.y,
+    //     });
+    //     setDrawAxisDatas(prevCopyDraw);
+    //     ctx.stroke();
+    //   }
+    // }
   };
 
   const onMouseUp = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
@@ -186,7 +182,7 @@ const useGenerateDrawCanvas = (
     canvasRef,
     canvasWrapperRef,
     saveWrapperRef,
-    ctx,
+    // ctx,
     drawingMode,
     isDrawing,
     onDrawToogleClick,
@@ -195,8 +191,10 @@ const useGenerateDrawCanvas = (
     onMouseDown,
     onMouseLeave,
     onSave,
-    onNewCanvas,
+    // onNewCanvas,
     drawArr,
+    width,
+    height,
   ] as const;
 };
 
