@@ -84,6 +84,9 @@ const useParsingAndUpdateWebSocketChart = (
     // pause && drawStBars && candleRef.current?.setData(drawStBars);
     drawStBars && candleRef.current?.setData(drawStBars);
 
+    /**
+     * 한틱 쌓일때마다 차트를 뒤로 밀어서 동기화되게 하는 기능이긴함,,
+     */
     if (recordRange) {
       // const prev  = JSON.parse(JSON.stringify(recordRange));
       const prev = recordRange;

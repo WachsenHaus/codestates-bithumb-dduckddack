@@ -1,5 +1,5 @@
 {
-  "name": "codestates-bithumb-coinTalk",
+  "name": "codestatesBithumbCoinTalk",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -27,6 +27,7 @@
     "fast-json-stable-stringify": "^2.1.0",
     "framer-motion": "^6.2.8",
     "hangul-js": "^0.2.6",
+    "html2canvas": "^1.4.1",
     "http-proxy-middleware": "^2.0.6",
     "immer": "^9.0.12",
     "lightweight-charts": "^3.8.0",
@@ -38,6 +39,7 @@
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
+    "react-sketch-canvas": "^6.1.5",
     "react-trading-ui": "^0.1.5",
     "react-virtualized": "^9.22.3",
     "recoil": "^0.7.2",

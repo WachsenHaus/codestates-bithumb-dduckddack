@@ -1,8 +1,9 @@
 import { atom } from 'recoil';
 
 interface IModalState {
-  modalType: 'sign';
+  modalType: 'sign' | 'image';
   modalState: boolean;
+  modalPayload?: string;
 }
 
 export const atomModalState = atom<IModalState>({

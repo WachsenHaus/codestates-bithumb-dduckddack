@@ -15,7 +15,10 @@ const SignModal = () => {
           modalType: 'sign',
         });
       }}
-      className={classNames(`flex justify-center items-center `)}
+      className={classNames(`flex justify-center items-center`)}
+      style={{
+        zIndex: 9999,
+      }}
     >
       <div
         className={classNames(
@@ -26,7 +29,18 @@ const SignModal = () => {
           `flex justify-center`
         )}
       >
-        adsf
+        {modal.modalType === 'sign' && <div> adsf</div>}
+        {modal.modalType === 'image' && (
+          <div>
+            {modal.modalPayload && (
+              <img
+                alt="modal_img"
+                src={modal.modalPayload}
+                className={classNames(`w-full h-full`)}
+              />
+            )}
+          </div>
+        )}
       </div>
     </Modal>
   );

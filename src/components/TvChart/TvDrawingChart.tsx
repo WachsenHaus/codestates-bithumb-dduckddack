@@ -5,8 +5,40 @@ import { useRef, useState, useEffect } from 'react';
 import useGenerateChart from '../../hooks/useGenerateChart';
 import { useGetChartDatas } from '../../hooks/useGetChartDatas';
 import useParsingAndUpdateWebSocketChart from '../../hooks/useParsingAndUpdateWebSocketChart';
+import DrawCanvas from '../DrawCanvas/DrawCanvas';
+import DrawModeToggle from '../DrawCanvas/DrawModeToggle';
+import useGenerateDrawCanvas from '../DrawCanvas/useGenerateDrawCanvas';
+import useGetContext from '../DrawCanvas/useGetContext';
+import useResizeCanvas from '../DrawCanvas/useResizeCanvas';
+import AddIcon from '@mui/icons-material/Add';
+import SaveIcon from '@mui/icons-material/Save';
+import DrawSave from '../DrawCanvas/DrawSave';
+import DrawCanvasBar from '../DrawCanvas/DrawCanvasBar';
+import { useRecoilState } from 'recoil';
+import { atomModalState } from '../../atom/modal.atom';
+import { IconButton } from '@mui/material';
+
+// 1. 새로운 도화지 생성하기를 누르면 해당 도화지를 생성함
+// 각도화지는
+// 2. 드로잉모드를 하게된다면 생성된 마지막 도화지를 기반으로 드로잉이 되며 드로잉값이 차트에 저장되지않음.
+// 3. 드로잉모드를 종료하면 자동으로 서버에 저장을함. ()
+// 4. 다시 드로잉모드를 한다면 아직 생성을 안했으니 해당 도화지에 그림을 그림
+
+/*
+[
+  {
+    draw:{
+
+    },
+    scale:{
+
+    }
+  }
+]
+*/
 
 const TvDrawingChart = () => {
+  const [modal, setModal] = useRecoilState(atomModalState);
   useGetChartDatas();
   const [wrapperRef, candleRef, chartRef] = useGenerateChart();
   const [recordRange, setRecordRange] = useState<LogicalRange>();
@@ -16,120 +48,32 @@ const TvDrawingChart = () => {
     setRecordRange
   );
 
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const contextRef = useRef<CanvasRenderingContext2D | null>(null);
-  const canvasWrapperRef = useRef<HTMLDivElement | null>(null);
+  const [
+    canvasRef,
+    canvasWrapperRef,
+    saveWrapperRef,
+    ctx,
+    drawingMode,
+    isDrawing,
+    onDrawToogleClick,
+    onDrawing,
+    onMouseUp,
+    onMouseDown,
+    onMouseLeave,
+    onSave,
+    onNewCanvas,
+    drawArr,
+  ] = useGenerateDrawCanvas(
+    wrapperRef,
+    pause,
+    setPause,
+    chartRef,
+    setRecordRange
+  );
 
-  const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
-  const [isDrawing, setIsDrawing] = useState(false);
   const [priceRange, setPriceRange] = useState();
-  const [drawingMode, setDrawingMode] = useState(false);
-  const [moveAxis, setMoveAxis] = useState<{
-    x: any;
-    y: any;
-  }>({
-    x: 0,
-    y: 0,
-  });
 
-  const [copyDraw, setCopyDraw] = useState<
-    Array<{
-      x: any;
-      y: any;
-      originX: any;
-      originY: any;
-      rateX: any;
-      rateY: any;
-    }>
-  >([]);
-  const [drawArr, setDrawArr] = useState<
-    Array<{
-      x: any;
-      y: any;
-      originX: any;
-      originY: any;
-      rateX: any;
-      rateY: any;
-    }>
-  >([]);
-
-  const startDrawing = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-    e.persist();
-    console.log(e.nativeEvent);
-    setIsDrawing(true);
-  };
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (wrapperRef.current && canvas) {
-      const tvCanvas = wrapperRef.current.querySelector('canvas');
-      if (tvCanvas) {
-        canvas.width = tvCanvas?.clientWidth;
-        canvas.height = tvCanvas.clientHeight;
-      }
-    }
-
-    if (canvas) {
-      const context = canvas.getContext('2d');
-
-      if (context) {
-        context.strokeStyle = 'black';
-        context.lineWidth = 1;
-
-        contextRef.current = context;
-
-        setCtx(context);
-      }
-    }
-  }, [canvasRef]);
-
-  const drawing = (e: any) => {
-    const { offsetX, offsetY } = e.nativeEvent;
-    if (ctx && canvasRef.current) {
-      if (!isDrawing) {
-        ctx.beginPath();
-        ctx.moveTo(offsetX, offsetY);
-        setMoveAxis({
-          x: offsetX,
-          y: offsetY,
-        });
-      } else {
-        ctx.lineTo(offsetX, offsetY);
-        const prevCopyDraw = JSON.parse(JSON.stringify(copyDraw));
-        prevCopyDraw.push({
-          x: offsetX,
-          y: offsetY,
-          originX: moveAxis.x,
-          originY: moveAxis.y,
-          rateX: offsetX / canvasRef.current?.clientWidth,
-          rateY: offsetY / canvasRef.current?.clientHeight,
-        });
-
-        setCopyDraw(prevCopyDraw);
-        ctx.stroke();
-      }
-    }
-  };
-
-  useEffect(() => {
-    canvasWrapperRef.current?.addEventListener('resize', () => {
-      if (ctx && wrapperRef.current) {
-        if (wrapperRef.current) {
-          const tvCanvas = wrapperRef.current.querySelector('canvas');
-          if (tvCanvas) {
-            ctx.canvas.width = tvCanvas?.clientWidth;
-            ctx.canvas.height = tvCanvas.clientHeight;
-          }
-        }
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (drawingMode) {
-      // chartRef.current.
-    }
-  }, [drawingMode]);
+  // const [isDrawing, setIsDrawing] = useState(false);
 
   useEffect(() => {
     if (candleRef.current) {
@@ -142,44 +86,10 @@ const TvDrawingChart = () => {
   }, [recordRange]);
 
   return (
-    <div className={classNames(`w-full bg-red-500 relative z-50`)}>
-      <div
-        className={'border-2 hover:cursor-pointer'}
+    <div className={classNames(`w-full `)}>
+      {/* <div
         onClick={(e) => {
-          // 트레이딩뷰 좌표 기억
-          if (candleRef.current) {
-            const range = chartRef.current?.timeScale().getVisibleRange();
-            const range2 = chartRef.current
-              ?.timeScale()
-              .getVisibleLogicalRange();
-
-            console.log(chartRef.current?.options());
-            console.log(range2);
-            if (range2) {
-              setRecordRange(range2);
-            }
-          }
-
-          // 드로잉한 그림 기억
-          if (canvasRef.current) {
-            const ctx = canvasRef.current.getContext('2d');
-            if (ctx) {
-              ctx.clearRect(
-                0,
-                0,
-                canvasRef.current.clientWidth,
-                canvasRef.current.clientHeight
-              );
-            }
-
-            console.log(copyDraw);
-          }
-        }}
-      >
-        드로잉 저장하기
-      </div>
-      <div
-        onClick={(e) => {
+          setPause(true);
           setDrawingMode(true);
           if (candleRef.current) {
             if (recordRange) {
@@ -199,15 +109,13 @@ const TvDrawingChart = () => {
               ctx.lineWidth = 1;
               ctx.strokeStyle = 'red';
 
-              if (copyDraw.length > 0) {
-                console.log(copyDraw);
-                console.log('copy');
+              if (drawArr.length > 0) {
                 ctx.beginPath();
-                let prevX = copyDraw[0].originX;
-                let prevY = copyDraw[0].originY;
+                let prevX = drawArr[0].originX;
+                let prevY = drawArr[0].originY;
 
                 ctx.moveTo(prevX, prevY);
-                copyDraw.forEach((item) => {
+                drawArr.forEach((item) => {
                   if (prevX !== item.originX || prevY !== item.originY) {
                     prevX = item.originX;
                     prevY = item.originY;
@@ -225,8 +133,8 @@ const TvDrawingChart = () => {
         }}
       >
         드로잉 불러오기
-      </div>
-      <div
+      </div> */}
+      {/* <div
         onClick={(e) => {
           if (candleRef.current) {
             if (recordRange) {
@@ -236,46 +144,92 @@ const TvDrawingChart = () => {
                   autoScale: true,
                 },
               });
+              setPause(false);
               setDrawingMode(true);
             }
           }
         }}
       >
-        드로잉 돌아가기
-      </div>
-      <div
+        드로잉 데이터 보기(실시간 적용)
+      </div> */}
+      {/* <div
         onClick={() => {
-          //   setPause(!pause);
-          setDrawingMode(!drawingMode);
+          if (canvasRef.current) {
+            const ctx = canvasRef.current.getContext('2d');
+            if (ctx) {
+              console.log('왜안돼');
+              ctx.clearRect(
+                0,
+                0,
+                canvasRef.current.clientWidth,
+                canvasRef.current.clientHeight
+              );
+              ctx.strokeStyle = 'black';
+              ctx.lineWidth = 1;
+            }
+          }
+          setDrawingMode(false);
+          setPause(false);
         }}
       >
-        드로잉 모드
+        드로잉 데이터 보기 모드 끄기
+      </div> */}
+      <div className={classNames(`flex justify-center items-center`)}>
+        <DrawCanvasBar onDraw={onDrawToogleClick} onSave={onSave} />
+        <IconButton onClick={onNewCanvas}>
+          <AddIcon />
+        </IconButton>
+      </div>
+      <div className={classNames(`flex justify-center items-center`)}>
+        {drawArr?.map((item) => (
+          <div
+            className={classNames(` mx-10`)}
+            onClick={() => {
+              console.log(item.drawData);
+            }}
+          >
+            {item.time}
+            <img
+              className={classNames(`hover:cursor-pointer`)}
+              onClick={() => {
+                setModal({
+                  modalState: true,
+                  modalType: 'image',
+                  modalPayload: item.drawImageUrl,
+                });
+              }}
+              src={item.drawImageUrl}
+              alt={item.time}
+              width="100"
+              height="100"
+            />
+          </div>
+        ))}
       </div>
 
       <div
-        className={classNames(`w-full absolute z-20`)}
-        ref={canvasWrapperRef}
+        className={classNames(`w-full ml-28 relative z-20 `)}
+        ref={saveWrapperRef}
       >
-        <canvas
-          ref={canvasRef}
-          onMouseMove={drawing}
-          onMouseDown={startDrawing}
-          onMouseUp={(e) => {
-            e.persist();
-            setIsDrawing(false);
-          }}
-          onMouseLeave={(e) => {
-            e.persist();
-            setIsDrawing(false);
-          }}
-          // onScroll={(e) => {}}
-          className={classNames(
-            `bg-red-50 bg-opacity-20`,
-            drawingMode === true ? 'visible' : 'hidden'
-          )}
-        />
+        <div
+          className={classNames(`w-full  absolute z-10 -tran`)}
+          ref={canvasWrapperRef}
+        >
+          <canvas
+            ref={canvasRef}
+            onMouseMove={onDrawing}
+            onMouseUp={onMouseUp}
+            onMouseDown={onMouseDown}
+            onMouseLeave={onMouseLeave}
+            className={classNames(
+              `bg-blue-300 bg-opacity-20`,
+              drawingMode === true ? 'visible' : 'hidden'
+            )}
+          />
+        </div>
+
+        <div className={classNames(`w-full h-full`)} ref={wrapperRef} />
       </div>
-      <div className={classNames(`w-full px-10 h-full`)} ref={wrapperRef} />
     </div>
   );
 };
