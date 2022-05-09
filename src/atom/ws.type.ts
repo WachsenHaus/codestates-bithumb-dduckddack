@@ -57,3 +57,106 @@ export type TypeWebSocketTransactionReturnType = {
     t: string;
   }>;
 };
+
+// 받는것
+// {
+//   "type": "CHAT_MESSAGE",
+//   "payload": {
+//       "roomId": "2",
+//       "user": {
+//           "username": "cyh",
+//           "avatar": null
+//       },
+//       "message": "zxcv"
+//   },
+//   "id": 66,
+//   "timestamp": 1652017028353
+// }
+
+// {
+//   "type": "USER_LEFT",
+//   "payload": {
+//       "roomId": null,
+//       "user": {
+//           "username": "ㅁㅁ",
+//           "avatar": "//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+//       }
+//   },
+//   "id": 62,
+//   "timestamp": 1652017015118
+// }
+
+// {
+//   "type": "USER_JOINED",
+//   "payload": {
+//       "roomId": "1",
+//       "user": {
+//           "username": "ㄴㄴ",
+//           "avatar": "//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+//       }
+//   },
+//   "id": 63,
+//   "timestamp": 1652017019006
+// }
+// {
+//   "type": "USER_STATS",
+//   "payload": {
+//       "roomId": null,
+//       "user": {
+//           "username": "System",
+//           "avatar": "https://robohash.org/system.png"
+//       },
+//       "stats": {
+//           "최영훈": {
+//               "user": {
+//                   "username": "최영훈",
+//                   "avatar": "//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+//               },
+//               "lastMessage": 1652016161790,
+//               "messageCount": 14
+//           },
+//           "cyh": {
+//               "user": {
+//                   "username": "cyh",
+//                   "avatar": "//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+//               },
+//               "lastMessage": 1652017028353,
+//               "messageCount": 27
+//           },
+//           "ㄴㄴ": {
+//               "user": {
+//                   "username": "ㄴㄴ",
+//                   "avatar": "//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+//               },
+//               "lastMessage": 1652017021415,
+//               "messageCount": 1
+//           }
+//       }
+//   },
+//   "id": 64,
+//   "timestamp": 1652017019006
+// }
+
+// 보낼 때
+// {
+//   "type": "USER_JOINED",
+//   "payload": {
+//     "roomId": 1,
+//     "user": {
+//       "username": "ㄹㄹ",
+//       "avatar": "//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+//     }
+//   }
+// }
+
+// {
+//   "type": "CHAT_MESSAGE",
+//   "payload": {
+//     "roomId": "2",
+//     "user": {
+//       "username": "ㄹㄹ",
+//       "avatar": "//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+//     },
+//    "message":"zxcv"
+//   }
+// }
