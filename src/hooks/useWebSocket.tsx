@@ -22,7 +22,7 @@ import {
  *
  * @returns 빗썸 웹소켓과 연결하고 웹소켓 객체를 반환합니다.
  */
-export const useGenerateBitThumbSocket = (type: TypeWebSocketTypes) => {
+export const useGenerateSocket = (type: TypeWebSocketTypes) => {
   const [wsSubscribe, setWsSubscribe] = useRecoilState(atomSubscribeWebSocket);
   const wsMessage = useRecoilValue(atomSubscribeWebSocektMessage);
 
@@ -53,38 +53,38 @@ export const useGenerateBitThumbSocket = (type: TypeWebSocketTypes) => {
           case 'SUBSCRIBE':
             if (type === 'data') {
               if (subtype === 'tk') {
-                // setWebsocketObj((prevData) => {
-                //   return {
-                //     ...prevData,
-                //     tickers: content,
-                //   };
-                // });
                 setTimeout(() => {
                   setTickers(content);
                 }, 0);
               } else if (subtype === 'st') {
-                // setWebsocketObj((prevData) => {
-                //   return {
-                //     ...prevData,
-                //     stbar: content,
-                //   };
-                // });
-
                 setTimeout(() => {
                   setSt(content);
                 }, 0);
               } else if (subtype === 'tr') {
-                // setWebsocketObj((prevData) => {
-                //   return {
-                //     ...prevData,
-                //     transactions: content,
-                //   };
-                // });
                 setTimeout(() => {
                   setTransactions(content);
                 }, 0);
               }
             }
+            break;
+          case 'CHAT':
+            console.log();
+            break;
+          default:
+            break;
+        }
+      }
+    };
+
+  const generateOnChatMessage: any | null =
+    (nameType: TypeWebSocketTypes) =>
+    (ev: MessageEvent<TypeWebSocketSubscribeReturnType>) => {
+      if (ev) {
+        const { subtype, type, content }: TypeWebSocketSubscribeReturnType =
+          parse(ev.data).value;
+        switch (nameType) {
+          case 'CHAT':
+            console.log(parse(ev.data).value);
             break;
           default:
             break;
@@ -134,6 +134,15 @@ export const useGenerateBitThumbSocket = (type: TypeWebSocketTypes) => {
           subWs.onerror = generateOnError(type);
           subWs.onclose = generateOnCloser(type);
           subWs.onmessage = generateOnMessage(type);
+          break;
+        case 'CHAT':
+          const chatWs = new WebSocket(
+            'wss://cointalk.kro.kr:8080/chatting/rs'
+          );
+          chatWs.onopen = generateOnOpen(type, chatWs);
+          chatWs.onerror = generateOnError(type);
+          chatWs.onclose = generateOnCloser(type);
+          chatWs.onmessage = generateOnChatMessage(type);
           break;
         default:
           break;

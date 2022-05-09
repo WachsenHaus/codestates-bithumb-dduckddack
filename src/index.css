@@ -138,6 +138,6 @@ table {
   src: url('./asset/font/BMJUA_ttf.ttf') format('truetype');
 }
 
-* {
+/* * {
   color: white;
-}
+} */

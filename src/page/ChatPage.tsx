@@ -17,13 +17,13 @@ import { TypeDrawTicker } from '../atom/drawData.atom';
 import TvChart from '../components/TvChart/TvChart';
 import { atomSelectCoinDefault } from '../atom/selectCoinDefault.atom';
 import TvDrawingChart from '../components/TvChart/TvDrawingChart';
-import { useGenerateBitThumbSocket } from '../hooks/useWebSocket';
+import { useGenerateSocket } from '../hooks/useWebSocket';
 
 const ChatPage = () => {
   const coins = useRecoilValue(atomUseCoins);
   const setDefaultCoins = useSetRecoilState(atomSelectCoinDefault);
   useCoinChart();
-  useGenerateBitThumbSocket('SUBSCRIBE');
+  useGenerateSocket('SUBSCRIBE');
 
   useEffect(() => {
     setDefaultCoins({

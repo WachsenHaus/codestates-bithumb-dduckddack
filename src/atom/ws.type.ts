@@ -1,6 +1,6 @@
 import { TypeCoinKind } from './coinList.type';
 
-export type TypeWebSocketTypes = 'SUBSCRIBE';
+export type TypeWebSocketTypes = 'SUBSCRIBE' | 'CHAT';
 
 /**
  * tr : 트랜잭션
@@ -14,6 +14,9 @@ export type TypeWebSocketDetailObj = {
   type: TypeWebSocketDetailTypes;
 };
 
+/**
+ * 빗썸의 웹소켓 리턴타입
+ */
 export type TypeWebSocketSubscribeReturnType = {
   type: string;
   subtype: TypeWebSocketDetailTypes;

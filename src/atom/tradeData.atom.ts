@@ -5,7 +5,10 @@ import { atom, selector } from 'recoil';
 import { ResponseVO } from '../type/api';
 import { Log } from '../utils/log';
 import { API_BITHUMB, API_BITHUMB_STATUS_CODE } from './../api/bt.api';
-import { atomSelectCoinDetail, ISelectCoinDetail } from './selectCoinDetail.atom';
+import {
+  atomSelectCoinDetail,
+  ISelectCoinDetail,
+} from './selectCoinDetail.atom';
 import _ from 'lodash';
 import produce from 'immer';
 import { atomSelectCoinDefault } from './selectCoinDefault.atom';
@@ -76,9 +79,12 @@ export const selectorTradeData = selector({
           transaction: { limit: 31 },
         },
       };
-      const result = await axios.get<ResponseVO<ITradeData>>(`${API_BITHUMB.GET_TRADE_DATA}`, {
-        params: url,
-      });
+      const result = await axios.get<ResponseVO<ITradeData>>(
+        `${API_BITHUMB.GET_TRADE_DATA}`,
+        {
+          params: url,
+        }
+      );
       return result.data;
     } catch (err) {
       Log(err);
@@ -106,8 +112,20 @@ export const selectPriceInfoToCoins = selector({
 
     const cloneUseCoin = _.clone(useCoins);
     for (let i = 0; i < tickerKeys.length; i++) {
-      const { coinType, chgAmt, chgRate, volume24H, value24H, prevClosePrice, highPrice, lowPrice, closePrice } = tickerData[tickerKeys[i]];
-      const isExist = cloneUseCoin.findIndex((item) => item.coinType === coinType);
+      const {
+        coinType,
+        chgAmt,
+        chgRate,
+        volume24H,
+        value24H,
+        prevClosePrice,
+        highPrice,
+        lowPrice,
+        closePrice,
+      } = tickerData[tickerKeys[i]];
+      const isExist = cloneUseCoin.findIndex(
+        (item) => item.coinType === coinType
+      );
       if (coinType === selectDefaultCoin.coinType) {
         detailObj = {
           e: closePrice,
@@ -123,6 +141,7 @@ export const selectPriceInfoToCoins = selector({
       } else {
         cloneUseCoin[isExist] = {
           ...cloneUseCoin[isExist],
+          v24: volume24H,
           u24: value24H,
           r: chgRate,
           e: closePrice,
@@ -148,7 +167,8 @@ export const selectTransactionInfoToCoins = selector({
       return;
     }
 
-    const transactionData = tradeData[selectDefaultCoin.siseCrncCd]['transaction'];
+    const transactionData =
+      tradeData[selectDefaultCoin.siseCrncCd]['transaction'];
     const transactionKeys = Object.keys(transactionData);
 
     const keys = transactionData[transactionKeys[0]];

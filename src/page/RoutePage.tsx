@@ -8,13 +8,22 @@ import UserPage from './UserPage';
 import { loadFull } from 'tsparticles';
 import Particles from 'react-tsparticles';
 import bg_full from '../asset/img/bg_full.png';
+import NewsPage from './NewsPage';
+import MainPage from './MainPage';
+import useChangeWebTitle from '../hooks/useChangeWebTitle';
+import useInitialize from '../hooks/useInitialize';
+import useResetObserverDrawData from '../hooks/useResetDrawData';
 
 const RoutePage = () => {
   return (
     <>
       <BrowserRouter>
         <Box
-          className={classNames(`grid grid-cols-12 w-screen h-screen `)}
+          className={classNames(
+            `gap-x-10`,
+            `grid grid-cols-12 grid-rows-2 w-screen h-screen `,
+            `grid-rows-[7%_auto]`
+          )}
           style={{
             backgroundImage: `url(${bg_full})`,
           }}
@@ -23,10 +32,12 @@ const RoutePage = () => {
             <Header />
           </Box>
           <Routes>
+            <Route path={`/`} element={<MainPage />} />
+            <Route path={'/news'} element={<NewsPage />} />
             <Route path={'/user'} element={<UserPage />} />
             <Route path={'/chat'} element={<ChatPage />} />
-            <Route path={`/:coinName`} element={<TradePage />} />
-            <Route path={`/`} element={<TradePage />} />
+            <Route path={`/trade`} element={<TradePage />} />
+            <Route path={`/trade/:coinName`} element={<TradePage />} />
           </Routes>
         </Box>
       </BrowserRouter>

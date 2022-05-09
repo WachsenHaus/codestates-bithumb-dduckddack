@@ -5,6 +5,14 @@ module.exports = {
       bmjua: ['bmjua'],
     },
     extend: {
+      colors: {
+        highRight: '#FF9900',
+        bithumb: '#F6B93B',
+        nightBlack: '#353232',
+        upRed: '#E55039',
+        downBlue: '#6A89CC',
+      },
+
       animation: {
         up: 'up_Effect 0.2s',
         down: 'down_Effect 0.2s',

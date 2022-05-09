@@ -416,7 +416,16 @@ export const useCoinChart = () => {
   // 추린 코인리스트에 가격정보를 병합한다.
   useGetPriceInfoList();
   useMergeTickersWebsocketAndFilteredData();
+
   useGetInitTransactionData();
   // 받아온 트랜잭션 데이터와 웹소켓 데이터를 병합한다.
   useMergeTransactionWebsocketAndInitData();
+};
+
+export const useCoinList = () => {
+  useGetCoinList();
+  useGetTradeData();
+  useGetFiltredUseCoins();
+  useGetPriceInfoList();
+  // useMergeTickersWebsocketAndFilteredData();
 };

@@ -15,7 +15,7 @@ const HeaderNavTab = () => {
       <div
         className={classNames(`mx-10 hover:cursor-pointer hover:scale-105`)}
         onClick={() => {
-          navigate('/');
+          navigate('/trade');
         }}
       >
         거래소
@@ -27,6 +27,14 @@ const HeaderNavTab = () => {
         }}
       >
         채팅방
+      </div>
+      <div
+        className={classNames(`mx-10 hover:cursor-pointer hover:scale-105`)}
+        onClick={() => {
+          navigate('/news');
+        }}
+      >
+        뉴스룸
       </div>
     </div>
   );

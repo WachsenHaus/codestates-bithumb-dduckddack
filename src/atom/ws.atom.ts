@@ -6,6 +6,11 @@ export const atomSubscribeWebSocket = atom<WebSocket | undefined>({
   default: undefined,
 });
 
+export const atomChatWebSocket = atom<WebSocket | undefined>({
+  key: 'atomChatWebSocket',
+  default: undefined,
+});
+
 export const atomSubscribeWebSocektMessage = selector({
   key: 'atomSubscribeWebSocektMessage',
   get: ({ get }) => {
