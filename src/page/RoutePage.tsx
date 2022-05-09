@@ -7,7 +7,7 @@ import TradePage from './TradePage';
 import UserPage from './UserPage';
 import { loadFull } from 'tsparticles';
 import Particles from 'react-tsparticles';
-import bg_all from '../asset/img/bg_all.png';
+import bg_full from '../asset/img/bg_full.png';
 
 const RoutePage = () => {
   return (
@@ -16,7 +16,7 @@ const RoutePage = () => {
         <Box
           className={classNames(`grid grid-cols-12 w-screen h-screen `)}
           style={{
-            backgroundImage: `url(${bg_all})`,
+            backgroundImage: `url(${bg_full})`,
           }}
         >
           <Box gridColumn={`span 12`}>

@@ -18,7 +18,7 @@ const Header = () => {
     <AppBar
       position="static"
       sx={{
-        // backgroundImage: `url(${bg_main})`,
+        backgroundImage: `url(${bg_main})`,
         backgroundColor: 'transparent',
         zIndex: 99,
         borderBottom: '1px',
@@ -52,9 +52,7 @@ const Header = () => {
             onClick={async () => {
               // const a = await axios.get('https://3.90.102.135/user/test');
               try {
-                const a = await axios.get(
-                  'https://cointalk.kro.kr:8080/test?message=test'
-                );
+                const a = await axios.get('https://cointalk.kro.kr:8080/test?message=test');
                 console.log(a);
               } catch (err) {
                 console.error(err);
