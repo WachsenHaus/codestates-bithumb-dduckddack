@@ -146,7 +146,11 @@ const BestCoinRowName = ({
 const BestCoinRowPrice = ({ children }: { children?: ReactNode }) => {
   return (
     <div
-      className={classNames(`flex justify-center items-center`, `text-bithumb`)}
+      className={classNames(
+        `flex justify-center items-center`,
+        `text-xs`,
+        `text-bithumb`
+      )}
     >
       {children}
     </div>
@@ -171,6 +175,7 @@ const BestCoinRowchgR = ({ value }: { value?: string }) => {
     <div
       className={classNames(
         `flex justify-center items-center`,
+        `text-xs`,
         `${isUp ? `text-upRed` : ``}`,
         `${isUp === false ? `text-downBlue` : ``}`
       )}
@@ -185,6 +190,7 @@ const BestCoinRowVolume = ({ children }: { children?: ReactNode }) => {
     <div
       className={classNames(
         `flex justify-center items-center`,
+        `text-xs`,
         `text-bithumb`
         // `text-sm`
       )}

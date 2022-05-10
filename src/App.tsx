@@ -14,6 +14,7 @@ import { loadFull } from 'tsparticles';
 import Particles from 'react-tsparticles';
 import { loadStarsPreset } from 'tsparticles-preset-stars';
 import bg_main from '../../asset/img/bg_main.png';
+import { useGenerateSocket } from './hooks/useWebSocket';
 
 // import SignModal from './components/Modal/SignModal';
 // import RoutePage from './page/RoutePage';

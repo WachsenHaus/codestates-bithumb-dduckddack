@@ -193,7 +193,7 @@ const TvDrawingChart = () => {
       <div className={classNames(`flex justify-center items-center`)}>
         {drawArr?.map((item) => (
           <div
-            className={classNames(` mx-10`)}
+            className={classNames(` px-10`)}
             onClick={() => {
               console.log(item.drawData);
             }}
@@ -217,10 +217,7 @@ const TvDrawingChart = () => {
         ))}
       </div>
 
-      <div
-        className={classNames(`w-full ml-28 relative z-20 `)}
-        ref={saveWrapperRef}
-      >
+      <div className={classNames(`w-full relative z-20 `)} ref={saveWrapperRef}>
         <div
           className={classNames(`w-full  absolute z-10 -tran`)}
           ref={canvasWrapperRef}

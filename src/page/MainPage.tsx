@@ -8,6 +8,7 @@ import { useCoinList } from '../hooks/useInitialize';
 import { useGenerateSocket } from '../hooks/useWebSocket';
 
 const MainPage = () => {
+  useGenerateSocket('CHAT');
   const setDefaultCoins = useSetRecoilState(atomSelectCoinDefault);
   useEffect(() => {
     setDefaultCoins({
@@ -22,7 +23,9 @@ const MainPage = () => {
 
   return (
     <>
-      <BestCoin className={classNames(`col-start-3 col-end-7 drop-shadow-2xl`)} />
+      <BestCoin
+        className={classNames(`col-start-3 col-end-7 drop-shadow-2xl`)}
+      />
       <OnlyDisplayChat className={classNames(` col-start-7 col-end-11`)} />
     </>
   );

@@ -22,7 +22,9 @@ const SignModal = () => {
     >
       <div
         className={classNames(
-          `h-5/6 w-7/12`,
+          `h-5/6`,
+          `p-10`,
+          // `h-5/6 w-7/12`,
           `bg-slate-300`,
           `rounded-2xl shadow-xl`,
           `shadow-xl`,

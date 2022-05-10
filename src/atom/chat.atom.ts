@@ -17,21 +17,25 @@ export const atomChatSender = atom<TypeWebSocketChatSend>({
 //   default: {},
 // });
 
-export const atomChatRecvChatMessage = atom<TypeWebSocketChatMessageRecv>({
+export const atomChatRecvChatMessage = atom<TypeWebSocketChatMessageRecv[]>({
   key: 'atomChatRecvChatMessage',
-  default: {},
+  default: [],
 });
-export const atomChatRecvChatUserLeft = atom<TypeWebSocketChatUserLeftRecv>({
+export const atomChatRecvChatUserLeft = atom<TypeWebSocketChatUserLeftRecv[]>({
   key: 'atomChatRecvChatUserLeft',
-  default: {},
+  default: [],
 });
-export const atomChatRecvChatUserJoin = atom<TypeWebSocketChatUserJoinedRecv>({
-  key: 'atomChatRecvChatUserJoin',
-  default: {},
-});
-export const atomChatRecvChatUserStats = atom<TypeWebSocketChatUserStatsdRecv>({
+export const atomChatRecvChatUserJoin = atom<TypeWebSocketChatUserJoinedRecv[]>(
+  {
+    key: 'atomChatRecvChatUserJoin',
+    default: [],
+  }
+);
+export const atomChatRecvChatUserStats = atom<
+  TypeWebSocketChatUserStatsdRecv[]
+>({
   key: 'atomChatRecvChatUserStats',
-  default: {},
+  default: [],
 });
 
 export const atomChatWebSocket = atom<WebSocket | undefined>({

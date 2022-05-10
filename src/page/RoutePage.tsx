@@ -16,12 +16,15 @@ import useResetObserverDrawData from '../hooks/useResetDrawData';
 import { useGenerateSocket } from '../hooks/useWebSocket';
 
 const RoutePage = () => {
-  useGenerateSocket('CHAT');
   return (
     <>
       <BrowserRouter>
         <Box
-          className={classNames(`gap-x-10`, `grid grid-cols-12 grid-rows-2 w-screen h-screen `, `grid-rows-[7%_auto]`)}
+          className={classNames(
+            `gap-x-10`,
+            `grid grid-cols-12 grid-rows-2 w-screen h-screen `,
+            `grid-rows-[7%_auto]`
+          )}
           style={{
             backgroundImage: `url(${bg_full})`,
           }}

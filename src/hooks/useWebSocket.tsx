@@ -3,11 +3,28 @@ import parse from 'fast-json-parse';
 import React, { useEffect } from 'react';
 import _ from 'lodash';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { atomSubscribeWebSocektMessage, atomSubscribeWebSocket } from '../atom/ws.atom';
-import { TypeWebSocketChatReceive, TypeWebSocketSubscribeReturnType, TypeWebSocketTypes } from '../atom/ws.type';
+import {
+  atomSubscribeWebSocektMessage,
+  atomSubscribeWebSocket,
+} from '../atom/ws.atom';
+import {
+  TypeWebSocketChatReceive,
+  TypeWebSocketSubscribeReturnType,
+  TypeWebSocketTypes,
+} from '../atom/ws.type';
 import { atomWsStBar } from '../atom/tvChart.atom';
-import { atomTickers, atomTransactions, atomWebsocketObj } from '../atom/total.atom';
-import { atomChatRecvChatMessage, atomChatRecvChatUserLeft, atomChatRecvChatUserJoin, atomChatRecvChatUserStats } from '../atom/chat.atom';
+import {
+  atomTickers,
+  atomTransactions,
+  atomWebsocketObj,
+} from '../atom/total.atom';
+import {
+  atomChatRecvChatMessage,
+  atomChatRecvChatUserLeft,
+  atomChatRecvChatUserJoin,
+  atomChatRecvChatUserStats,
+  atomChatWebSocket,
+} from '../atom/chat.atom';
 
 /**
  *
@@ -15,122 +32,142 @@ import { atomChatRecvChatMessage, atomChatRecvChatUserLeft, atomChatRecvChatUser
  */
 export const useGenerateSocket = (type: TypeWebSocketTypes) => {
   const [wsSubscribe, setWsSubscribe] = useRecoilState(atomSubscribeWebSocket);
+  const [wsChat, setWsChat] = useRecoilState(atomChatWebSocket);
   const wsMessage = useRecoilValue(atomSubscribeWebSocektMessage);
 
   const setTickers = useSetRecoilState(atomTickers);
   const setTransactions = useSetRecoilState(atomTransactions);
   const setSt = useSetRecoilState(atomWsStBar);
-  const setChatMsg = useSetRecoilState(atomChatRecvChatMessage);
-  const setChatUserLeft = useSetRecoilState(atomChatRecvChatUserLeft);
-  const setChatUserJoin = useSetRecoilState(atomChatRecvChatUserJoin);
-  const setChatUserStats = useSetRecoilState(atomChatRecvChatUserStats);
+  const [chatMsg, setChatMsg] = useRecoilState(atomChatRecvChatMessage);
+  const [chatUserLeft, setChatUserLeft] = useRecoilState(
+    atomChatRecvChatUserLeft
+  );
+  const [chatUserJoin, setChatUserJoin] = useRecoilState(
+    atomChatRecvChatUserJoin
+  );
+  const [chatUserStats, setChatUserStats] = useRecoilState(
+    atomChatRecvChatUserStats
+  );
 
-  const generateOnError: any | null = (type: TypeWebSocketTypes) => (ev: Event) => {
-    console.error(`Error WebSocket ${type} ${ev}`);
-    console.error(ev);
-  };
-  const generateOnCloser: any | null = (type: TypeWebSocketTypes) => (ev: CloseEvent) => {
-    console.info(`Close WebSocket ${type} ${ev}`);
-    console.info(ev);
-    setWsSubscribe(undefined);
-  };
+  const generateOnError: any | null =
+    (type: TypeWebSocketTypes) => (ev: Event) => {
+      console.error(`Error WebSocket ${type} ${ev}`);
+      console.error(ev);
+    };
+  const generateOnCloser: any | null =
+    (type: TypeWebSocketTypes) => (ev: CloseEvent) => {
+      console.info(`Close WebSocket ${type} ${ev}`);
+      console.info(ev);
+      setWsSubscribe(undefined);
+    };
 
-  const generateOnMessage: any | null = (nameType: TypeWebSocketTypes) => (ev: MessageEvent<TypeWebSocketSubscribeReturnType>) => {
-    if (ev) {
-      const { subtype, type, content }: TypeWebSocketSubscribeReturnType = parse(ev.data).value;
-      switch (nameType) {
-        case 'SUBSCRIBE':
-          if (type === 'data') {
-            if (subtype === 'tk') {
-              setTimeout(() => {
-                setTickers(content);
-              }, 0);
-            } else if (subtype === 'st') {
-              setTimeout(() => {
-                setSt(content);
-              }, 0);
-            } else if (subtype === 'tr') {
-              setTimeout(() => {
-                setTransactions(content);
-              }, 0);
+  const generateOnMessage: any | null =
+    (nameType: TypeWebSocketTypes) =>
+    (ev: MessageEvent<TypeWebSocketSubscribeReturnType>) => {
+      if (ev) {
+        const { subtype, type, content }: TypeWebSocketSubscribeReturnType =
+          parse(ev.data).value;
+        switch (nameType) {
+          case 'SUBSCRIBE':
+            if (type === 'data') {
+              if (subtype === 'tk') {
+                setTimeout(() => {
+                  setTickers(content);
+                }, 0);
+              } else if (subtype === 'st') {
+                setTimeout(() => {
+                  setSt(content);
+                }, 0);
+              } else if (subtype === 'tr') {
+                setTimeout(() => {
+                  setTransactions(content);
+                }, 0);
+              }
             }
-          }
-          break;
-        default:
-          break;
+            break;
+          default:
+            break;
+        }
       }
-    }
-  };
+    };
 
-  const generateOnChatMessage: any | null = (nameType: TypeWebSocketTypes) => (ev: MessageEvent<TypeWebSocketChatReceive>) => {
-    if (ev) {
-      const recvData: TypeWebSocketChatReceive = parse(ev.data).value;
-      console.log(recvData);
-      switch (nameType) {
-        case 'CHAT':
-          switch (recvData.type) {
-            case 'CHAT_MESSAGE':
-              setTimeout(() => {
-                setChatMsg({
-                  id: recvData.id,
-                  payload: recvData.payload,
-                  timestamp: recvData.timestamp,
+  const generateOnChatMessage: any | null =
+    (nameType: TypeWebSocketTypes) =>
+    (ev: MessageEvent<TypeWebSocketChatReceive>) => {
+      if (ev) {
+        const recvData: TypeWebSocketChatReceive = parse(ev.data).value;
+        console.log(recvData);
+        switch (nameType) {
+          case 'CHAT':
+            switch (recvData.type) {
+              case 'CHAT_MESSAGE':
+                setChatMsg((prev) => {
+                  const r = JSON.parse(JSON.stringify(prev));
+                  r.push(recvData);
+                  return r;
                 });
-              }, 0);
-              break;
-            case 'USER_JOINED':
-              setTimeout(() => {
-                setChatUserJoin({
-                  id: recvData.id,
-                  payload: recvData.payload,
-                  timestamp: recvData.timestamp,
-                });
-              }, 0);
-              break;
-            case 'USER_LEFT':
-              setTimeout(() => {
-                setChatUserLeft({
-                  id: recvData.id,
-                  payload: recvData.payload,
-                  timestamp: recvData.timestamp,
-                });
-              }, 0);
-              break;
-            case 'USER_STATS':
-              setTimeout(() => {
-                setChatUserStats({
-                  id: recvData.id,
-                  payload: recvData.payload,
-                  timestamp: recvData.timestamp,
-                });
-              }, 0);
-              break;
-          }
-          break;
-        default:
-          break;
-      }
-    }
-  };
+                // setTimeout(() => {
+                //   // console.log(prev);
 
-  const generateOnOpen: any | null = (type: TypeWebSocketTypes, ws: WebSocket) => (ev: Event) => {
-    if (ev) {
-      console.log(`Connected WebSocket ${type}`);
-      switch (type) {
-        case 'SUBSCRIBE':
-          if (wsSubscribe) {
-            wsSubscribe.close();
-            console.warn(`Exist ${type} Socket`);
-          }
-          if (wsSubscribe?.CLOSED || wsSubscribe === undefined) {
-            setWsSubscribe(ws);
-          }
-          break;
-        default:
-          break;
+                // }, 0);
+                break;
+              case 'USER_JOINED':
+                setTimeout(() => {
+                  const prev = JSON.parse(JSON.stringify(chatUserJoin));
+                  prev.push(recvData);
+                  setChatUserJoin(prev);
+                }, 0);
+                break;
+              case 'USER_LEFT':
+                setTimeout(() => {
+                  const prev = JSON.parse(JSON.stringify(chatUserLeft));
+                  prev.push(recvData);
+                  setChatUserLeft(prev);
+                }, 0);
+                break;
+              case 'USER_STATS':
+                setTimeout(() => {
+                  const prev = JSON.parse(JSON.stringify(chatUserStats));
+                  prev.push(recvData);
+                  setChatUserStats(prev);
+                }, 0);
+                break;
+            }
+            break;
+          default:
+            break;
+        }
       }
-    }
-  };
+    };
+
+  const generateOnOpen: any | null =
+    (type: TypeWebSocketTypes, ws: WebSocket) => (ev: Event) => {
+      if (ev) {
+        console.log(`Connected WebSocket ${type}`);
+        switch (type) {
+          case 'SUBSCRIBE':
+            if (wsSubscribe) {
+              wsSubscribe.close();
+              console.warn(`Exist ${type} Socket`);
+            }
+            if (wsSubscribe?.CLOSED || wsSubscribe === undefined) {
+              setWsSubscribe(ws);
+            }
+            break;
+          case 'CHAT':
+            if (wsChat) {
+              wsChat.close();
+              console.warn(`Exist ${type} Socket`);
+            }
+            if (wsChat?.CLOSED || wsChat === undefined) {
+              setWsChat(ws);
+            }
+            break;
+          default:
+            break;
+        }
+      }
+    };
 
   /**
    * 웹소켓의 구독 메세지가 변경되면 소켓에 전달합니다.
@@ -156,7 +193,9 @@ export const useGenerateSocket = (type: TypeWebSocketTypes) => {
           subWs.onmessage = generateOnMessage(type);
           break;
         case 'CHAT':
-          const chatWs = new WebSocket('wss://cointalk.kro.kr:8080/chatting/rs');
+          const chatWs = new WebSocket(
+            'wss://cointalk.kro.kr:8080/chatting/rs'
+          );
           chatWs.onopen = generateOnOpen(type, chatWs);
           chatWs.onerror = generateOnError(type);
           chatWs.onclose = generateOnCloser(type);
