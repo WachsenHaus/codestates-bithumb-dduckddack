@@ -8,7 +8,6 @@ import { useCoinList } from '../hooks/useInitialize';
 import { useGenerateSocket } from '../hooks/useWebSocket';
 
 const MainPage = () => {
-  useGenerateSocket('CHAT');
   const setDefaultCoins = useSetRecoilState(atomSelectCoinDefault);
   useEffect(() => {
     setDefaultCoins({

@@ -16,6 +16,8 @@ import useResetObserverDrawData from '../hooks/useResetDrawData';
 import { useGenerateSocket } from '../hooks/useWebSocket';
 
 const RoutePage = () => {
+  useGenerateSocket('CHAT');
+  useGenerateSocket('SUBSCRIBE');
   return (
     <>
       <BrowserRouter>

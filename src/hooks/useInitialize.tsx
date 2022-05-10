@@ -56,13 +56,15 @@ const useGetCoinList = () => {
  * URL주소를 분석하고 해당 값으로 defaultCoin을 설정합니다.
  */
 const useGetTradeParam = () => {
+  const { coinName } = useParams();
   const coins = useRecoilValue(atomCoinList);
-  const params = useParams();
   const setSelectCoin = useSetRecoilState(atomSelectCoinDefault);
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    if (ready && coins && params?.coinName) {
-      const result = params?.coinName?.split('_');
+    console.log('뭔데 도대체');
+    console.log(coinName, ready);
+    if (ready && coins && coinName) {
+      const result = coinName?.split('_');
       if (coins && result) {
         const item = coins.coinList.find(
           (item) => item.coinSymbol === result[0]
@@ -82,6 +84,7 @@ const useGetTradeParam = () => {
         const marketSymbol = result[1];
 
         if (type && siseCrncCd && coinSymbol && marketSymbol) {
+          console.log('??');
           setSelectCoin((prevData) => {
             return {
               coinType: type,
@@ -92,7 +95,7 @@ const useGetTradeParam = () => {
           });
         }
       }
-    } else if (ready === true && params?.coinName === undefined) {
+    } else if (ready === true && coinName === undefined) {
       setSelectCoin({
         coinType: 'C0101',
         coinSymbol: 'BTC',
@@ -100,7 +103,8 @@ const useGetTradeParam = () => {
         siseCrncCd: 'C0100',
       });
     }
-  }, [params, ready]);
+    //params, ready
+  }, [coinName, ready]);
 
   useEffect(() => {
     if (coins) {
@@ -393,7 +397,6 @@ const useInitialize = () => {
   useMergeTickersWebsocketAndFilteredData();
   // 키워드,방향등의 필터조건을 통과한 결과값을 filteredCoins에 할당한다.
   useGetFilteredCoins();
-
   /**
    * 트랜잭션
    */

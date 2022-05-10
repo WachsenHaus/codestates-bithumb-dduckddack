@@ -24,9 +24,8 @@ import ChatRoom from '../components/Chat/ChatRoom';
 const ChatPage = () => {
   const coins = useRecoilValue(atomUseCoins);
   const setDefaultCoins = useSetRecoilState(atomSelectCoinDefault);
-  useGenerateSocket('CHAT');
+
   useCoinChart();
-  useGenerateSocket('SUBSCRIBE');
 
   useEffect(() => {
     setDefaultCoins({
