@@ -58,6 +58,126 @@ export type TypeWebSocketTransactionReturnType = {
   }>;
 };
 
+export type TypeWebSocketChatPayloadType = {
+  payload?: {
+    roomId: string;
+    user: {
+      username: string;
+      avatar: string;
+    };
+    // message?: string;
+    // stats?: {
+    //   [key in string]: {
+    //     user: {
+    //       username: string;
+    //       avatar: string;
+    //     };
+    //     lastMessage: number;
+    //     messageCount: number;
+    //   };
+    // };
+  };
+  id?: number;
+  timestamp?: number;
+};
+
+export type TypeWebSocketChatMessageRecv = {
+  type?: 'CHAT_MESSAGE';
+  payload?: {
+    roomId: string;
+    user: {
+      username: string;
+      avatar: string;
+    };
+    message?: string;
+  };
+  id?: number;
+  timestamp?: number;
+};
+export type TypeWebSocketChatUserLeftRecv = {
+  type?: 'USER_LEFT';
+  payload?: {
+    roomId: string;
+    user: {
+      username: string;
+      avatar: string;
+    };
+  };
+  id?: number;
+  timestamp?: number;
+};
+export type TypeWebSocketChatUserJoinedRecv = {
+  type?: 'USER_JOINED';
+  payload?: {
+    roomId: string;
+    user: {
+      username: string;
+      avatar: string;
+    };
+  };
+  id?: number;
+  timestamp?: number;
+};
+export type TypeWebSocketChatUserStatsdRecv = {
+  type?: 'USER_STATS';
+  payload?: {
+    roomId: string;
+    user: {
+      username: string;
+      avatar: string;
+    };
+    stats?: {
+      [key in string]: {
+        user: {
+          username: string;
+          avatar: string;
+        };
+        lastMessage: number;
+        messageCount: number;
+      };
+    };
+  };
+  id?: number;
+  timestamp?: number;
+};
+
+export type TypeWebSocketChatSend = {
+  type?: 'CHAT_MESSAGE' | 'USER_JOINED';
+  payload?: {
+    roomId: string;
+    user: {
+      username: string;
+      avatar: string;
+    };
+    // userJoined할때만 필요함.
+    message?: string;
+  };
+};
+
+export type TypeWebSocketChatReceive = {
+  type?: 'USER_STATS' | 'CHAT_MESSAGE' | 'USER_JOINED' | 'USER_LEFT';
+  payload?: {
+    roomId: string;
+    user: {
+      username: string;
+      avatar: string;
+    };
+    message?: string;
+    stats?: {
+      [key in string]: {
+        user: {
+          username: string;
+          avatar: string;
+        };
+        lastMessage: number;
+        messageCount: number;
+      };
+    };
+  };
+  id?: number;
+  timestamp?: number;
+};
+
 // 받는것
 // {
 //   "type": "CHAT_MESSAGE",

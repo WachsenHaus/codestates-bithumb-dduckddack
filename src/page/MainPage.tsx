@@ -19,12 +19,10 @@ const MainPage = () => {
     });
   }, []);
   useCoinList();
-  useGenerateSocket('CHAT');
+
   return (
     <>
-      <BestCoin
-        className={classNames(`col-start-3 col-end-7 drop-shadow-2xl`)}
-      />
+      <BestCoin className={classNames(`col-start-3 col-end-7 drop-shadow-2xl`)} />
       <OnlyDisplayChat className={classNames(` col-start-7 col-end-11`)} />
     </>
   );
