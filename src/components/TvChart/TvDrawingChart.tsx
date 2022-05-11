@@ -140,7 +140,7 @@ const TvDrawingChart = () => {
 
       <div
         className={classNames(
-          `w-full h-full relative z-20 rounded-3xl bg-nightBlack p-5`
+          `w-full h-full relative z-20 rounded-3xl bg-nightBlack p-5 drop-shadow-3xl`
         )}
         ref={saveWrapperRef}
       >

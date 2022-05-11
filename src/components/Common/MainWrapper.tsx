@@ -13,7 +13,7 @@ const MainWrapper = ({
       className={classNames(
         `bg-nightBlack`,
         `rounded-3xl`,
-        `drop-shadow-2xl`,
+        `filter drop-shadow-3xl`,
         `${className}`
       )}
     >

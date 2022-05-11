@@ -16,7 +16,7 @@ module.exports = {
         bithumbSubGray: '#D0D0D0',
       },
       dropShadow: {
-        '3xl': '0px 5px 3px rgba(0, 0, 0, 6.25)',
+        '3xl': '0px 5px 3px rgba(0, 0, 0, 0.85)',
       },
 
       animation: {
