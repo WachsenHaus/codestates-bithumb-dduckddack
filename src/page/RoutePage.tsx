@@ -24,7 +24,7 @@ const RoutePage = () => {
         <Box
           className={classNames(
             `gap-x-10`,
-            `grid grid-cols-12 grid-rows-2 w-screen h-screen `,
+            `grid grid-cols-12  w-screen h-screen `,
             `grid-rows-[7%_auto]`
           )}
           style={{

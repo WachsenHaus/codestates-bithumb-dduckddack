@@ -48,6 +48,7 @@
     "recoil": "^0.7.2",
     "sockjs-client": "^1.6.0",
     "styled-components": "^5.3.5",
+    "swiper": "^8.1.4",
     "tailwind-scrollbar-hide": "^1.1.7",
     "tsparticles": "^2.0.6",
     "tsparticles-preset-stars": "^2.0.6",

@@ -102,7 +102,7 @@ export const useGenerateSocket = (type: TypeWebSocketTypes) => {
       (ev: MessageEvent<TypeWebSocketChatReceive>) => {
         if (ev) {
           const recvData: TypeWebSocketChatReceive = parse(ev.data).value;
-          console.log(recvData);
+          // console.log(recvData);
           switch (nameType) {
             case 'CHAT':
               switch (recvData.type) {

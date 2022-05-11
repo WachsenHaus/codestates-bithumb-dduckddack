@@ -25,7 +25,12 @@ const CoinRate = ({
           }}
           transition={{ type: 'spring', stiffness: 100 }}
           className={classNames(
-            `font-thin font-bmjua  text-white rounded-2xl px-3 p-1`
+            `font-thin font-bmjua  text-white rounded-2xl `,
+            `text-xs`,
+            `w-14`,
+            `text-center`,
+            `absolute`,
+            `mt-14`
           )}
         >
           {rate}%

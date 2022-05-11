@@ -23,6 +23,7 @@ const useGenerateDrawCanvas = (
   // canvasRef.current.
   const [drawingMode, setDrawingMode] = useState(false);
   const [isDrawing, setIsDrawing] = useState(false);
+  const [eraseMode, setEraseMode] = useState(false);
 
   const [drawAxisDatas, setDrawAxisDatas] = useState<
     Array<{
@@ -54,7 +55,11 @@ const useGenerateDrawCanvas = (
     y: 0,
   });
 
-  const [width, height] = useResizeCanvas(canvasWrapperRef, tvChartRef);
+  const [width, height] = useResizeCanvas(
+    canvasWrapperRef,
+    tvChartRef,
+    chartRef
+  );
 
   const onDrawToogleClick = () => {
     setDrawingMode(!drawingMode);
@@ -108,28 +113,7 @@ const useGenerateDrawCanvas = (
         setRecordRange(range);
       }
     }
-
-    // 드로잉한 그림 기억
-    // if (canvasRef.current) {
-    //   const ctx = canvasRef.current.getContext('2d');
-    //   if (ctx) {
-    //     ctx.clearRect(
-    //       0,
-    //       0,
-    //       canvasRef.current.clientWidth,
-    //       canvasRef.current.clientHeight
-    //     );
-    //   }
-    //   setPause(false);
-    //   setDrawingMode(false);
-    // }
   };
-
-  // const onNewCanvas = () => {
-  //   if (ctx && canvasRef.current) {
-  //     ctx.clearRect(0, 0, 99999, 99999);
-  //   }
-  // };
 
   const onSaveAs = (uri: any, filename: any) => {
     console.log('onSaveas');
@@ -141,57 +125,35 @@ const useGenerateDrawCanvas = (
     document.body.removeChild(link);
   };
 
-  const onDrawing = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-    // const { offsetX, offsetY } = e.nativeEvent;
-    // if (ctx && canvasRef.current) {
-    //   if (!isDrawing) {
-    //     ctx.beginPath();
-    //     ctx.moveTo(offsetX, offsetY);
-    //     setMoveAxis({
-    //       x: offsetX,
-    //       y: offsetY,
-    //     });
-    //   } else {
-    //     ctx.lineTo(offsetX, offsetY);
-    //     const prevCopyDraw = JSON.parse(JSON.stringify(drawAxisDatas));
-    //     prevCopyDraw.push({
-    //       x: offsetX,
-    //       y: offsetY,
-    //       originX: moveAxis.x,
-    //       originY: moveAxis.y,
-    //     });
-    //     setDrawAxisDatas(prevCopyDraw);
-    //     ctx.stroke();
-    //   }
-    // }
+  const onErase = () => {
+    if (canvasRef.current) {
+      canvasRef.current?.eraseMode(!eraseMode);
+    }
+    setEraseMode(!eraseMode);
   };
 
-  const onMouseUp = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-    setIsDrawing(false);
+  const onUndo = () => {
+    if (canvasRef.current) {
+      canvasRef.current.undo();
+    }
   };
 
-  const onMouseDown = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-    setIsDrawing(true);
-  };
-
-  const onMouseLeave = (e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
-    setIsDrawing(false);
+  const onRedo = () => {
+    if (canvasRef.current) {
+      canvasRef.current.redo();
+    }
   };
 
   return [
     canvasRef,
     canvasWrapperRef,
     saveWrapperRef,
-    // ctx,
     drawingMode,
-    isDrawing,
     onDrawToogleClick,
-    onDrawing,
-    onMouseUp,
-    onMouseDown,
-    onMouseLeave,
     onSave,
-    // onNewCanvas,
+    onErase,
+    onUndo,
+    onRedo,
     drawArr,
     width,
     height,

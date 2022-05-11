@@ -14,11 +14,13 @@ import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
 import DrawSave from '../DrawCanvas/DrawSave';
 import DrawCanvasBar from '../DrawCanvas/DrawCanvasBar';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { atomModalState } from '../../atom/modal.atom';
 import { IconButton } from '@mui/material';
 import { ReactSketchCanvas } from 'react-sketch-canvas';
 import { HexColorPicker } from 'react-colorful';
+import { atomDrawConfig } from '../../atom/drawConfig.atom';
+import DrawTool from '../DrawTool/DrawTool';
 // 1. 새로운 도화지 생성하기를 누르면 해당 도화지를 생성함
 // 각도화지는
 // 2. 드로잉모드를 하게된다면 생성된 마지막 도화지를 기반으로 드로잉이 되며 드로잉값이 차트에 저장되지않음.
@@ -40,7 +42,7 @@ import { HexColorPicker } from 'react-colorful';
 
 const TvDrawingChart = () => {
   const [modal, setModal] = useRecoilState(atomModalState);
-  const [color, setColor] = useState('#aabbcc');
+  const drawConfig = useRecoilValue(atomDrawConfig);
 
   useGetChartDatas();
   const [wrapperRef, candleRef, chartRef] = useGenerateChart();
@@ -57,13 +59,11 @@ const TvDrawingChart = () => {
     saveWrapperRef,
     // ctx,
     drawingMode,
-    isDrawing,
     onDrawToogleClick,
-    onDrawing,
-    onMouseUp,
-    onMouseDown,
-    onMouseLeave,
     onSave,
+    onErase,
+    onUndo,
+    onRedo,
     // onNewCanvas,
     drawArr,
     width,
@@ -76,10 +76,6 @@ const TvDrawingChart = () => {
     setRecordRange
   );
 
-  const [priceRange, setPriceRange] = useState();
-
-  // const [isDrawing, setIsDrawing] = useState(false);
-
   useEffect(() => {
     if (candleRef.current) {
       if (recordRange) {
@@ -91,96 +87,20 @@ const TvDrawingChart = () => {
   }, [recordRange]);
 
   return (
-    <div className={classNames(`w-full `)}>
-      {/* <div
-        onClick={(e) => {
-          setPause(true);
-          setDrawingMode(true);
-          if (candleRef.current) {
-            if (recordRange) {
-              chartRef.current?.timeScale().setVisibleLogicalRange(recordRange);
-            }
-          }
-
-          if (canvasRef.current) {
-            const ctx = canvasRef.current.getContext('2d');
-            if (ctx) {
-              ctx.clearRect(
-                0,
-                0,
-                canvasRef.current.clientWidth,
-                canvasRef.current.clientHeight
-              );
-              ctx.lineWidth = 1;
-              ctx.strokeStyle = 'red';
-
-              if (drawArr.length > 0) {
-                ctx.beginPath();
-                let prevX = drawArr[0].originX;
-                let prevY = drawArr[0].originY;
-
-                ctx.moveTo(prevX, prevY);
-                drawArr.forEach((item) => {
-                  if (prevX !== item.originX || prevY !== item.originY) {
-                    prevX = item.originX;
-                    prevY = item.originY;
-                    ctx.moveTo(prevX, prevY);
-                  }
-
-                  ctx.lineTo(item.x, item.y);
-                  ctx.stroke();
-                });
-                ctx.closePath();
-                // ctx.save();
-              }
-            }
-          }
+    <div
+      className={classNames(`w-full h-full grid grid-rows-[25%_auto] gap-y-5 `)}
+    >
+      <DrawTool
+        onNewButton={() => {
+          canvasRef.current?.clearCanvas();
         }}
-      >
-        드로잉 불러오기
-      </div> */}
-      {/* <div
-        onClick={(e) => {
-          if (candleRef.current) {
-            if (recordRange) {
-              chartRef.current?.timeScale().setVisibleLogicalRange(recordRange);
-              chartRef.current?.applyOptions({
-                rightPriceScale: {
-                  autoScale: true,
-                },
-              });
-              setPause(false);
-              setDrawingMode(true);
-            }
-          }
-        }}
-      >
-        드로잉 데이터 보기(실시간 적용)
-      </div> */}
-      {/* <div
-        onClick={() => {
-          if (canvasRef.current) {
-            const ctx = canvasRef.current.getContext('2d');
-            if (ctx) {
-              console.log('왜안돼');
-              ctx.clearRect(
-                0,
-                0,
-                canvasRef.current.clientWidth,
-                canvasRef.current.clientHeight
-              );
-              ctx.strokeStyle = 'black';
-              ctx.lineWidth = 1;
-            }
-          }
-          setDrawingMode(false);
-          setPause(false);
-        }}
-      >
-        드로잉 데이터 보기 모드 끄기
-      </div> */}
-      <HexColorPicker color={color} onChange={setColor} />
-      <div className={classNames(`flex justify-center items-center`)}>
+        onDrawButton={onDrawToogleClick}
+        onErase={onErase}
+        onUndo={onUndo}
+        onRedo={onRedo}
+        onSave={onSave}
+      />
+      {/* <div className={classNames(`flex justify-center items-center`)}>
         <DrawCanvasBar onDraw={onDrawToogleClick} onSave={onSave} />
         <IconButton
           onClick={() => {
@@ -189,8 +109,9 @@ const TvDrawingChart = () => {
         >
           <AddIcon />
         </IconButton>
-      </div>
-      <div className={classNames(`flex justify-center items-center`)}>
+      </div> */}
+      {/* 이미지저장되면 생기는곳 */}
+      {/* <div className={classNames(`flex justify-center items-center`)}>
         {drawArr?.map((item) => (
           <div
             className={classNames(` px-10`)}
@@ -215,30 +136,26 @@ const TvDrawingChart = () => {
             />
           </div>
         ))}
-      </div>
+      </div> */}
 
-      <div className={classNames(`w-full relative z-20 `)} ref={saveWrapperRef}>
+      <div
+        className={classNames(
+          `w-full h-full relative z-20 rounded-3xl bg-nightBlack p-5`
+        )}
+        ref={saveWrapperRef}
+      >
         <div
           className={classNames(`w-full  absolute z-10 -tran`)}
           ref={canvasWrapperRef}
         >
           <ReactSketchCanvas
             ref={canvasRef}
-            strokeWidth={5}
-            strokeColor={color}
+            strokeWidth={drawConfig.penStroke}
+            eraserWidth={drawConfig.eraseStroke}
+            strokeColor={drawConfig.penColor}
             canvasColor="rgba(0,0,0,0)"
             width={`${width.toString()}px`}
             height={`${height.toString()}px`}
-            // style={{
-            //   background: 'rgba(0,0,0,0)',
-            // }}
-            // onStroke={}
-            // width={wrapperRef.current?.clientWidth || '100'}
-            // height={wrapperRef.current?.clientHeight || '100'}
-            // onMouseMove={onDrawing}
-            // onMouseUp={onMouseUp}
-            // onMouseDown={onMouseDown}
-            // onMouseLeave={onMouseLeave}
             className={classNames(
               `bg-blue-300 bg-opacity-20`,
               drawingMode === true ? 'visible' : 'hidden'

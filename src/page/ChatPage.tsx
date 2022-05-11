@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Autocomplete,
   Box,
@@ -6,26 +6,39 @@ import {
   TextField,
 } from '@mui/material';
 import {
+  useRecoilState,
   useRecoilValue,
   useRecoilValueLoadable,
   useSetRecoilState,
 } from 'recoil';
 import { useCoinChart } from '../hooks/useInitialize';
-import CoinBar from '../components/CoinBar/CoinBar';
 import { atomUseCoins } from '../atom/total.atom';
 import { TypeDrawTicker } from '../atom/drawData.atom';
-import TvChart from '../components/TvChart/TvChart';
 import { atomSelectCoinDefault } from '../atom/selectCoinDefault.atom';
 import TvDrawingChart from '../components/TvChart/TvDrawingChart';
-import { useGenerateSocket } from '../hooks/useWebSocket';
 import classNames from 'classnames';
 import ChatRoom from '../components/Chat/ChatRoom';
+import CoinBarForChat from '../components/CoinBar/CoinBarForChat';
+import MainWrapper from '../components/Common/MainWrapper';
+import DrawTool from '../components/DrawTool/DrawTool';
 
 const ChatPage = () => {
   const coins = useRecoilValue(atomUseCoins);
   const setDefaultCoins = useSetRecoilState(atomSelectCoinDefault);
+  const [displayCoins, setDisplayCoins] = useState<TypeDrawTicker[]>();
 
   useCoinChart();
+
+  useEffect(() => {
+    const result = coins.filter((item) => {
+      return (
+        item.coinSymbol === 'ETH' ||
+        item.coinSymbol === 'BTC' ||
+        item.coinSymbol === 'XRP'
+      );
+    });
+    setDisplayCoins(result);
+  }, [coins]);
 
   useEffect(() => {
     setDefaultCoins({
@@ -48,16 +61,13 @@ const ChatPage = () => {
       )}
     >
       <div className={classNames(`grid grid-cols-12`)}>
-        <div className={classNames(`col-start-1 col-end-2`)}>검색</div>
-        <div className={classNames(`col-start-2 col-end-12`)}>뉴스헤드라인</div>
-      </div>
-      <div className={classNames(`grid grid-cols-12`)}>
-        <div className={classNames(`col-start-1 col-end-9`)}>
+        {/* 코인검색, 헤드라인 */}
+        <div className={classNames(`col-start-1 col-end-3 p-5`)}>
           <Autocomplete
             disablePortal
             id="coin-comboBOx"
-            options={coins}
-            sx={{ width: 300 }}
+            options={displayCoins || []}
+            sx={{ width: '100%' }}
             filterOptions={filterOption}
             getOptionLabel={(e) => {
               return e.coinName!;
@@ -76,10 +86,40 @@ const ChatPage = () => {
             }}
             renderInput={(params) => <TextField {...params} label="비트코인" />}
           />
-          <CoinBar />
-          <TvDrawingChart />
         </div>
-        <div className={classNames(`col-start-9 col-end-12`)}>
+
+        <div className={classNames(`col-start-3 col-end-13 p-5`)}>
+          <MainWrapper
+            className={classNames(
+              `w-full h-full rounded-[4rem]`,
+              `flex justify-center  items-center`
+            )}
+          >
+            뉴스헤드라인
+          </MainWrapper>
+        </div>
+      </div>
+
+      {/* 본문 */}
+      <div className={classNames(`grid grid-cols-12 gap-x-2`)}>
+        {/*  좌측 코인/차트 정보*/}
+        <div className={classNames(`col-start-1 col-end-9 p-5`)}>
+          <div
+            className={classNames(
+              `w-full h-full grid grid-rows-[15%_auto] gap-y-5 `
+            )}
+          >
+            <CoinBarForChat />
+
+            {/* <div className={classNames(`text-white`)}>
+              여기가 그림판 도구가 들어간다..
+            </div> */}
+            <TvDrawingChart />
+          </div>
+        </div>
+
+        {/* 채팅방 */}
+        <div className={classNames(`col-start-9 col-end-13 p-5`)}>
           <ChatRoom />
         </div>
       </div>

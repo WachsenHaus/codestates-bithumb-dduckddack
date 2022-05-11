@@ -1,3 +1,4 @@
+import { IChartApi } from 'lightweight-charts';
 import { useCallback, useEffect, useState } from 'react';
 
 /**
@@ -19,7 +20,8 @@ import { useCallback, useEffect, useState } from 'react';
 const useResizeCanvas = (
   wrapper: React.MutableRefObject<HTMLDivElement | null>,
   // target: CanvasRenderingContext2D | null,
-  baseTarget: React.MutableRefObject<HTMLDivElement | null>
+  baseTarget: React.MutableRefObject<HTMLDivElement | null>,
+  chartRef: React.MutableRefObject<IChartApi | null | undefined>
 ) => {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
@@ -31,6 +33,9 @@ const useResizeCanvas = (
         if (tvCanvas) {
           setWidth(tvCanvas.clientWidth);
           setHeight(tvCanvas.clientHeight);
+          console.log('resize');
+          // chartRef.current?.resize(tvCanvas.clientWidth, tvCanvas.clientHeight);
+
           // target.canvas.width = tvCanvas.clientWidth;
           // target.canvas.height = tvCanvas.clientHeight;
         }

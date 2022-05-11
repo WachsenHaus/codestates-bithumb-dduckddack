@@ -24,7 +24,7 @@ const ChatRoom = () => {
   return (
     <div className={classNames(`h-full`, `flex justify-center items-center`)}>
       <MainWrapper
-        className={classNames(`w-full h-[90%] grid grid-rows-[90%_auto]`)}
+        className={classNames(`w-full h-full grid grid-rows-[90%_auto]`)}
       >
         <div
           className={classNames(

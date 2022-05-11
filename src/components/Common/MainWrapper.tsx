@@ -11,10 +11,10 @@ const MainWrapper = ({
   return (
     <div
       className={classNames(
-        `${className}`,
         `bg-nightBlack`,
         `rounded-3xl`,
-        `drop-shadow-xl`
+        `drop-shadow-2xl`,
+        `${className}`
       )}
     >
       {children}

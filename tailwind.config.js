@@ -8,9 +8,15 @@ module.exports = {
       colors: {
         highRight: '#FF9900',
         bithumb: '#F6B93B',
+        bithumbGray: '#777777',
+        bithumbYellow: '#FAD390',
         nightBlack: '#353232',
         upRed: '#E55039',
         downBlue: '#6A89CC',
+        bithumbSubGray: '#D0D0D0',
+      },
+      dropShadow: {
+        '3xl': '0px 5px 3px rgba(0, 0, 0, 6.25)',
       },
 
       animation: {
