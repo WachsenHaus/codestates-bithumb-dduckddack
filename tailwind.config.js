@@ -14,6 +14,8 @@ module.exports = {
         upRed: '#E55039',
         downBlue: '#6A89CC',
         bithumbSubGray: '#D0D0D0',
+        downBox: '#1E3799',
+        upBox: '#EB2F06',
       },
       dropShadow: {
         '3xl': '0px 5px 3px rgba(0, 0, 0, 0.85)',

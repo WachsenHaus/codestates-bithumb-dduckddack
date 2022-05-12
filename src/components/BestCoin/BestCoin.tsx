@@ -49,10 +49,10 @@ const BestCoinRow = ({ children }: { children?: ReactNode }) => {
   );
 };
 
-const BestCoinRowChart = ({ data }: { data?: any[] }) => {
+export const BestCoinRowChart = ({ data }: { data?: any[] }) => {
   const generateLabel = Array.from({ length: 1500 }, (undefined, i) => i);
   const chartData = {
-    // width: '150px',
+    // width: '50px',
     responsive: true,
     labels: generateLabel,
     datasets: [
@@ -229,18 +229,14 @@ const BestCoin = ({ className }: { className?: string }) => {
   };
 
   return (
-    <div
-      className={classNames(
-        `${className}`,
-        `h-full`,
-        `flex justify-center items-center`
-      )}
-    >
-      <MainWrapper className={classNames(`w-full h-5/6`)}>
+    <div className={classNames(`${className}`)}>
+      <MainWrapper
+        className={classNames(`w-full h-full `, `grid grid-rows-[10%_auto]`)}
+      >
         <div
           className={classNames(
-            `w-full text-center font-bold font-bmjua text-white`,
-            `h-10`,
+            `w-full h-full text-center font-bold font-bmjua text-white`,
+
             `flex justify-center items-center`
           )}
         >
@@ -253,8 +249,11 @@ const BestCoin = ({ className }: { className?: string }) => {
         </div>
         <div
           className={classNames(
-            `w-full h-full py-5 px-5`,
-            `grid grid-cols-1 grid-rows-[4%_auto_auto_auto_auto_auto]`
+            `h-full`,
+            `max-h-full`,
+            `w-full`,
+            `grid grid-cols-1 grid-rows-[10%_auto_auto_auto_auto]`,
+            `content-evenly`
           )}
         >
           <BestCoinRow>

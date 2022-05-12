@@ -27,7 +27,7 @@ const ChatPage = () => {
   const setDefaultCoins = useSetRecoilState(atomSelectCoinDefault);
   const [displayCoins, setDisplayCoins] = useState<TypeDrawTicker[]>();
 
-  useCoinChart();
+  // useCoinChart();
 
   useEffect(() => {
     const result = coins.filter((item) => {
@@ -48,6 +48,9 @@ const ChatPage = () => {
       siseCrncCd: 'C0100',
       coinName: '비트코인',
     });
+    return () => {
+      // setDefaultCoins([]);
+    };
   }, []);
   const filterOption = createFilterOptions({
     matchFrom: 'start',
@@ -55,11 +58,7 @@ const ChatPage = () => {
   });
 
   return (
-    <div
-      className={classNames(
-        `grid grid-rows-[7%_auto] w-full h-full col-span-12`
-      )}
-    >
+    <div className={classNames(`grid grid-rows-[auto_auto] col-span-12`)}>
       <div className={classNames(`grid grid-cols-12`)}>
         {/* 코인검색, 헤드라인 */}
         <div className={classNames(`col-start-1 col-end-3 p-5`)}>
@@ -101,9 +100,15 @@ const ChatPage = () => {
       </div>
 
       {/* 본문 */}
-      <div className={classNames(`grid grid-cols-12 gap-x-2`)}>
+      <div className={classNames(`grid grid-cols-12 gap-2`)}>
         {/*  좌측 코인/차트 정보*/}
-        <div className={classNames(`col-start-1 col-end-9 p-5`)}>
+        <div
+          className={classNames(
+            `p-5`,
+            `2xl:col-start-1 2xl:col-end-9`,
+            `xl:col-start-1 xl:col-end-13`
+          )}
+        >
           <div
             className={classNames(
               `w-full h-full grid grid-rows-[15%_auto] gap-y-5 `
@@ -119,7 +124,13 @@ const ChatPage = () => {
         </div>
 
         {/* 채팅방 */}
-        <div className={classNames(`col-start-9 col-end-13 p-5`)}>
+        <div
+          className={classNames(
+            `p-5`,
+            `2xl:col-start-9 2xl:col-end-13`,
+            `xl:col-start-1 xl:col-end-13`
+          )}
+        >
           <ChatRoom />
         </div>
       </div>

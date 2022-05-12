@@ -141,3 +141,13 @@ table {
 /* * {
   color: white;
 } */
+
+/* body {
+  width: '100vw';
+  height: '100vh';
+} */
+
+body {
+  background-image: url('./asset/img/bg_full.png');
+  /* background-size: cover; */
+}

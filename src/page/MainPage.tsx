@@ -21,12 +21,22 @@ const MainPage = () => {
   useCoinList();
 
   return (
-    <>
+    <div className={classNames(`grid grid-cols-12 `, `max-h-full`, `h-full`)}>
+      {/* {' '} */}
       <BestCoin
-        className={classNames(`col-start-3 col-end-7 drop-shadow-2xl`)}
+        className={classNames(
+          `col-start-3 col-end-7  drop-shadow-2xl`,
+          `h-5/6 my-auto mx-2`
+        )}
       />
-      <OnlyDisplayChat className={classNames(` col-start-7 col-end-11`)} />
-    </>
+      <OnlyDisplayChat
+        className={classNames(
+          `col-start-7 col-end-11  drop-shadow-2xl`,
+          `h-5/6 my-auto mx-2`
+        )}
+      />
+      {/* <div className="h-full w-full"></div> */}
+    </div>
   );
 };
 

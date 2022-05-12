@@ -3,7 +3,11 @@ import classNames from 'classnames';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 import { atomDrawCoinInfo } from '../../atom/drawData.atom';
-import { atomOrderBook, IOrderBookData, TypeOrderObj } from '../../atom/orderBook.atom';
+import {
+  atomOrderBook,
+  IOrderBookData,
+  TypeOrderObj,
+} from '../../atom/orderBook.atom';
 
 import { atomSelectCoinDefault } from '../../atom/selectCoinDefault.atom';
 import { atomSelectCoinDetail } from '../../atom/selectCoinDetail.atom';
@@ -13,6 +17,7 @@ import { useGetOrderBookInterval } from '../../hooks/useOrderBook';
 import OrderbookRow from './OrderbookRow';
 import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash';
+import MainWrapper from '../Common/MainWrapper';
 
 const getMaxValueOrderBook = (baseValue: string, values: TypeOrderObj[]) => {
   let base = Number(baseValue);
@@ -151,54 +156,70 @@ const Orderbook = () => {
   const lastTransaction = useGetLastTransaction();
 
   return (
-    <Box className={classNames(`w-full`)}>
-      <Box className={classNames(` py-4`, `shadow-sm`, `font-bmjua`)}>
-        <p className="text-center">호가창</p>
-        <Box className="mt-2 flex justify-around items-center text-sm">
-          <p className="">가격({marketSymbol})</p>
-          <p className="">수량({coinSymbol})</p>
-        </Box>
-      </Box>
-
-      <Box
-        sx={{
-          height: { sm: 200, md: 440 },
-        }}
-        className={classNames(`scrollbar-hide overflow-y-auto will-change-contents`)}
+    <MainWrapper
+      className={classNames(`w-full h-full`, `grid grid-rows-[13%_auto]`)}
+    >
+      <div
+        className={classNames(
+          `py-4`,
+          `drop-shadow-3xl`,
+          `font-bmjua border-b-bithumbGray border-b-2`
+        )}
       >
-        {_.clone(orderBook?.ask)
-          .reverse()
-          .map((item, index) => {
-            // 변동량은 전일종가를 비율식으로 계산한것.
+        <p className="text-center text-bithumb">호가창</p>
+        <div
+          className={classNames(
+            `flex justify-around items-center`,
+            `text-bithumbYellow text-sm`,
+            `h-full`
+          )}
+        >
+          <p>가격({marketSymbol})</p>
+          <p>수량({coinSymbol})</p>
+        </div>
+      </div>
+      <div className={classNames(`py-4`)}>
+        <div
+          className={classNames(
+            `max-h-full h-[30rem]`,
+            `w-full`,
+            `scrollbar-hide overflow-y-auto will-change-contents`
+          )}
+        >
+          {_.clone(orderBook?.ask)
+            .reverse()
+            .map((item, index) => {
+              // 변동량은 전일종가를 비율식으로 계산한것.
+              return (
+                <OrderbookRow
+                  key={index}
+                  price={item.p}
+                  quantity={item.q}
+                  orderType={'ask'}
+                  r={getRateOfChange(f, item.p)}
+                  quantityRatio={getQuantityRatio(item.q, maxQuantity)}
+                  eventType={getEventType(lastTransaction, item.p)}
+                />
+              );
+            })}
+          {orderBook?.bid?.map((item, index) => {
             return (
               <OrderbookRow
                 key={index}
+                index={index}
                 price={item.p}
                 quantity={item.q}
-                orderType={'ask'}
+                orderType={'bid'}
                 r={getRateOfChange(f, item.p)}
                 quantityRatio={getQuantityRatio(item.q, maxQuantity)}
                 eventType={getEventType(lastTransaction, item.p)}
               />
             );
           })}
-        {orderBook?.bid?.map((item, index) => {
-          return (
-            <OrderbookRow
-              key={index}
-              index={index}
-              price={item.p}
-              quantity={item.q}
-              orderType={'bid'}
-              r={getRateOfChange(f, item.p)}
-              quantityRatio={getQuantityRatio(item.q, maxQuantity)}
-              eventType={getEventType(lastTransaction, item.p)}
-            />
-          );
-        })}
-        {isLoading === false && <Skeleton height={'100%'} animation="wave" />}
-      </Box>
-    </Box>
+          {isLoading === false && <Skeleton height={'100%'} animation="wave" />}
+        </div>
+      </div>
+    </MainWrapper>
   );
 };
 

@@ -10,39 +10,41 @@ import Particles from 'react-tsparticles';
 import bg_full from '../asset/img/bg_full.png';
 import NewsPage from './NewsPage';
 import MainPage from './MainPage';
-import useChangeWebTitle from '../hooks/useChangeWebTitle';
-import useInitialize from '../hooks/useInitialize';
-import useResetObserverDrawData from '../hooks/useResetDrawData';
 import { useGenerateSocket } from '../hooks/useWebSocket';
 
 const RoutePage = () => {
   useGenerateSocket('CHAT');
-  useGenerateSocket('SUBSCRIBE');
+
   return (
     <>
       <BrowserRouter>
-        <Box
-          className={classNames(
-            `gap-x-10`,
-            `grid grid-cols-12  w-screen h-screen `,
-            `grid-rows-[7%_auto]`
-          )}
-          style={{
-            backgroundImage: `url(${bg_full})`,
-          }}
-        >
-          <Box gridColumn={`span 12`}>
-            <Header />
-          </Box>
-          <Routes>
-            <Route path={`/`} element={<MainPage />} />
-            <Route path={'/news'} element={<NewsPage />} />
-            <Route path={'/user'} element={<UserPage />} />
-            <Route path={'/chat'} element={<ChatPage />} />
-            <Route path={`/trade`} element={<TradePage />} />
-            <Route path={`/trade/:coinName`} element={<TradePage />} />
-          </Routes>
-        </Box>
+        <div className={classNames(`w-screen h-screen max-w-full`)}>
+          <div
+            className={classNames(
+              'grid grid-cols-12 grid-rows-[auto_auto]',
+              ` h-full w-full`
+            )}
+          >
+            <div className={classNames(`col-span-full row-span-1 `)}>
+              <Header />
+            </div>
+            <div
+              className={classNames(
+                `col-span-full row-start-2 row-span-1`,
+                `flex justify-center items-center`
+              )}
+            >
+              <Routes>
+                <Route path={`/`} element={<MainPage />} />
+                <Route path={'/news'} element={<NewsPage />} />
+                <Route path={'/user'} element={<UserPage />} />
+                <Route path={'/chat'} element={<ChatPage />} />
+                <Route path={`/trade`} element={<TradePage />} />
+                <Route path={`/trade/:coinName`} element={<TradePage />} />
+              </Routes>
+            </div>
+          </div>
+        </div>
       </BrowserRouter>
     </>
   );

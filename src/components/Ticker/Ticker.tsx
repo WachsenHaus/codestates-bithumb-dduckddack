@@ -22,6 +22,8 @@ import { atomFilteredCoins } from '../../atom/total.atom';
 import useFilterKeyword from '../../hooks/useFilterKeyword';
 import useSort from '../../hooks/useSort';
 import useGetPagination from '../../hooks/useGetPagination';
+import MainWrapper from '../Common/MainWrapper';
+import { border } from '@mui/material/node_modules/@mui/system';
 
 const Ticker = () => {
   const [filterKeyword, onChange] = useFilterKeyword();
@@ -40,14 +42,17 @@ const Ticker = () => {
         <div
           className="grid w-full"
           style={{
-            gridTemplateColumns: '5% 20% 20% 15% auto',
+            gridTemplateColumns: '10% 20% 20% 30% auto',
           }}
         >
           {e?.rowData && (
             <>
               <RenderFavoriteColumn {...e} />
               <RenderNameColumn e={e} key={e.rowData.coinName} />
-              <RenderCurrentPriceColumn {...e} key={`${e.rowData.e}_${e.rowData.u24}`} />
+              <RenderCurrentPriceColumn
+                {...e}
+                key={`${e.rowData.e}_${e.rowData.u24}`}
+              />
               <RenderRateOfChange {...e} key={e.rowData.r} />
               <RenderU24 {...e} key={e.rowData.u24} />
             </>
@@ -58,54 +63,91 @@ const Ticker = () => {
   };
 
   return (
-    <div>
+    <MainWrapper className={classNames(`h-full w-full`)}>
       <div>
         <div
-          className={classNames('grid', `grid-cols-2 grid-rows-1`)}
+          className={classNames(
+            'grid',
+            `grid-cols-2 grid-rows-1`,
+            `text-white`
+          )}
           style={{
             gridTemplateColumns: '40% auto',
           }}
         >
-          <div className={classNames(`w-full h-full`, `flex items-center justify-around`)}>
+          <div
+            className={classNames(
+              // `w-full h-full`,
+              `my-2`,
+              `flex items-center justify-around`
+            )}
+          >
             <button
-              className={classNames(sortObj.filterMode === 'normal' && `border-b-4 font-bold`, `border-b-black`, `h-full`)}
+              className={classNames(
+                sortObj.filterMode === 'normal' && `border-b-4 font-bold`,
+                `border-b-bithumb`,
+                `h-full`
+              )}
               onClick={sortObj.onSetFilterMode('normal')}
             >
               원화마켓
             </button>
             <button
-              className={classNames(sortObj.filterMode === 'isFavorite' && `border-b-4 font-bold `, `border-b-black`, `h-full`)}
+              className={classNames(
+                sortObj.filterMode === 'isFavorite' && `border-b-4 font-bold `,
+                `border-b-black`,
+                `h-full`
+              )}
               onClick={sortObj.onSetFilterMode('isFavorite')}
             >
               즐겨찾기
             </button>
           </div>
-
-          <TextField
-            placeholder="검색"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-            onChange={onChange}
-          />
+          <div className={classNames(`w-full flex  items-center`)}>
+            <TextField
+              variant="standard"
+              sx={{
+                width: '100%',
+                input: {
+                  border: 0,
+                  color: 'white',
+                },
+                border: 0,
+                borderColor: 'transparent',
+              }}
+              placeholder="검색"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon
+                      sx={{
+                        color: '#FF9900',
+                      }}
+                    />
+                  </InputAdornment>
+                ),
+              }}
+              onChange={onChange}
+            />
+          </div>
         </div>
       </div>
 
-      <div>
+      <div className={classNames(``)}>
         <Paper
           sx={{
             height: paginationObj.height,
             width: '100%',
+            backgroundColor: '#353232',
+            color: 'white',
           }}
+          className={classNames(`scorllbar-hide`)}
         >
           <AutoSizer>
             {({ width, height }) =>
               filterdCoins?.length > 0 ? (
                 <Table
+                  className={classNames(`scrollbar-hide`)}
                   width={width}
                   height={height}
                   headerHeight={paginationObj.headerHeight}
@@ -118,13 +160,13 @@ const Ticker = () => {
                   rowGetter={onRender}
                   rowRenderer={RowRenderer}
                 >
-                  <Column width={width * 0.05} label="" dataKey="isFavorite" />
+                  <Column width={width * 0.1} label="" dataKey="isFavorite" />
                   <Column
                     width={width * 0.2}
                     label="자산"
                     dataKey="coinName"
                     headerRenderer={(e) => <HeaderCoinName {...e} />}
-                    headerClassName="flex items-center"
+                    headerClassName="flex items-center text-bithumbYellow"
                   />
                   <Column
                     width={width * 0.2}
@@ -139,10 +181,10 @@ const Ticker = () => {
                         onClick={sortObj.onSetFilterDirection('e')}
                       />
                     )}
-                    headerClassName="flex items-center"
+                    headerClassName="flex items-center text-bithumbYellow"
                   />
                   <Column
-                    width={width * 0.15}
+                    width={width * 0.3}
                     label="변동률(당일)"
                     dataKey="r"
                     headerRenderer={(e) => (
@@ -153,7 +195,7 @@ const Ticker = () => {
                         onClick={sortObj.onSetFilterDirection('r')}
                       />
                     )}
-                    headerClassName="flex items-center"
+                    headerClassName="flex items-center text-bithumbYellow"
                   />
                   <Column
                     width={width * 0.2}
@@ -167,7 +209,7 @@ const Ticker = () => {
                         onClick={sortObj.onSetFilterDirection('u24')}
                       />
                     )}
-                    headerClassName="flex items-center"
+                    headerClassName="flex items-center text-bithumbYellow"
                   />
                 </Table>
               ) : (
@@ -186,9 +228,26 @@ const Ticker = () => {
         </Paper>
       </div>
       <div className="flex items-center w-full ">
-        <Pagination count={paginationObj.pageCount} page={paginationObj.page} onChange={paginationObj.handlePageChange} className="mx-auto mt-2" />
+        <Pagination
+          count={paginationObj.pageCount}
+          page={paginationObj.page}
+          onChange={paginationObj.handlePageChange}
+          className="mx-auto mt-2 text-bithumbSubGray"
+          sx={{
+            color: '#777777',
+            li: {
+              color: '#777777',
+            },
+            button: {
+              color: '#777777',
+            },
+            div: {
+              color: '#777777',
+            },
+          }}
+        />
       </div>
-    </div>
+    </MainWrapper>
   );
 };
 export default React.memo(Ticker);

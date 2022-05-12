@@ -24,10 +24,6 @@ import { useGenerateSocket } from './hooks/useWebSocket';
 const App = () => {
   const particlesInit = async (main: any) => {
     console.log(main);
-
-    // you can initialize the tsParticles instance (main) here, adding custom shapes or presets
-    // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-    // starting from v2 you can add only the features you need reducing the bundle size
     await loadFull(main);
   };
 
@@ -43,11 +39,13 @@ const App = () => {
               // backgroundMode: true,
               detectRetina: true,
               fps_limit: 120,
-              zLayers: 1,
+              zLayers: 0,
               fullScreen: true,
               style: {
                 // opacity: '0.1',
                 // position: 'fixed',
+                width: '100vw',
+                height: '100vh',
                 // zIndex: '-1',
                 // backgroundColor: 'black',
               },

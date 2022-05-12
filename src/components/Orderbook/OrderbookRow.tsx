@@ -22,19 +22,23 @@ const OrderbookRow = ({
   quantityRatio: string;
   index?: any;
 }) => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (scrollRef && index === 0) {
-      scrollRef?.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'nearest',
-      });
-    }
-  }, [index]);
+  // console.log(quantityRatio);
+  // const scrollRef = useRef<HTMLDivElement>(null);
+  // useEffect(() => {
+  //   if (scrollRef && index === 0) {
+  //     scrollRef?.current?.scrollIntoView({
+  //       behavior: 'smooth',
+  //       block: 'center',
+  //       inline: 'nearest',
+  //     });
+  //   }
+  // }, [index]);
   return (
-    <Box className={classNames(`flex justify-around items-center w-full`)} ref={scrollRef}>
-      <Box
+    <div
+      className={classNames(`flex justify-around items-center w-full`)}
+      // ref={scrollRef}
+    >
+      <div
         className={classNames(
           `w-1/2`,
           `flex  justify-around`,
@@ -47,26 +51,43 @@ const OrderbookRow = ({
           className={classNames(
             // `will-change-transform`,
             `text-left`,
-            `${eventType === 'ask' ? `shadow-inner shadow-blue-900 ${styles.askEffect}` : ''}`,
-            `${eventType === 'bid' ? `shadow-inner shadow-red-900 ${styles.bidEffect}` : ''}`
+            `${
+              eventType === 'ask'
+                ? `shadow-inner shadow-blue-900 ${styles.askEffect}`
+                : ''
+            }`,
+            `${
+              eventType === 'bid'
+                ? `shadow-inner shadow-red-900 ${styles.bidEffect}`
+                : ''
+            }`
           )}
         >
           {convertStringPriceToKRW(price)}
         </span>
         <span>{r}%</span>
-      </Box>
-      <Box className={classNames(`w-1/2`, `flex justify-start relative`)}>
-        {Number(quantity).toFixed(4)}
-        <Box
-          className={classNames(`absolute left-0`)}
-          sx={{
+      </div>
+      <div
+        className={classNames(
+          `w-1/2`,
+          `flex justify-start relative text-bithumbYellow `
+        )}
+      >
+        <p className={classNames(`z-50`)}> {Number(quantity).toFixed(4)}</p>
+
+        <div
+          className={classNames(
+            `absolute left-0 z-0`,
+            `w-[${quantityRatio}%] h-full`,
+            `${orderType === 'ask' ? 'bg-downBox' : 'bg-upBox'}`
+            // `bg-cop`
+          )}
+          style={{
             width: `${quantityRatio}%`,
-            height: '100%',
-            backgroundColor: `${orderType === 'ask' ? '#416ac25e;' : '#ff000021;'}`,
           }}
         />
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

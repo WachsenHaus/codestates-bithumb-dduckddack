@@ -23,7 +23,7 @@ const useResetObserverDrawData = () => {
     resetCoinBar();
     resetOrderBook();
     resetChartData();
-    resetTicker();
+    // resetTicker();
   }, [selectCoin]);
 };
 

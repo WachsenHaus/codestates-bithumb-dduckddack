@@ -72,12 +72,24 @@ export const RenderFavoriteColumn = (e: TableRowProps) => {
   return (
     <div
       onClick={onClick}
-      className="flex justify-center items-center h-full hover:cursor-pointer active:bg-yellow-200  hover:scale-110"
+      className="flex justify-center items-center h-full hover:cursor-pointer  hover:scale-110"
       // whileHover={{
       //   scale: 1.1,
       // }}
     >
-      {e.rowData.isFavorite ? <StarRateIcon /> : <StarBorderIcon />}
+      {e.rowData.isFavorite ? (
+        <StarRateIcon
+          sx={{
+            color: '#FAD390',
+          }}
+        />
+      ) : (
+        <StarBorderIcon
+          sx={{
+            color: '#FAD390',
+          }}
+        />
+      )}
     </div>
   );
 };
@@ -109,7 +121,7 @@ export const RenderNameColumn = React.memo(
       <div
         className={classNames(
           `${
-            selectCoinDefault.coinType === e.rowData.coinType && ` text-red-300`
+            selectCoinDefault.coinType === e.rowData.coinType && ` text-bithumb`
           }`,
           ` flex flex-col justify-center w-full h-full `,
           `hover:scale-110`,

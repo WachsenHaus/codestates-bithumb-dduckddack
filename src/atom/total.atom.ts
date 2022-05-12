@@ -284,55 +284,55 @@ export const selectorFilterUseCoins = selector({
 /**
  * 안씀
  */
-export const selectorWebSocketTransaction = selector({
-  key: 'selectorWebSocketTransaction',
-  get: async ({ get }) => {
-    const webSocketTransaction = get(atomTransactions);
-    const initTransactions = get(atomDrawTransaction);
-    if (webSocketTransaction === undefined && initTransactions === undefined) {
-      return;
-    }
-    const deepCopyInitTransaction = _.clone(initTransactions);
-    if (webSocketTransaction === undefined) {
-      return;
-    }
-    const { m, c, l } = webSocketTransaction;
-    let coinbarPrice;
-    for (let i = 0; i < l.length; i++) {
-      const { o, n, p, q, t } = l[i];
-      let color = '1';
-      let prevPrice;
-      const lastItem = deepCopyInitTransaction[deepCopyInitTransaction.length - 1];
-      if (lastItem) {
-        prevPrice = lastItem.contPrice;
-        if (p === prevPrice) {
-          color = lastItem.buySellGb;
-        } else if (p > prevPrice) {
-          color = '2';
-        } else {
-          color = '1';
-        }
-      }
-      coinbarPrice = p;
-      deepCopyInitTransaction.push({
-        coinType: c, //
-        contAmt: n, //
-        crncCd: m, //
-        buySellGb: color,
-        contPrice: p, //현재가
-        contQty: q, // 수량
-        contDtm: t, //
-      });
+// export const selectorWebSocketTransaction = selector({
+//   key: 'selectorWebSocketTransaction',
+//   get: async ({ get }) => {
+//     const webSocketTransaction = get(atomTransactions);
+//     const initTransactions = get(atomDrawTransaction);
+//     if (webSocketTransaction === undefined && initTransactions === undefined) {
+//       return;
+//     }
+//     const deepCopyInitTransaction = _.clone(initTransactions);
+//     if (webSocketTransaction === undefined) {
+//       return;
+//     }
+//     const { m, c, l } = webSocketTransaction;
+//     let coinbarPrice;
+//     for (let i = 0; i < l.length; i++) {
+//       const { o, n, p, q, t } = l[i];
+//       let color = '1';
+//       let prevPrice;
+//       const lastItem = deepCopyInitTransaction[deepCopyInitTransaction.length - 1];
+//       if (lastItem) {
+//         prevPrice = lastItem.contPrice;
+//         if (p === prevPrice) {
+//           color = lastItem.buySellGb;
+//         } else if (p > prevPrice) {
+//           color = '2';
+//         } else {
+//           color = '1';
+//         }
+//       }
+//       coinbarPrice = p;
+//       deepCopyInitTransaction.push({
+//         coinType: c, //
+//         contAmt: n, //
+//         crncCd: m, //
+//         buySellGb: color,
+//         contPrice: p, //현재가
+//         contQty: q, // 수량
+//         contDtm: t, //
+//       });
 
-      // 트랜잭션은 20개의 데이터만 보관함.
-      if (deepCopyInitTransaction.length > 20) {
-        deepCopyInitTransaction.shift();
-      }
-    }
+//       // 트랜잭션은 20개의 데이터만 보관함.
+//       if (deepCopyInitTransaction.length > 20) {
+//         deepCopyInitTransaction.shift();
+//       }
+//     }
 
-    return await { deepCopyInitTransaction, coinbarPrice };
-  },
-  cachePolicy_UNSTABLE: {
-    eviction: 'most-recent',
-  },
-});
+//     return await { deepCopyInitTransaction, coinbarPrice };
+//   },
+//   cachePolicy_UNSTABLE: {
+//     eviction: 'most-recent',
+//   },
+// });

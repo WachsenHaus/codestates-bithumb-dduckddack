@@ -11,17 +11,18 @@ const OnlyDisplayChat = ({ className }: { className?: string }) => {
   const chatMsg = useRecoilValue(atomChatRecvChatMessage);
 
   return (
-    <div
-      className={classNames(
-        `${className}`,
-        `h-full`,
-        `flex justify-center items-center`
-      )}
-    >
-      <MainWrapper className={classNames(`w-full h-5/6 py-10`)}>
+    <div className={classNames(`${className}`)}>
+      <MainWrapper
+        className={classNames(
+          `w-full h-full grid grid-rows-1`,
+          `flex items-center`
+        )}
+      >
         <div
           className={classNames(
-            `scrollbar-hide overflow-auto h-[45rem] max-h-[100%]`
+            `py-2`,
+            `h-[40rem] max-h-[95%]`,
+            `scrollbar-hide overflow-auto`
           )}
         >
           {chatMsg &&

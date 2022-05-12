@@ -75,6 +75,26 @@ const DrawToolUndoButton = ({ onClick }: { onClick: () => void }) => {
   return <SubWrapper onClick={onClick}>뒤</SubWrapper>;
 };
 
+const ImgItem = () => {
+  const setModal = useSetRecoilState(atomModalState);
+  return (
+    <SwiperSlide className={classNames(`flex justify-center items-center`)}>
+      <img
+        src="https://source.unsplash.com/random"
+        alt="radomphoto"
+        className={classNames(`w-12 h-12 hover:cursor-pointer`)}
+        onClick={() => {
+          setModal({
+            modalState: true,
+            modalType: 'image',
+            modalPayload: 'https://source.unsplash.com/random',
+          });
+        }}
+      />
+    </SwiperSlide>
+  );
+};
+
 const DrawTool = ({
   onNewButton,
   onDrawButton,
@@ -215,7 +235,15 @@ const DrawTool = ({
           //   rewind
           //   navigation
         >
-          <SwiperSlide
+          {ImgItem()}
+          {ImgItem()}
+          {ImgItem()}
+          {ImgItem()}
+          {ImgItem()}
+          {ImgItem()}
+          {ImgItem()}
+
+          {/* <SwiperSlide
             className={classNames(`flex justify-center items-center`)}
           >
             <img
@@ -279,6 +307,38 @@ const DrawTool = ({
               }}
             />
           </SwiperSlide>
+          <SwiperSlide
+            className={classNames(`flex justify-center items-center`)}
+          >
+            <img
+              src="https://source.unsplash.com/random"
+              alt="radomphoto"
+              className={classNames(`w-12 h-12`)}
+              onClick={() => {
+                setModal({
+                  modalState: true,
+                  modalType: 'image',
+                  modalPayload: 'https://source.unsplash.com/random',
+                });
+              }}
+            />
+          </SwiperSlide>
+          <SwiperSlide
+            className={classNames(`flex justify-center items-center`)}
+          >
+            <img
+              src="https://source.unsplash.com/random"
+              alt="radomphoto"
+              className={classNames(`w-12 h-12`)}
+              onClick={() => {
+                setModal({
+                  modalState: true,
+                  modalType: 'image',
+                  modalPayload: 'https://source.unsplash.com/random',
+                });
+              }}
+            />
+          </SwiperSlide> */}
 
           {/* <SwiperSlide>이미지3</SwiperSlide> */}
         </Swiper>
