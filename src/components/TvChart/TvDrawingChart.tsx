@@ -88,7 +88,10 @@ const TvDrawingChart = () => {
 
   return (
     <div
-      className={classNames(`w-full h-full grid grid-rows-[25%_auto] gap-y-5 `)}
+      className={classNames(`w-full h-full grid gap-y-5 `)}
+      style={{
+        gridTemplateRows: '25% auto',
+      }}
     >
       <DrawTool
         onNewButton={() => {

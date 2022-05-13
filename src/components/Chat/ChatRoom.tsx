@@ -24,12 +24,17 @@ const ChatRoom = () => {
   return (
     <div className={classNames(`h-full`, `flex justify-center items-center`)}>
       <MainWrapper
-        className={classNames(`w-full h-full grid grid-rows-[90%_auto]`)}
+        className={classNames(`w-full h-full grid`)}
+        style={{
+          gridTemplateRows: '90% auto',
+        }}
       >
         <div
-          className={classNames(
-            `scrollbar-hide overflow-auto h-[40rem] max-h-[100%]`
-          )}
+          className={classNames(`scrollbar-hide overflow-auto `)}
+          style={{
+            height: '40rem',
+            maxHeight: '100%',
+          }}
         >
           {chatMsg &&
             chatMsg?.map((item, index) => {

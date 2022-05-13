@@ -60,9 +60,10 @@ const ChatPage = () => {
 
   return (
     <div
-      className={classNames(
-        `w-full h-full grid grid-rows-[auto_auto] col-span-12`
-      )}
+      className={classNames(`w-full h-full grid  col-span-12`)}
+      style={{
+        gridTemplateRows: 'auto auto',
+      }}
     >
       <div className={classNames(`grid grid-cols-12`)}>
         {/* 코인검색, 헤드라인 */}
@@ -111,9 +112,12 @@ const ChatPage = () => {
         <div className={classNames(`col-start-3 col-end-13 p-5`)}>
           <MainWrapper
             className={classNames(
-              `w-full h-full rounded-[4rem]`,
+              `w-full h-full`,
               `flex justify-center  items-center`
             )}
+            style={{
+              borderRadius: '4rem',
+            }}
           >
             뉴스헤드라인
           </MainWrapper>
@@ -131,9 +135,10 @@ const ChatPage = () => {
           )}
         >
           <div
-            className={classNames(
-              `w-full h-full grid grid-rows-[15%_auto] gap-y-5 `
-            )}
+            className={classNames(`w-full h-full grid  gap-y-5 `)}
+            style={{
+              gridTemplateRows: '15% auto',
+            }}
           >
             <CoinBarForChat />
 

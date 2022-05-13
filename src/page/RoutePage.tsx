@@ -17,18 +17,19 @@ const RoutePage = () => {
       <BrowserRouter>
         <div className={classNames(`w-screen h-screen max-w-full`)}>
           <div
-            className={classNames(
-              'grid grid-cols-12 grid-rows-[auto_auto]',
-              ` h-full w-full`
-            )}
+            className={classNames('grid grid-cols-12 ', ` h-full w-full`)}
+            style={{
+              gridTemplateRows: '7% auto',
+            }}
           >
             <div className={classNames(`col-span-full row-span-1 `)}>
               <Header />
             </div>
             <div
               className={classNames(
-                `col-span-full row-start-2 row-span-1`,
-                `flex justify-center items-center`
+                `col-span-full row-start-2 row-span-1`
+                // `flex justify-center items-center`,
+                // `w-full h-full`
               )}
             >
               <Routes>

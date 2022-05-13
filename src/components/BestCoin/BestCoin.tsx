@@ -38,11 +38,10 @@ ChartJS.register(
 const BestCoinRow = ({ children }: { children?: ReactNode }) => {
   return (
     <div
-      className={classNames(
-        `grid grid-cols-5`,
-        `grid-cols-[20% auto 20% 10% 10%]`,
-        `text-highRight`
-      )}
+      className={classNames(`grid grid-cols-5`, `text-highRight`)}
+      style={{
+        gridTemplateColumns: '20% auto 20% 10% 10%',
+      }}
     >
       {children}
     </div>
@@ -231,7 +230,10 @@ const BestCoin = ({ className }: { className?: string }) => {
   return (
     <div className={classNames(`${className}`)}>
       <MainWrapper
-        className={classNames(`w-full h-full `, `grid grid-rows-[10%_auto]`)}
+        className={classNames(`w-full h-full grid `)}
+        style={{
+          gridTemplateRows: '10% auto',
+        }}
       >
         <div
           className={classNames(
@@ -252,9 +254,12 @@ const BestCoin = ({ className }: { className?: string }) => {
             `h-full`,
             `max-h-full`,
             `w-full`,
-            `grid grid-cols-1 grid-rows-[10%_auto_auto_auto_auto]`,
+            `grid grid-cols-1 `,
             `content-evenly`
           )}
+          style={{
+            gridTemplateRows: '10% auto auto auto auto',
+          }}
         >
           <BestCoinRow>
             <BestCoinTitle />

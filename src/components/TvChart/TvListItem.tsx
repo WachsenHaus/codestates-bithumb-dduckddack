@@ -17,7 +17,7 @@ const TvListItem = ({
         `w-full my-5`,
         `text-center rounded-lg border-2`,
         `hover:cursor-pointer `,
-        `hover:border-blue-[#6a89cc]`
+        `hover:border-downBlue`
       )}
       onClick={onClick}
     >

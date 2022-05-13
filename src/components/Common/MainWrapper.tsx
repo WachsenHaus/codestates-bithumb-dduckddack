@@ -4,9 +4,11 @@ import React from 'react';
 const MainWrapper = ({
   className,
   children,
+  style,
 }: {
   className?: string;
   children?: React.ReactNode;
+  style?: React.CSSProperties;
 }) => {
   return (
     <div
@@ -16,6 +18,9 @@ const MainWrapper = ({
         `filter drop-shadow-3xl`,
         `${className}`
       )}
+      style={{
+        ...style,
+      }}
     >
       {children}
     </div>

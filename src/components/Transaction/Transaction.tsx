@@ -22,7 +22,10 @@ const Transaction = () => {
 
   return (
     <MainWrapper
-      className={classNames(`w-full h-full`, `grid grid-rows-[13%_auto] `)}
+      className={classNames(`w-full h-full`)}
+      style={{
+        gridTemplateRows: '13% auto',
+      }}
     >
       <div
         className={classNames(
@@ -47,10 +50,13 @@ const Transaction = () => {
       <div className={classNames(`py-4`)}>
         <div
           className={classNames(
-            `max-h-full h-[30rem]`,
+            `max-h-full`,
             `w-full`,
             `scrollbar-hide overflow-y-auto`
           )}
+          style={{
+            height: '30rem',
+          }}
         >
           {drawTransaction.state === 'hasValue'
             ? drawTransaction.contents

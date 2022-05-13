@@ -22,9 +22,11 @@ const CoinBarForChat = () => {
     <MainWrapper
       className={classNames(
         `w-full h-full`,
-        `flex justify-around items-center`,
-        `rounded-[4rem]`
+        `flex justify-around items-center`
       )}
+      style={{
+        borderRadius: '4rem',
+      }}
     >
       <div className="font-bmjua text-highRight">{coinName}</div>
       <div

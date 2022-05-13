@@ -65,8 +65,11 @@ const CoinBar = () => {
       className={classNames(
         `w-full h-24`,
         `mt-4`,
-        `rounded-[4rem]  flex justify-around items-center text-white`
+        `flex justify-around items-center text-white`
       )}
+      style={{
+        borderRadius: '4rem',
+      }}
     >
       <div className="font-bmjua">{coinSymbol}</div>
       <div

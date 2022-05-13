@@ -146,13 +146,8 @@ const DrawTool = ({
 
   return (
     <MainWrapper
-      className={classNames(
-        `h-full w-full`,
-        `mx-auto`,
-        `grid grid-cols-[40%_20%_40%]`,
-        `rounded-[4rem]`,
-        `shadow-2xl`
-      )}
+      className={classNames(`h-full w-full`, `mx-auto`, `shadow-2xl`)}
+      style={{ gridTemplateColumns: '40% 20% 40%', borderRadius: '4rem' }}
     >
       <div className={classNames(`w-full  h-full grid grid-cols-3`)}>
         {/* col1 */}
