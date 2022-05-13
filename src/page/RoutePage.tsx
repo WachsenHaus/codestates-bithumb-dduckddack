@@ -5,8 +5,6 @@ import Header from '../components/Header/Header';
 import ChatPage from './ChatPage';
 import TradePage from './TradePage';
 import UserPage from './UserPage';
-import { loadFull } from 'tsparticles';
-import Particles from 'react-tsparticles';
 import bg_full from '../asset/img/bg_full.png';
 import NewsPage from './NewsPage';
 import MainPage from './MainPage';

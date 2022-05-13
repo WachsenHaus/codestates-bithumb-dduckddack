@@ -2,16 +2,32 @@ import { Slider } from '@mui/material';
 import classNames from 'classnames';
 import { ReactNode, useEffect, useState } from 'react';
 import MainWrapper from '../Common/MainWrapper';
-import SwiperCore, { Autoplay, Pagination, Navigation, Virtual } from 'swiper';
+import SwiperCore, { Autoplay, Navigation } from 'swiper';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
+// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+// import 'swiper/css';
+// import 'swiper/css/pagination';
+// import 'swiper/css/navigation';
+// import 'swiper/swiper.scss'; // core Swiper
+// import 'swiper/modules/navigation/navigation.scss'; // Navigation module
+// import 'swiper/modules/pagination/pagination.scss'; // Pagination module
+// swiper core styles
+import 'swiper/css';
+
+// modules styles
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { atomModalState } from '../../atom/modal.atom';
 import { HexColorPicker } from 'react-colorful';
 import { atomDrawConfig } from '../../atom/drawConfig.atom';
 import { atomUserChartDatas } from '../../atom/user.atom';
+// import 'swiper/modules/navigation/navigation.scss'; // Navigation module
+// import 'swiper/modules/pagination/pagination.scss'; // Pagination module
 
 SwiperCore.use([Autoplay, Navigation]);
 
@@ -233,8 +249,6 @@ const DrawTool = ({
       {/* 이미지 슬라이더 */}
       <div>
         <Swiper
-          modules={[Virtual]}
-          virtual
           onSwiper={(e) => {
             // refSwiper.current = e;
           }}

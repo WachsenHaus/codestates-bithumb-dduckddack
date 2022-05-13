@@ -28,7 +28,7 @@ const ChatPage = () => {
   const [defaultCoin, setDefaultCoins] = useRecoilState(atomSelectCoinDefault);
   const [displayCoins, setDisplayCoins] = useState<TypeDrawTicker[]>();
 
-  // useCoinChart();
+  useCoinChart();
 
   useEffect(() => {
     const result = coins.filter((item) => {

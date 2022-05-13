@@ -43,15 +43,12 @@
     "react-scripts": "5.0.0",
     "react-sketch-canvas": "^6.1.5",
     "react-trading-ui": "^0.1.5",
-    "react-tsparticles": "^2.0.6",
     "react-virtualized": "^9.22.3",
     "recoil": "^0.7.2",
     "sockjs-client": "^1.6.0",
     "styled-components": "^5.3.5",
-    "swiper": "^8.1.4",
+    "swiper": "^7.2.0",
     "tailwind-scrollbar-hide": "^1.1.7",
-    "tsparticles": "^2.0.6",
-    "tsparticles-preset-stars": "^2.0.6",
     "typescript": "^4.6.3",
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"
@@ -85,7 +82,7 @@
     "@types/sockjs-client": "^1.5.1",
     "@types/styled-components": "^5.1.24",
     "autoprefixer": "^10.4.4",
-    "postcss": "^8.4.12",
+    "postcss": "^8.4.5",
     "tailwindcss": "^3.0.23"
   }
 }
