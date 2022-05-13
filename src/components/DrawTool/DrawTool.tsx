@@ -1,16 +1,17 @@
 import { Slider } from '@mui/material';
 import classNames from 'classnames';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import MainWrapper from '../Common/MainWrapper';
 import SwiperCore, { Autoplay, Pagination, Navigation, Virtual } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { atomModalState } from '../../atom/modal.atom';
 import { HexColorPicker } from 'react-colorful';
 import { atomDrawConfig } from '../../atom/drawConfig.atom';
+import { atomUserChartDatas } from '../../atom/user.atom';
 
 SwiperCore.use([Autoplay, Navigation]);
 
@@ -77,22 +78,34 @@ const DrawToolUndoButton = ({ onClick }: { onClick: () => void }) => {
 
 const ImgItem = () => {
   const setModal = useSetRecoilState(atomModalState);
-  return (
-    <SwiperSlide className={classNames(`flex justify-center items-center`)}>
-      <img
-        src="https://source.unsplash.com/random"
-        alt="radomphoto"
-        className={classNames(`w-12 h-12 hover:cursor-pointer`)}
-        onClick={() => {
-          setModal({
-            modalState: true,
-            modalType: 'image',
-            modalPayload: 'https://source.unsplash.com/random',
-          });
-        }}
-      />
-    </SwiperSlide>
-  );
+  const userChartData = useRecoilValue(atomUserChartDatas);
+  const [drawResult, setDrawResult] = useState<any>(undefined);
+
+  useEffect(() => {
+    const result = userChartData.map((item) => (
+      <SwiperSlide className={classNames(`flex justify-center items-center`)}>
+        <img
+          src={item.chartImg}
+          alt="radomphoto"
+          className={classNames(`w-12 h-12 hover:cursor-pointer`)}
+          onClick={() => {
+            setModal({
+              modalState: true,
+              modalType: 'chartImage',
+              modalPayload: {
+                src: item.chartImg,
+                data: item.chartData,
+              },
+            });
+          }}
+        />
+      </SwiperSlide>
+    ));
+    console.log(result);
+    setDrawResult(result);
+  }, [userChartData]);
+  console.log(userChartData);
+  return drawResult;
 };
 
 const DrawTool = ({
@@ -236,12 +249,12 @@ const DrawTool = ({
           //   navigation
         >
           {ImgItem()}
+          {/* {ImgItem()}
           {ImgItem()}
           {ImgItem()}
           {ImgItem()}
           {ImgItem()}
-          {ImgItem()}
-          {ImgItem()}
+          {ImgItem()} */}
 
           {/* <SwiperSlide
             className={classNames(`flex justify-center items-center`)}

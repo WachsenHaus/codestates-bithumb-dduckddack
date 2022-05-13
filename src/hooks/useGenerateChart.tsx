@@ -60,7 +60,6 @@ const useGenerateChart = () => {
           background: {
             color: '#353232',
             bottomColor: '#FAD390',
-            // colo
           },
           textColor: '#FAD390',
         },
@@ -74,7 +73,6 @@ const useGenerateChart = () => {
         },
         timeScale: {
           borderColor: 'rgba(197, 203, 206, 0.8)',
-          // borderColor: 'rgba(0, 0, 0, 0.8)',
         },
       });
       chartRef.current.applyOptions({

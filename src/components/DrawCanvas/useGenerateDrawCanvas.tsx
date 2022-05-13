@@ -2,8 +2,15 @@ import html2canvas from 'html2canvas';
 import { IChartApi, LogicalRange } from 'lightweight-charts';
 import _ from 'lodash';
 import moment from 'moment';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ReactSketchCanvasRef } from 'react-sketch-canvas';
+import { useRecoilState, useRecoilValueLoadable } from 'recoil';
+import {
+  atomChartData,
+  atomDrawStBars,
+  selectorDrawStBars,
+} from '../../atom/tvChart.atom';
+import { atomUserChartDatas, IUserChatDatas } from '../../atom/user.atom';
 import useGetContext from './useGetContext';
 import useResizeCanvas from './useResizeCanvas';
 
@@ -17,6 +24,19 @@ const useGenerateDrawCanvas = (
   const canvasRef = useRef<ReactSketchCanvasRef | null>(null);
   const canvasWrapperRef = useRef<HTMLDivElement | null>(null);
   const saveWrapperRef = useRef<HTMLDivElement | null>(null);
+
+  const [uesrData, setUserData] = useRecoilState(atomUserChartDatas);
+  const [chartData, setChartData] = useRecoilState(atomDrawStBars);
+  const selectorDrawStbars = useRecoilValueLoadable(selectorDrawStBars);
+
+  useEffect(() => {
+    const { state, contents } = selectorDrawStbars;
+    if (state === 'hasValue') {
+      contents && setChartData(contents);
+    } else if (state === 'hasError') {
+      console.error(state);
+    }
+  }, [selectorDrawStbars]);
 
   // const ctx = useGetContext(canvasRef);
 
@@ -84,6 +104,14 @@ const useGenerateDrawCanvas = (
           if (saveWrapperRef.current) {
             console.log(canvas);
             imageUrl = canvas.toDataURL();
+            const data: IUserChatDatas = {
+              chartData: chartData,
+              date: moment().format('YYYY-MM-DD / HH:mm:ss'),
+              chartImg: imageUrl,
+            };
+            const prevData = JSON.parse(JSON.stringify(uesrData));
+            prevData.push(data);
+            setUserData(prevData);
 
             console.log(imageUrl);
             saveWrapperRef.current.removeChild(timeTitle);

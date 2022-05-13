@@ -1,9 +1,14 @@
 import { atom } from 'recoil';
+import { iStBar } from './tvChart.atom';
 
-interface IModalState {
-  modalType: 'sign' | 'image';
+export type TypeChartImg = {
+  src: string;
+  data: iStBar[];
+};
+export interface IModalState {
+  modalType: 'sign' | 'image' | 'chartImage';
   modalState: boolean;
-  modalPayload?: string;
+  modalPayload?: string | TypeChartImg;
 }
 
 export const atomModalState = atom<IModalState>({

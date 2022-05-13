@@ -6,6 +6,7 @@ import {
   TextField,
 } from '@mui/material';
 import {
+  selector,
   useRecoilState,
   useRecoilValue,
   useRecoilValueLoadable,
@@ -24,7 +25,7 @@ import DrawTool from '../components/DrawTool/DrawTool';
 
 const ChatPage = () => {
   const coins = useRecoilValue(atomUseCoins);
-  const setDefaultCoins = useSetRecoilState(atomSelectCoinDefault);
+  const [defaultCoin, setDefaultCoins] = useRecoilState(atomSelectCoinDefault);
   const [displayCoins, setDisplayCoins] = useState<TypeDrawTicker[]>();
 
   // useCoinChart();
@@ -58,7 +59,11 @@ const ChatPage = () => {
   });
 
   return (
-    <div className={classNames(`grid grid-rows-[auto_auto] col-span-12`)}>
+    <div
+      className={classNames(
+        `w-full h-full grid grid-rows-[auto_auto] col-span-12`
+      )}
+    >
       <div className={classNames(`grid grid-cols-12`)}>
         {/* 코인검색, 헤드라인 */}
         <div className={classNames(`col-start-1 col-end-3 p-5`)}>
@@ -83,7 +88,23 @@ const ChatPage = () => {
             isOptionEqualToValue={(e, v) => {
               return e.coinName === v.coinName;
             }}
-            renderInput={(params) => <TextField {...params} label="비트코인" />}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="standard"
+                sx={{
+                  width: '100%',
+                  color: '#FF9900',
+                  input: {
+                    border: 0,
+                    color: '#FF9900',
+                  },
+                  border: 0,
+                  borderColor: 'transparent',
+                }}
+                label={defaultCoin.coinName}
+              />
+            )}
           />
         </div>
 
@@ -105,8 +126,8 @@ const ChatPage = () => {
         <div
           className={classNames(
             `p-5`,
-            `2xl:col-start-1 2xl:col-end-9`,
-            `xl:col-start-1 xl:col-end-13`
+            `xl:col-start-1 xl:col-end-13`,
+            `2xl:col-start-1 2xl:col-end-9`
           )}
         >
           <div
@@ -127,8 +148,8 @@ const ChatPage = () => {
         <div
           className={classNames(
             `p-5`,
-            `2xl:col-start-9 2xl:col-end-13`,
-            `xl:col-start-1 xl:col-end-13`
+            `xl:col-start-1 xl:col-end-13`,
+            `2xl:col-start-9 2xl:col-end-13`
           )}
         >
           <ChatRoom />

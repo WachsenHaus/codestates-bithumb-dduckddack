@@ -22,17 +22,17 @@ import { useGenerateSocket } from './hooks/useWebSocket';
 // import { Home } from 'grommet-icons';
 // <Route path={`:coinName`} element={<TradePage />} />
 const App = () => {
-  const particlesInit = async (main: any) => {
-    console.log(main);
-    await loadFull(main);
-  };
+  // const particlesInit = async (main: any) => {
+  //   console.log(main);
+  //   await loadFull(main);
+  // };
 
   return (
     <RecoilRoot>
       <DebugObserver />
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <StyledEngineProvider>
-          <Particles
+          {/* <Particles
             id="tsparticles"
             options={{
               // preset: 'stars',
@@ -94,7 +94,7 @@ const App = () => {
               retina_detect: true,
             }}
             init={particlesInit}
-          />
+          /> */}
 
           <CssBaseline />
           <SignModal />

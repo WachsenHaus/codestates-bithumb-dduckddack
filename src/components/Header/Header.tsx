@@ -48,19 +48,6 @@ const Header = () => {
         </Box>
 
         <Box className={'absolute right-0 flex-grow'}>
-          <div
-            onClick={async () => {
-              // const a = await axios.get('https://3.90.102.135/user/test');
-              try {
-                const a = await axios.get('https://cointalk.kro.kr:8080/test?message=test');
-                console.log(a);
-              } catch (err) {
-                console.error(err);
-              }
-            }}
-          >
-            user/test get
-          </div>
           {isLogin ? <AvatarWrapper /> : <HeaderSignIn />}
         </Box>
       </Toolbar>
