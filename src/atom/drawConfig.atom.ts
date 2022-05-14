@@ -9,8 +9,8 @@ interface IDrawSetConfig {
 export const atomDrawConfig = atom<IDrawSetConfig>({
   key: 'atomDrawConfig',
   default: {
-    penStroke: 18,
-    eraseStroke: 18,
+    penStroke: 10,
+    eraseStroke: 20,
     penColor: '#F6B93B',
   },
 });

@@ -16,14 +16,12 @@ const useResetObserverDrawData = () => {
   const resetTransaction = useResetRecoilState(atomDrawTransaction);
   const resetOrderBook = useResetRecoilState(atomOrderBook);
   const resetChartData = useResetRecoilState(atomDrawChart);
-  const resetTicker = useResetRecoilState(atomFilteredCoins);
 
   useEffect(() => {
     resetTransaction();
     resetCoinBar();
     resetOrderBook();
     resetChartData();
-    // resetTicker();
   }, [selectCoin]);
 };
 

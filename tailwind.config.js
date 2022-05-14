@@ -24,8 +24,17 @@ module.exports = {
       animation: {
         up: 'up_Effect 0.2s',
         down: 'down_Effect 0.2s',
+        effect: 'effet 0.2s forward',
       },
+
       keyfraems: {
+        effect: {
+          from: {},
+          to: {
+            opacity: 0,
+            transform: 'scale(0)',
+          },
+        },
         up_Effect: {
           from: {
             opacity: 1,

@@ -3,6 +3,7 @@ import {
   Autocomplete,
   Box,
   createFilterOptions,
+  InputAdornment,
   TextField,
 } from '@mui/material';
 import {
@@ -22,6 +23,7 @@ import ChatRoom from '../components/Chat/ChatRoom';
 import CoinBarForChat from '../components/CoinBar/CoinBarForChat';
 import MainWrapper from '../components/Common/MainWrapper';
 import DrawTool from '../components/DrawTool/DrawTool';
+import SearchIcon from '@mui/icons-material/Search';
 
 const ChatPage = () => {
   const coins = useRecoilValue(atomUseCoins);
@@ -66,71 +68,98 @@ const ChatPage = () => {
       }}
     >
       <div className={classNames(`grid grid-cols-12`)}>
-        {/* 코인검색, 헤드라인 */}
-        <div className={classNames(`col-start-1 col-end-3 p-5`)}>
-          <Autocomplete
-            disablePortal
-            id="coin-comboBOx"
-            options={displayCoins || []}
-            sx={{ width: '100%' }}
-            filterOptions={filterOption}
-            getOptionLabel={(e) => {
-              return e.coinName!;
-            }}
-            onChange={(e, v) => {
-              setDefaultCoins({
-                coinType: v?.coinType!,
-                coinSymbol: v?.coinSymbol!,
-                marketSymbol: 'KRW',
-                siseCrncCd: v?.siseCrncCd!,
-                coinName: v?.coinName!,
-              });
-            }}
-            isOptionEqualToValue={(e, v) => {
-              return e.coinName === v.coinName;
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                variant="standard"
-                sx={{
-                  width: '100%',
-                  color: '#FF9900',
-                  input: {
-                    border: 0,
+        <div
+          className={classNames(
+            `xl:col-start-1 xl:col-end-13`,
+            `2xl:col-start-1 2xl:col-span-full`,
+            `w-full h-full grid grid-cols-12`
+          )}
+        >
+          <div className={classNames(`col-start-1 col-end-3 p-5`)}>
+            <Autocomplete
+              disablePortal
+              id="coin-comboBOx"
+              options={displayCoins || []}
+              sx={{ width: '100%' }}
+              filterOptions={filterOption}
+              getOptionLabel={(e) => {
+                return e.coinName!;
+              }}
+              onChange={(e, v) => {
+                setDefaultCoins({
+                  coinType: v?.coinType!,
+                  coinSymbol: v?.coinSymbol!,
+                  marketSymbol: 'KRW',
+                  siseCrncCd: v?.siseCrncCd!,
+                  coinName: v?.coinName!,
+                });
+              }}
+              isOptionEqualToValue={(e, v) => {
+                return e.coinName === v.coinName;
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  color="info"
+                  variant="standard"
+                  sx={{
+                    width: '100%',
                     color: '#FF9900',
-                  },
-                  border: 0,
-                  borderColor: 'transparent',
-                }}
-                label={defaultCoin.coinName}
-              />
-            )}
-          />
-        </div>
+                    input: {
+                      border: 0,
+                      color: '#FF9900',
+                    },
+                    label: {
+                      color: 'white',
+                    },
+                    border: 0,
+                    borderColor: 'transparent',
+                  }}
+                  label={'코인'}
+                  // InputProps={{
+                  //   startAdornment: (
+                  //     <InputAdornment position="start">
+                  //       <SearchIcon
+                  //         sx={{
+                  //           color: '#FF9900',
+                  //         }}
+                  //       />
+                  //     </InputAdornment>
+                  //   ),
+                  //   endAdornment: (
+                  //     <InputAdornment position="end"></InputAdornment>
+                  //   ),
+                  // }}
+                />
+              )}
+            />
+          </div>
 
-        <div className={classNames(`col-start-3 col-end-13 p-5`)}>
-          <MainWrapper
-            className={classNames(
-              `w-full h-full`,
-              `flex justify-center  items-center`
-            )}
-            style={{
-              borderRadius: '4rem',
-            }}
-          >
-            뉴스헤드라인
-          </MainWrapper>
+          <div className={classNames(`col-start-3 col-end-13 p-5`)}>
+            <MainWrapper
+              className={classNames(
+                `w-full h-full`,
+                `flex justify-center  items-center`
+              )}
+              style={{
+                borderRadius: '4rem',
+              }}
+            >
+              뉴스헤드라인
+            </MainWrapper>
+          </div>
         </div>
       </div>
 
+      {/* 코인검색, 헤드라인 */}
+
       {/* 본문 */}
-      <div className={classNames(`grid grid-cols-12 gap-2`)}>
+      <div className={classNames(`grid grid-cols-12 gap-5`)}>
         {/*  좌측 코인/차트 정보*/}
         <div
           className={classNames(
-            `p-5`,
-            `xl:col-start-1 xl:col-end-13`,
+            // `p-5`,
+            `xl:col-start-1 xl:col-end-8`,
             `2xl:col-start-1 2xl:col-end-9`
           )}
         >
@@ -152,8 +181,8 @@ const ChatPage = () => {
         {/* 채팅방 */}
         <div
           className={classNames(
-            `p-5`,
-            `xl:col-start-1 xl:col-end-13`,
+            // `p-5`,
+            `xl:col-start-8 xl:col-end-13`,
             `2xl:col-start-9 2xl:col-end-13`
           )}
         >

@@ -23,7 +23,7 @@ const OnlyDisplayChat = ({ className }: { className?: string }) => {
         )}
       >
         <div
-          className={classNames(`py-2`, `scrollbar-hide overflow-auto`)}
+          className={classNames(`py-2`, `overflow-auto`)}
           style={{
             height: '40rem',
             maxHeight: '95%',

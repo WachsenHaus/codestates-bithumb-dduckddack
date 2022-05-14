@@ -117,8 +117,6 @@ const CoinBar = () => {
         <div className={classNames(`w-32 h-full`)}>
           <BestCoinRowChart data={data[0]} />
         </div>
-        {/* <h1 className="font-bmjua">차트</h1> */}
-        {/* <span>{convertStringPriceToKRW(f)}</span> */}
       </CoinColumn>
     </MainWrapper>
 

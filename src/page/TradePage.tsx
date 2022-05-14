@@ -19,7 +19,7 @@ import { useGenerateSocket } from '../hooks/useWebSocket';
 const TradePage = () => {
   useInitialize();
   // 3.웹소켓을 실행시킴 웹소켓은 트랜잭션,티커,차트봉에 대한 정보를 받아온다.
-  useGenerateSocket('SUBSCRIBE');
+
   // 4.선택된 코인에 대한 정보가 바뀌면 그리는 데이터들을 초기화하는 옵저버.
   useResetObserverDrawData();
   // 5.선택된 코인에 따라 가격정보가 해당 웹타이틀에 표시되는 훅스

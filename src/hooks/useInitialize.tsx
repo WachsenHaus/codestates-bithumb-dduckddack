@@ -8,7 +8,10 @@ import {
 } from 'recoil';
 import { API_BITHUMB_STATUS_CODE } from '../api/bt.api';
 import { selectorGetCoinList, atomCoinList } from '../atom/coinList.atom';
-import { atomSelectCoinDefault } from '../atom/selectCoinDefault.atom';
+import {
+  atomSelectCoinDefault,
+  ISelectCoinDefault,
+} from '../atom/selectCoinDefault.atom';
 import { atomSelectCoinDetail } from '../atom/selectCoinDetail.atom';
 import {
   selectorFilterUseCoins,
@@ -175,6 +178,7 @@ const useMergeTickersWebsocketAndFilteredData = () => {
   const getAtomTicker = useRecoilValue(atomTickers);
   const getDefaultCoin = useRecoilValue(atomSelectCoinDefault);
   const getDetailCoin = useRecoilValue(atomSelectCoinDetail);
+  // const setDetailCoin = useSetRecoilState(atomSelectCoinDetail);
   const [priceInfoUseCoin, setPriceInfoUseCoins] = useRecoilState(
     atomPriceInfoUseCoins
   );
@@ -186,9 +190,11 @@ const useMergeTickersWebsocketAndFilteredData = () => {
     );
     setWorker(worker);
     worker.onmessage = (e) => {
-      setTimeout(() => {
-        setPriceInfoUseCoins(e.data);
-      }, 0);
+      setPriceInfoUseCoins(e.data.coinList);
+      // console.log(e.data.detail);
+      // setDetailCoin(e.data.detail);
+      // setTimeout(() => {
+      // }, 0);
     };
 
     return () => {
@@ -221,14 +227,22 @@ const useMergeTickersWebsocketAndFilteredData = () => {
   );
 
   useEffect(() => {
-    memoMerge({
-      getAtomTicker,
-      priceInfoUseCoin,
-      getDetailCoin,
-      getDefaultCoin,
-    });
+    // memoMerge({
+    //   getAtomTicker,
+    //   priceInfoUseCoin,
+    //   getDetailCoin,
+    //   getDefaultCoin,
+    // });
+    // console.log(getAtomTicker);
+    worker &&
+      worker.postMessage({
+        tickerObj: getAtomTicker,
+        coins: priceInfoUseCoin,
+        detail: getDetailCoin,
+        default: getDefaultCoin,
+      });
     setTimeout(() => {}, 0);
-  }, [getAtomTicker, getDefaultCoin, memoMerge]);
+  }, [worker, getAtomTicker, getDefaultCoin, getDetailCoin]);
 };
 
 /**
@@ -245,59 +259,36 @@ const useGetFilteredCoins = () => {
   const filterOrder = useRecoilValue(atomFilterOrderBy);
   const filterDirection = useRecoilValue(atomFilterDirection);
   const priceInfoUseCoins = useRecoilValue(atomPriceInfoUseCoins);
-  const [worker, setWorker] = useState<any>();
+  const [worker, setWorker] = useState<Worker | undefined>();
 
   useEffect(() => {
     const worker: Worker = new Worker(
       new URL('./worker/selectorPriceFilterdCoins.ts', import.meta.url)
     );
     setWorker(worker);
-    worker.onmessage = (e) => {
-      setTimeout(() => {
-        setFilteredCoins(e.data);
-      }, 0);
-    };
     return () => {
       setWorker(undefined);
       worker.terminate();
     };
   }, []);
 
-  const memoMerge = useCallback(
-    ({
-      filterMode,
-      filterKeyword,
-      filterOrder,
-      filterDirection,
-      priceInfoUseCoins,
-    }: {
-      filterMode: any;
-      filterKeyword: any;
-      filterOrder: any;
-      filterDirection: any;
-      priceInfoUseCoins: any;
-    }) => {
-      worker &&
-        worker.postMessage({
-          filterMode: filterMode,
-          filterKeyword: filterKeyword,
-          filterOrder: filterOrder,
-          filterDirection: filterDirection,
-          priceInfoUseCoins: priceInfoUseCoins,
-        });
-    },
-    [worker]
-  );
+  useEffect(() => {
+    if (worker) {
+      worker.onmessage = (e) => {
+        setFilteredCoins(e.data);
+      };
+    }
+  }, [worker]);
 
   useEffect(() => {
-    memoMerge({
-      filterMode: filterMode,
-      filterKeyword: filterKeyword,
-      filterOrder: filterOrder,
-      filterDirection: filterDirection,
-      priceInfoUseCoins: priceInfoUseCoins,
-    });
-    setTimeout(() => {}, 0);
+    worker &&
+      worker.postMessage({
+        filterMode: filterMode,
+        filterKeyword: filterKeyword,
+        filterOrder: filterOrder,
+        filterDirection: filterDirection,
+        priceInfoUseCoins: priceInfoUseCoins,
+      });
   }, [
     worker,
     filterMode,
@@ -306,7 +297,6 @@ const useGetFilteredCoins = () => {
     filterDirection,
     priceInfoUseCoins,
     selectCoin,
-    memoMerge,
   ]);
 };
 
@@ -324,8 +314,11 @@ const useGetInitTransactionData = () => {
    */
   useEffect(() => {
     const { state, contents } = selectTransaction;
+
     if (state === 'hasValue') {
       contents && setDrawTransaction(contents);
+    } else if (state === 'loading') {
+      setDrawTransaction([]);
     } else if (state === 'hasError') {
       console.log('error');
     }
@@ -342,59 +335,45 @@ const useMergeTransactionWebsocketAndInitData = () => {
     useRecoilState(atomDrawTransaction);
   const [selectDetailCoin, setSelectDetailCoin] =
     useRecoilState(atomSelectCoinDetail);
-  const [worker, setWorker] = useState<any>();
+  const [worker, setWorker] = useState<Worker | undefined>();
 
   useEffect(() => {
-    // const worker: Worker = new Worker(workerMergeWebsocketTransaction);
     const worker: Worker = new Worker(
       new URL(`./worker/mergeWebsocketTransaction.ts`, import.meta.url)
     );
     setWorker(worker);
-    worker.onmessage = (e) => {
-      setSelectDetailCoin((prevData) => {
-        return {
-          ...prevData,
-          e: e.data.p,
-          r: e.data.r,
-        };
-      });
-      setDrawTransaction(e.data.cloneDrawTransaction);
-    };
     return () => {
       setWorker(undefined);
       worker.terminate();
     };
   }, []);
 
-  const memoMerge = useCallback(
-    ({
-      drawTransaction,
-      websocketTransaction,
-      selectDetailCoin,
-    }: {
-      drawTransaction: any;
-      websocketTransaction: any;
-      selectDetailCoin: any;
-    }) => {
-      worker &&
-        worker.postMessage({
-          drawTransaction: drawTransaction,
-          websocketTransaction: websocketTransaction,
-          selectDetailCoin: selectDetailCoin,
-        });
-    },
-    [worker]
-  );
+  useEffect(() => {
+    if (worker) {
+      worker.onmessage = (e) => {
+        if (selectCoin.coinType === e.data.c) {
+          setSelectDetailCoin((prev) => {
+            return {
+              ...prev,
+              e: e.data.p,
+              r: e.data.r,
+            };
+          });
+        }
+
+        setDrawTransaction(e.data.cloneDrawTransaction);
+      };
+    }
+  }, [worker, selectCoin]);
 
   useEffect(() => {
-    setTimeout(() => {
-      memoMerge({
+    worker &&
+      worker.postMessage({
         drawTransaction: drawTransaction,
         websocketTransaction: websocketTransaction,
         selectDetailCoin: selectDetailCoin,
       });
-    }, 0);
-  }, [worker, websocketTransaction, selectCoin.coinSymbol, memoMerge]);
+  }, [websocketTransaction]);
 };
 
 export const useInitialize = () => {

@@ -38,7 +38,7 @@ const Ticker = () => {
 
   const RowRenderer = (e: TableRowProps) => {
     return (
-      <div className="flex border-b" key={e.key} style={e.style}>
+      <div className="flex border-b" style={e.style}>
         <div
           className="grid w-full"
           style={{
@@ -46,15 +46,25 @@ const Ticker = () => {
           }}
         >
           {e?.rowData && (
+            // <>
+            //   <RenderFavoriteColumn {...e} />
+            //   <RenderNameColumn e={e} key={e.rowData.coinName} />
+            //   <RenderCurrentPriceColumn
+            //     {...e}
+            //     key={`${e.rowData.e}_${e.rowData.u24}`}
+            //   />
+            //   <RenderRateOfChange {...e} key={e.rowData.r} />
+            //   <RenderU24 {...e} key={e.rowData.u24} />
+            // </>
             <>
-              <RenderFavoriteColumn {...e} />
-              <RenderNameColumn e={e} key={e.rowData.coinName} />
+              <RenderFavoriteColumn {...e} key={`${e.rowData.coinName}_1`} />
+              <RenderNameColumn e={e} key={`${e.rowData.coinName}_2`} />
               <RenderCurrentPriceColumn
                 {...e}
                 key={`${e.rowData.e}_${e.rowData.u24}`}
               />
-              <RenderRateOfChange {...e} key={e.rowData.r} />
-              <RenderU24 {...e} key={e.rowData.u24} />
+              <RenderRateOfChange {...e} key={`${e.rowData.coinName}_4`} />
+              <RenderU24 {...e} key={`${e.rowData.coinName}_5`} />
             </>
           )}
         </div>

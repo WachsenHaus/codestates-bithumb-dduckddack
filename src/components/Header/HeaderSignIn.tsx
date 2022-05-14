@@ -19,7 +19,7 @@ const HeaderSignIn = () => {
           //   });
         }}
       >
-        SignIn
+        Sign In
       </div>
     </>
   );

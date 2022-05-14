@@ -22,9 +22,9 @@ const getRateOfChange = (f: string | undefined, e: string) => {
 self.onmessage = function (e) {
   const { data } = e;
   let result;
-  const cloneDrawTransaction = JSON.parse(JSON.stringify(data.drawTransaction));
-  const { m, c, l } = JSON.parse(JSON.stringify(data.websocketTransaction));
-  const detail = JSON.parse(JSON.stringify(data.selectDetailCoin));
+  const cloneDrawTransaction = data.drawTransaction;
+  const { m, c, l } = data.websocketTransaction;
+  const detail = data.selectDetailCoin;
   for (let i = 0; i < l.length; i++) {
     const { o, n, p, q, t } = l[i];
     let color = '1';
@@ -44,6 +44,7 @@ self.onmessage = function (e) {
     result = {
       p: p,
       r: r,
+      c: c,
     };
     cloneDrawTransaction.push({
       coinType: c, //
