@@ -22,7 +22,6 @@ const MainPage = () => {
 
   return (
     <div className={classNames(`grid grid-cols-12 `, `max-h-full`, `h-full`)}>
-      {/* {' '} */}
       <BestCoin
         className={classNames(
           `col-start-3 col-end-7  drop-shadow-2xl`,
@@ -35,7 +34,6 @@ const MainPage = () => {
           `h-5/6 my-auto mx-2`
         )}
       />
-      {/* <div className="h-full w-full"></div> */}
     </div>
   );
 };

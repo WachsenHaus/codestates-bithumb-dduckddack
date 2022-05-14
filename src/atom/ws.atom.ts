@@ -9,10 +9,10 @@ export const atomSubscribeWebSocket = atom<WebSocket | undefined>({
 export const atomSubscribeWebSocektMessage = selector({
   key: 'atomSubscribeWebSocektMessage',
   get: ({ get }) => {
-    const { siseCrncCd, coinType } = get(atomSelectCoinDefault);
+    const selectCoin = get(atomSelectCoinDefault);
     const ws = get(atomSubscribeWebSocket);
-    if (ws && siseCrncCd && coinType) {
-      const filter = [siseCrncCd, coinType];
+    if (ws && selectCoin.siseCrncCd && selectCoin.coinType) {
+      const filter = [selectCoin.siseCrncCd, selectCoin.coinType];
       const result = {
         events: [
           {

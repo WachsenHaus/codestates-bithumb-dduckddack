@@ -40,7 +40,7 @@ const BestCoinRow = ({ children }: { children?: ReactNode }) => {
     <div
       className={classNames(`grid grid-cols-5`, `text-highRight`)}
       style={{
-        gridTemplateColumns: '20% auto 20% 10% 10%',
+        gridTemplateColumns: '20% auto 20% 10% 30%',
       }}
     >
       {children}
@@ -48,7 +48,13 @@ const BestCoinRow = ({ children }: { children?: ReactNode }) => {
   );
 };
 
-export const BestCoinRowChart = ({ data }: { data?: any[] }) => {
+export const BestCoinRowChart = ({
+  data,
+  className,
+}: {
+  data?: any[];
+  className?: string;
+}) => {
   const generateLabel = Array.from({ length: 1500 }, (undefined, i) => i);
   const chartData = {
     // width: '50px',
@@ -72,7 +78,8 @@ export const BestCoinRowChart = ({ data }: { data?: any[] }) => {
       <div
         className={classNames(
           `flex justify-center items-center`,
-          `text-bithumb`
+          `text-bithumb`,
+          className
         )}
       >
         <Line
@@ -103,12 +110,16 @@ export const BestCoinRowChart = ({ data }: { data?: any[] }) => {
               legend: {
                 display: false,
               },
+              tooltip: {
+                enabled: false,
+              },
             },
             elements: {
               point: {
                 radius: 0,
               },
             },
+
             responsive: true,
           }}
         />

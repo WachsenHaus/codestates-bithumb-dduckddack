@@ -31,8 +31,8 @@ const useResizeCanvas = (
       if (baseTarget.current) {
         const tvCanvas = baseTarget.current.querySelector('canvas');
         if (tvCanvas) {
-          setWidth(tvCanvas.clientWidth);
-          setHeight(tvCanvas.clientHeight);
+          setWidth(tvCanvas.getBoundingClientRect().width);
+          setHeight(tvCanvas.getBoundingClientRect().height);
           console.log('resize');
           // chartRef.current?.resize(tvCanvas.clientWidth, tvCanvas.clientHeight);
 

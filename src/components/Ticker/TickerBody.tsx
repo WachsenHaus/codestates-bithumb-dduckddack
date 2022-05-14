@@ -118,14 +118,18 @@ export const RenderNameColumn = React.memo(
     );
 
     return (
-      <div
+      <motion.div
+        whileHover={{
+          scale: 1.1,
+          transition: {
+            x: '2rem',
+          },
+        }}
         className={classNames(
           `${
             selectCoinDefault.coinType === e.rowData.coinType && ` text-bithumb`
           }`,
-          ` flex flex-col justify-center w-full h-full `,
-          `hover:scale-110`,
-          `hover:ml-4`
+          ` flex flex-col justify-center w-full h-full `
         )}
         onClick={onSelectClick(e)}
       >
@@ -133,7 +137,7 @@ export const RenderNameColumn = React.memo(
         <div className="text-xs font-bmjua">
           {e.rowData.coinSymbol}/{e.rowData.siseCrncCd === 'C0100' ? 'KRW' : ''}
         </div>
-      </div>
+      </motion.div>
     );
   }
 );
@@ -147,10 +151,11 @@ export const RenderCurrentPriceColumn = React.memo((e: TableRowProps) => {
           className={classNames(
             // `will-change-transform`,
             `${styles.effect}`,
-            `border-white`,
+            // `animate-effect`,
+            // `border-transparent`,
             e.rowData.isUp === true && `border-red-600`,
             e.rowData.isUp === false && `border-blue-600`,
-            e.rowData?.isUp === undefined && `border-white`,
+            e.rowData?.isUp === undefined && `border-transparent`,
             `border-2`,
             `h-1`
           )}
@@ -161,7 +166,7 @@ export const RenderCurrentPriceColumn = React.memo((e: TableRowProps) => {
 });
 
 export const RenderRateOfChange = React.memo((e: TableRowProps) => {
-  const [isUp, setIsUp] = useState<boolean | undefined>(undefined);
+  const [isUp, setIsUp] = useState<boolean>(false);
   useEffect(() => {
     if (e.rowData.a?.includes('-')) {
       setIsUp(false);

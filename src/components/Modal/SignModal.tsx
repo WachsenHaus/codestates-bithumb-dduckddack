@@ -62,7 +62,7 @@ const SignModal = () => {
         className={classNames(
           `h-5/6`,
           `p-10`,
-          // `h-5/6 w-7/12`,
+          // 'w-full', // `h-5/6 w-7/12`,
           `bg-slate-300`,
           `rounded-2xl shadow-xl`,
           `shadow-xl`,
@@ -86,16 +86,18 @@ const SignModal = () => {
           // className={classNames(
           //   modal.modalType === 'chartImage' ? 'visible' : 'invisible'
           // )}
-          className={classNames(`flex justify-center items-center`)}
+          className={classNames(
+            `w-5/6 grid grid-cols-2 grid-rows-1 content-around `
+          )}
         >
-          <div>
+          <div className={classNames(`w-full`)}>
             <img
               alt="modal_img"
               src={payload?.src}
-              className={classNames(`w-full h-full`)}
+              // className={classNames(`w-full h-full`)}
             />
           </div>
-          <div className={classNames(`w-full h-full`)} ref={wrapperRef} />
+          <div className={classNames(`w-full`)} ref={wrapperRef} />
         </div>
       </div>
     </div>

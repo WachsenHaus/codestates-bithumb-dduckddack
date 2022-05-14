@@ -1,9 +1,17 @@
 import { TypeCoinKind, TypeCoinClassCode } from './coinList.type';
 import { atom, selector } from 'recoil';
-import { generateKeywordForSearch, getCookie, order, unpackCookie } from '../utils/utils';
+import {
+  generateKeywordForSearch,
+  getCookie,
+  order,
+  unpackCookie,
+} from '../utils/utils';
 import { atomCoinList } from './coinList.atom';
 import { TypeDrawTicker } from './drawData.atom';
-import { TypeWebSocketTickerReturnType, TypeWebSocketTransactionReturnType } from './ws.type';
+import {
+  TypeWebSocketTickerReturnType,
+  TypeWebSocketTransactionReturnType,
+} from './ws.type';
 import _ from 'lodash';
 import { TypeTradeTransaction } from './tradeData.atom';
 import { atomSelectCoinDetail } from './selectCoinDetail.atom';
@@ -103,7 +111,7 @@ export const atomFilterKeyword = atom<string>({
 });
 export const atomFilterOrderBy = atom<'e' | 'r' | 'u24'>({
   key: 'atomFilterOrderBy',
-  default: 'e',
+  default: 'u24',
 });
 export const atomFilterDirection = atom<'desc' | 'asc'>({
   key: 'atomFilterDirection',
@@ -247,7 +255,10 @@ export const selectorFilterUseCoins = selector({
     const displayFilter = get(atomDisplayCoinsFilter);
 
     const useFilterCoins = defaultInfoCoins?.coinList.filter(
-      (item) => item.coinClassCode === displayFilter.coinClassCode && item.siseCrncCd === displayFilter.siseCrncCd && item.isLive === displayFilter.isLive
+      (item) =>
+        item.coinClassCode === displayFilter.coinClassCode &&
+        item.siseCrncCd === displayFilter.siseCrncCd &&
+        item.isLive === displayFilter.isLive
     );
     const cookieFavorites = getCookie('marketFavoritesCoin');
     const unPackCookie = unpackCookie(cookieFavorites);
@@ -258,7 +269,9 @@ export const selectorFilterUseCoins = selector({
         coinNameEn: item.coinNameEn,
         coinSymbol: item.coinSymbol,
       });
-      const cookieCoinSymbol = unPackCookie.find((i) => i.split('_')[0] === item.coinType);
+      const cookieCoinSymbol = unPackCookie.find(
+        (i) => i.split('_')[0] === item.coinType
+      );
       return {
         isFavorite: cookieCoinSymbol ? true : false,
         siseCrncCd: item.siseCrncCd,

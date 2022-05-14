@@ -36,7 +36,7 @@ const TransactionRow = ({
         )}
       >
         <div className="relative">
-          <span className="absolute right-5">
+          <span className="absolute right-5 text-sm">
             {Number(contQty).toFixed(4)} {coinSymbol}
           </span>
         </div>

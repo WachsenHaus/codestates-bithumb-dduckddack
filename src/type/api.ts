@@ -4,3 +4,8 @@ export interface ResponseVO<T> {
   message: string;
   data: T;
 }
+
+export interface dduckddackResponseVO<T> {
+  status: 'ok' | 'error';
+  message: T;
+}

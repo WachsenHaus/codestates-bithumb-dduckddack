@@ -10,7 +10,11 @@ self.onmessage = function (e) {
   const defaultCoin = data.default;
 
   // console.log(item.coinType === ticker.c ,item.coinType === defaultCoin.coinType )
-  const isExist = _.findIndex(coinList, (item: any) => item.coinType === ticker.c || item.coinType === defaultCoin.coinType);
+  const isExist = _.findIndex(
+    coinList,
+    (item: any) =>
+      item.coinType === ticker.c || item.coinType === defaultCoin.coinType
+  );
   // const isExist = coinList.findIndex();
   if (isExist === -1) {
     return;
@@ -28,17 +32,37 @@ self.onmessage = function (e) {
     } else {
       isUp = false;
     }
-    // console.log(detail);
+    // if (coinList[isExist].coinType === defaultCoin.coinType) {
+    //   coinList[isExist] = {
+    //     ...coinList[isExist],
+    //     e: detail.e,
+    //     r: detail.r,
+    //     isUp,
+    //   };
+    //   console.log(coinList[isExist]);
+    // } else if (coinList[isExist].coinType === ticker.c) {
+    //   coinList[isExist] = { ...coinList[isExist], ...ticker, isUp };
+    //   console.log(coinList[isExist]);
+    // }
+
+    // let resultDetail;
     if (coinList[isExist].coinType === defaultCoin.coinType) {
-      // console.log(detail);
-      // const a = (detail.e * detail.r) / 100;
-      // console.log(a.toString());
-      // console.log(coinList[isExist]);
-      coinList[isExist] = { ...coinList[isExist], e: detail.e, r: detail.r, isUp };
-    } else if (coinList[isExist].coinType === ticker.c) {
-      coinList[isExist] = { ...coinList[isExist], ...ticker, isUp };
+      coinList[isExist] = {
+        ...coinList[isExist],
+        e: detail.e,
+        r: detail.r,
+        isUp,
+      };
+      // resultDetail = coinList[isExist];
     }
-    self.postMessage(coinList);
+    if (coinList[isExist].coinType === ticker.c) {
+      coinList[isExist] = { ...coinList[isExist], ...ticker, isUp };
+      // console.log(coinList[isExist]);
+    }
+    self.postMessage({
+      // detail: resultDetail,
+      coinList: coinList,
+    });
   }
 };
 export {};

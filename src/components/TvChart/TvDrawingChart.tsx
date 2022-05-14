@@ -143,12 +143,14 @@ const TvDrawingChart = () => {
 
       <div
         className={classNames(
-          `w-full h-full relative z-20 rounded-3xl bg-nightBlack p-5 drop-shadow-3xl`
+          `w-full h-full relative z-20 rounded-3xl bg-nightBlack  drop-shadow-3xl`,
+          `box-border`,
+          `p-5`
         )}
         ref={saveWrapperRef}
       >
         <div
-          className={classNames(`w-full  absolute z-10 -tran`)}
+          className={classNames(`w-full  absolute z-10`)}
           ref={canvasWrapperRef}
         >
           <ReactSketchCanvas

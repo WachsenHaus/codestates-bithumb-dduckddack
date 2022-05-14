@@ -33,25 +33,37 @@ const useGenerateChart = () => {
     ) =>
     () => {
       console.log('차트 리사이징');
+      // console.log(ref?.current?.clientWidth);
+      console.log(ref?.current);
+      console.log(ref?.current?.getBoundingClientRect().width);
+      console.log(ref?.current?.scrollWidth);
       console.log(ref?.current?.clientWidth);
-      console.log(ref?.current?.clientHeight);
+      console.log(ref?.current?.offsetWidth);
+      console.log(ref?.current?.getBoundingClientRect().height);
+      console.log(ref?.current?.scrollHeight);
+      // console.log(ref?.current?.clientHeight);
       chart.current &&
         ref.current &&
         chart.current.resize(
           ref?.current?.clientWidth,
-          ref?.current?.clientHeight
+          ref?.current?.clientHeight,
+          true
         );
     };
 
   useEffect(() => {
-    if (candleChart.current) {
+    if (chartRef.current) {
+      console.log('생성');
       onResize(chartRef, wrapperRef)();
     }
-  }, [candleChart.current]);
+  }, [chartRef.current]);
   useEffect(() => {
     if (wrapperRef.current) {
       chartRef.current = createChart(wrapperRef.current, {
-        height: 340,
+        // height: wrapperRef.current.getBoundingClientRect().height,
+        // width: wrapperRef.current.getBoundingClientRect().width,
+        height: 350,
+        // width: 1000,
         crosshair: {
           mode: 0,
         },
@@ -80,8 +92,19 @@ const useGenerateChart = () => {
           timeVisible: true,
         },
       });
-
+      wrapperRef.current.addEventListener(
+        'resize',
+        onResize(chartRef, wrapperRef)
+      );
       window.addEventListener('resize', onResize(chartRef, wrapperRef));
+      wrapperRef.current.addEventListener(
+        'load',
+        onResize(chartRef, wrapperRef)
+      );
+      // wrapperRef.current.addEventListener(
+      //   'load',
+      //   onResize(chartRef, wrapperRef)
+      // );
 
       candleChart.current = chartRef.current.addCandlestickSeries();
       candleChart.current.applyOptions({

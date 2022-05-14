@@ -5,6 +5,9 @@ module.exports = {
       bmjua: ['bmjua'],
     },
     extend: {
+      maxHeight: {
+        128: '32rem',
+      },
       colors: {
         highRight: '#FF9900',
         bithumb: '#F6B93B',
@@ -17,6 +20,7 @@ module.exports = {
         downBox: '#1E3799',
         upBox: '#EB2F06',
       },
+
       dropShadow: {
         '3xl': '0px 5px 3px rgba(0, 0, 0, 0.85)',
       },
@@ -24,8 +28,17 @@ module.exports = {
       animation: {
         up: 'up_Effect 0.2s',
         down: 'down_Effect 0.2s',
+        effect: 'effet 0.2s forward',
       },
+
       keyfraems: {
+        effect: {
+          from: {},
+          to: {
+            opacity: 0,
+            transform: 'scale(0)',
+          },
+        },
         up_Effect: {
           from: {
             opacity: 1,

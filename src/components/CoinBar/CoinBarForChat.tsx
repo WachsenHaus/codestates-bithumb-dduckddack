@@ -1,12 +1,18 @@
+import axios from 'axios';
 import classNames from 'classnames';
 import { motion } from 'framer-motion';
-import React from 'react';
+import _ from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { atomSelectCoinDefault } from '../../atom/selectCoinDefault.atom';
+import { atomPriceInfoUseCoins } from '../../atom/total.atom';
 import useGetCoinBar from '../../hooks/useGetCoinBar';
 import {
   convertStringPriceToKRW,
   convertStringToVolume24,
   convertStringPriceWON,
 } from '../../utils/utils';
+import { BestCoinRowChart } from '../BestCoin/BestCoin';
 import MainWrapper from '../Common/MainWrapper';
 import CoinRate from './CoinRate';
 
@@ -18,6 +24,45 @@ const CoinColumn = React.memo(({ children }: { children: React.ReactNode }) => (
 
 const CoinBarForChat = () => {
   const { e, v24, u24, h, l, f, r, coinSymbol, coinName } = useGetCoinBar();
+
+  const selectCoin = useRecoilValue(atomSelectCoinDefault);
+
+  const coins = useRecoilValue(atomPriceInfoUseCoins);
+  const [data, setData] = useState<any[]>([]);
+  const [flag, setFlag] = useState(false);
+  useEffect(() => {
+    if (coins.length > 0 && flag === false) {
+      setFlag(true);
+    }
+  }, [coins]);
+  useEffect(() => {
+    if (flag) {
+      getData();
+    }
+  }, [selectCoin.coinSymbol, flag]);
+
+  const getData = async () => {
+    const r = _.filter(
+      coins,
+      (item) => item.coinSymbol === selectCoin.coinSymbol
+    );
+    let result: any = [];
+    r.forEach((item) => {
+      result.push(
+        new Promise((resolve, reject) => {
+          const res = axios.get(
+            `https://pub2.bithumb.com/public/candlesticknew/${item.coinType}_C0100/1M`
+          );
+          res.then((_) => resolve(_.data.data.map((item: any) => item[2])));
+          res.catch((err) => reject(err));
+        })
+      );
+    });
+    Promise.all(result).then((values) => {
+      setData(values);
+    });
+  };
+
   return (
     <MainWrapper
       className={classNames(
@@ -70,6 +115,20 @@ const CoinBarForChat = () => {
         <span className={classNames(`text-bithumbYellow`)}>
           {convertStringPriceToKRW(f)}
         </span>
+      </CoinColumn>
+      <CoinColumn>
+        <div
+          className={classNames(
+            `h-full flex items-center justify-center`,
+            `2xl:w-32`,
+            `xl:w-8`
+          )}
+        >
+          <BestCoinRowChart
+            data={data[0]}
+            className={classNames(`2xl:w-32`, `xl:w-8`)}
+          />
+        </div>
       </CoinColumn>
     </MainWrapper>
   );
