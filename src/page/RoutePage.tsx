@@ -12,7 +12,7 @@ import SiginUpPage from './SiginUpPage';
 
 const RoutePage = () => {
   useGenerateSocket('CHAT');
-  useGenerateSocket('SUBSCRIBE');
+
   return (
     <>
       <BrowserRouter>

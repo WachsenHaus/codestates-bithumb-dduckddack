@@ -95,14 +95,17 @@ export const useGenerateSocket = (type: TypeWebSocketTypes) => {
             case 'SUBSCRIBE':
               if (type === 'data') {
                 if (subtype === 'tk') {
-                  setTickers(content);
-                  setTimeout(() => {}, 0);
+                  setTimeout(() => {
+                    setTickers(content);
+                  }, 0);
                 } else if (subtype === 'st') {
-                  setSt(content);
-                  setTimeout(() => {}, 0);
+                  setTimeout(() => {
+                    setSt(content);
+                  }, 0);
                 } else if (subtype === 'tr') {
-                  setTransactions(content);
-                  setTimeout(() => {}, 0);
+                  setTimeout(() => {
+                    setTransactions(content);
+                  }, 0);
                 }
               }
               break;
