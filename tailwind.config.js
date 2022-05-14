@@ -5,6 +5,9 @@ module.exports = {
       bmjua: ['bmjua'],
     },
     extend: {
+      maxHeight: {
+        128: '32rem',
+      },
       colors: {
         highRight: '#FF9900',
         bithumb: '#F6B93B',
@@ -17,6 +20,7 @@ module.exports = {
         downBox: '#1E3799',
         upBox: '#EB2F06',
       },
+
       dropShadow: {
         '3xl': '0px 5px 3px rgba(0, 0, 0, 0.85)',
       },

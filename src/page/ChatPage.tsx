@@ -24,6 +24,7 @@ import CoinBarForChat from '../components/CoinBar/CoinBarForChat';
 import MainWrapper from '../components/Common/MainWrapper';
 import DrawTool from '../components/DrawTool/DrawTool';
 import SearchIcon from '@mui/icons-material/Search';
+import NewsHeadLine from '../components/News/NewsHeadLine';
 
 const ChatPage = () => {
   const coins = useRecoilValue(atomUseCoins);
@@ -145,7 +146,8 @@ const ChatPage = () => {
                 borderRadius: '4rem',
               }}
             >
-              뉴스헤드라인
+              <NewsHeadLine />
+              {/* 뉴스헤드라인 */}
             </MainWrapper>
           </div>
         </div>
