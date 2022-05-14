@@ -190,7 +190,7 @@ export const RenderRateOfChange = React.memo((e: TableRowProps) => {
         `${isUp === false ? `text-blue-500` : ``}`
       )}
     >
-      <div className="">{e.rowData.r}%</div>
+      <div className="">{Number(e.rowData.r).toFixed(2)}%</div>
       <div className="ml-4 text-sm">{price}</div>
     </div>
   );

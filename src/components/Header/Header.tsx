@@ -1,7 +1,7 @@
 import { AppBar, Box, Toolbar } from '@mui/material';
 import classNames from 'classnames';
 import { motion } from 'framer-motion';
-import React from 'react';
+import React, { useEffect } from 'react';
 import CI from '../../asset/img/sp_main_new.png';
 import bg_main from '../../asset/img/bg_main.png';
 import { useNavigate } from 'react-router-dom';
@@ -9,10 +9,16 @@ import axios from 'axios';
 import AvatarWrapper from '../Avatar/AvatarWrapper';
 import HeaderSignIn from './HeaderSignIn';
 import HeaderNavTab from './HeaderNavTab';
+import { useRecoilValue } from 'recoil';
+import { atomUserInfo } from '../../atom/user.atom';
 
 const Header = () => {
   const navigate = useNavigate();
-  const isLogin = false;
+  const userInfo = useRecoilValue(atomUserInfo);
+
+  useEffect(() => {
+    console.log(userInfo);
+  }, [userInfo]);
   // 로그인된 사용자 정보를 가져온다.
   return (
     <AppBar
@@ -48,7 +54,7 @@ const Header = () => {
         </Box>
 
         <Box className={'absolute right-0 flex-grow'}>
-          {isLogin ? <AvatarWrapper /> : <HeaderSignIn />}
+          {userInfo.accessToken ? <AvatarWrapper /> : <HeaderSignIn />}
         </Box>
       </Toolbar>
     </AppBar>

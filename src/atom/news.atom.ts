@@ -29,7 +29,7 @@ interface iNewsConfig {
   size: number;
   page: number;
   totalElements?: number;
-  totlaPages?: number;
+  totalPages?: number;
 }
 export const atomNewsConfig = atom<iNewsConfig>({
   key: 'atomNewsConfig',
@@ -50,17 +50,19 @@ export const selectorNews = selector({
     try {
       get(atomForceGetNews);
       const config = get(atomNewsConfig);
-      //   const result = await axios.get<dduckddackResponseVO<TypeReturnNews>>(/
-      const result = await axios.get<TypeNews[]>(API_NEWS.NEWS, {
-        params: {
-          page: config.page,
-          size: config.size,
-          keyword: config.keyword,
-        },
-      });
-      console.log(result.data);
+      const result = await axios.get<dduckddackResponseVO<TypeReturnNews>>(
+        API_NEWS.NEWS,
+        {
+          params: {
+            page: config.page,
+            size: config.size,
+            keyword: config.keyword,
+          },
+        }
+      );
       return result.data;
     } catch (err) {
+      console.log(err);
     } finally {
     }
   },

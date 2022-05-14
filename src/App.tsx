@@ -11,7 +11,8 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 
 import DebugObserver from './RecoilDebug';
 import RoutePage from './page/RoutePage';
-import SignModal from './components/Modal/SignModal';
+import ChartModal from './components/Modal/ChartModal';
+import SignInModal from './components/Modal/SignInModal';
 
 const App = () => {
   const darkTheme = createTheme({
@@ -26,7 +27,8 @@ const App = () => {
         <StyledEngineProvider>
           <ThemeProvider theme={darkTheme}>
             <CssBaseline />
-            <SignModal />
+            <ChartModal />
+
             <RoutePage />
           </ThemeProvider>
         </StyledEngineProvider>

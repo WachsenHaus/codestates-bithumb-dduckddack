@@ -8,17 +8,19 @@ import {
   atomChatRecvChatMessage,
   atomChatWebSocket,
 } from '../../atom/chat.atom';
-import { atomUserName } from '../../atom/user.atom';
+import { atomUserInfo, atomUserName } from '../../atom/user.atom';
 import MainWrapper from '../Common/MainWrapper';
 import { useRef, useEffect, useState } from 'react';
 import ChatRow from './ChatRow';
 import { TypeWebSocketChatSend } from './../../atom/ws.type';
 import stringify from 'fast-json-stable-stringify';
+import { atomSelectCoinDefault } from '../../atom/selectCoinDefault.atom';
 
 const ChatRoom = () => {
   const chatMsg = useRecoilValue(atomChatRecvChatMessage);
   const wsChat = useRecoilValue(atomChatWebSocket);
-  const userName = useRecoilValue(atomUserName);
+  const userInfo = useRecoilValue(atomUserInfo);
+  const selectCoin = useRecoilValue(atomSelectCoinDefault);
   const [keyword, setKeyword] = useState('');
 
   return (
@@ -38,7 +40,7 @@ const ChatRoom = () => {
         >
           {chatMsg &&
             chatMsg?.map((item, index) => {
-              return (
+              return item.payload?.roomId === selectCoin.coinName ? (
                 <ChatRow
                   // key={item.id || index}
                   index={index}
@@ -47,7 +49,10 @@ const ChatRoom = () => {
                   avatar={item.payload?.user.avatar}
                   message={item.payload?.message}
                   roomId={item.payload?.roomId}
+                  timestamp={item.timestamp}
                 />
+              ) : (
+                <></>
               );
             })}
         </div>
@@ -67,19 +72,17 @@ const ChatRoom = () => {
               const data: TypeWebSocketChatSend = {
                 type: 'CHAT_MESSAGE',
                 payload: {
-                  roomId: '비트코인',
+                  roomId: selectCoin.coinName || '비트코인',
                   user: {
-                    username: '홍길동',
+                    username: userInfo?.userInfo?.nickName || '익명',
                     avatar: '',
                   },
-                  // userJoined할때만 필요함.
                   message: keyword,
                 },
               };
 
               const sendData = stringify(data);
               wsChat?.send(sendData);
-              console.log(keyword);
               setKeyword('');
             }
           }}
@@ -100,7 +103,6 @@ const ChatRoom = () => {
             if (e.target) {
               setKeyword(e.target.value);
             }
-            // console.log(e);
           }}
         />
       </MainWrapper>

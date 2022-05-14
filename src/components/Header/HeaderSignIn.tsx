@@ -5,18 +5,16 @@ import { atomModalState } from '../../atom/modal.atom';
 
 const HeaderSignIn = () => {
   const setModal = useSetRecoilState(atomModalState);
-  const navigate = useNavigate();
 
   return (
     <>
       <div
         className={classNames(`hover:scale-105 hover:cursor-pointer`, `mr-5`)}
         onClick={() => {
-          navigate('/user');
-          //   setModal({
-          //     modalState: true,
-          //     modalType: 'sign',
-          //   });
+          setModal({
+            modalState: true,
+            modalType: 'sign',
+          });
         }}
       >
         Sign In

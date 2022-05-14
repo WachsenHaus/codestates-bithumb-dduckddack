@@ -16,6 +16,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import MainWrapper from '../components/Common/MainWrapper';
 import CircularProgress from '@mui/material/CircularProgress';
 import stringify from 'fast-json-stable-stringify';
+import axios from 'axios';
+import { API_USER } from '../api/user.api';
+import { useNavigate } from 'react-router-dom';
 
 const SignUpRow = (props: { children?: ReactNode; className?: string }) => {
   return (
@@ -41,6 +44,8 @@ type Inputs = {
 };
 
 const SiginUpPage = () => {
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -59,19 +64,94 @@ const SiginUpPage = () => {
         }
       );
     }
-    const send = stringify(data);
-
-    console.log(data);
-    console.log(send);
+    const sendData = {
+      email: data.email,
+      password: data.password1,
+      nickName: data.nickName,
+    };
+    // const send = stringify(data);
+    onUserCreate(sendData);
+    // console.log(data);
+    // console.log(send);
   };
 
-  const [mailFlag, setMailFlag] = useState(false);
+  // const [mailFlag, setMailFlag] = useState(false);
+  const [mailSenderStartFlag, setMailSenderStartFlag] = useState(false);
+  const [mailSenderEndFlag, setMailSenderEndFlag] = useState(false);
   const [mailSender, setMailSender] = useState(false);
+
   const [mailVerifyStartFlag, setMailVerifyStartFlag] = useState(false);
   const [mailVerifyEndFlag, setMailVerifyEndFlag] = useState(false);
   const [mailVerify, setMailVerify] = useState(false);
 
   const [mailVerifyCode, setMailVerifyCode] = useState<any>();
+
+  const onSendEmail = async (email: string) => {
+    try {
+      const result = await axios.post(
+        `${API_USER.EMAIL_VERIFY}/${email}/authentication`
+      );
+      if (result.data?.status === 'ok') {
+        setMailSenderEndFlag(true);
+        setMailSender(true);
+        console.log(result.data?.message);
+      }
+    } catch (err) {
+      setMailSenderStartFlag(false);
+      setMailSenderEndFlag(false);
+      setMailSender(false);
+      console.log(err);
+    }
+  };
+
+  const onEmailVerified = async (email: string) => {
+    try {
+      const result = await axios.get(
+        `${API_USER.EMAIL_VERIFY}/${email}/authentication`
+      );
+      if (result.data?.status === 'ok' && result.data.message === 'true') {
+        // 인증이 성공적으로 되었다면
+        setMailVerify(true);
+        setMailVerifyEndFlag(true);
+        console.log(result.data?.message);
+      } else {
+        if (errors && errors.emailVerify) {
+          errors.emailVerify.message = '에러임';
+        }
+        setError(
+          'emailVerify',
+          { message: '인증실패' },
+          {
+            shouldFocus: true,
+          }
+        );
+        setMailVerify(false);
+      }
+    } catch (err) {
+      setMailVerify(false);
+      setMailSenderEndFlag(false);
+      setMailSender(false);
+      setError(
+        'emailVerify',
+        { message: '인증실패' },
+        {
+          shouldFocus: true,
+        }
+      );
+    }
+  };
+
+  const onUserCreate = async (data: any) => {
+    try {
+      const result = await axios.put(`${API_USER.CREATE_USER}`, data);
+      if (result.data.status === 'ok') {
+        navigate('/');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div
       className={classNames(`grid grid-cols-12  w-full h-full`, `text-white`)}
@@ -96,13 +176,13 @@ const SiginUpPage = () => {
               <div
                 className={classNames(
                   ` w-10`,
-                  mailFlag ? `visible` : `invisible`
+                  mailSenderStartFlag ? `visible` : `invisible`
                 )}
               >
-                {mailSender ? (
+                {mailSenderEndFlag ? (
                   <Checkbox
                     defaultChecked
-                    color="success"
+                    color={mailSender ? 'success' : 'error'}
                     value={true}
                     className={classNames(`pointer-events-none`)}
                   />
@@ -130,13 +210,9 @@ const SiginUpPage = () => {
 
               <Button
                 onClick={() => {
-                  setMailFlag(true);
+                  setMailSenderStartFlag(true);
                   setMailSender(false);
-                  // 메일서버에서 성공적으로 보냈다면 true로 설정해줌.
-                  setTimeout(() => {
-                    setMailSender(true);
-                  }, 1000);
-                  console.log('인증보내기');
+                  onSendEmail(watch('email'));
                 }}
               >
                 인증 보내기
@@ -162,7 +238,28 @@ const SiginUpPage = () => {
               </div>
 
               <div className={classNames(`flex-1`)}>
-                <TextField
+                <Button
+                  {...register('emailVerify')}
+                  onClick={() => {
+                    setMailVerifyEndFlag(false);
+                    setMailVerify(false);
+                    setMailVerifyStartFlag(true);
+                    onEmailVerified(watch('email'));
+                    // setTimeout(() => {
+                    //   if (watch('emailVerify') === '123') {
+                    //     console.log('인증됨');
+                    //     console.log(watch('emailVerify').valueOf());
+
+                    //     setMailVerify(true);
+                    //   } else {
+                    //   }
+                    //   setMailVerifyEndFlag(true);
+                    // }, 1000);
+                  }}
+                >
+                  인증 확인
+                </Button>
+                {/* <TextField
                   required
                   fullWidth
                   {...register('emailVerify', {
@@ -171,40 +268,9 @@ const SiginUpPage = () => {
                   })}
                   label="이메일 인증번호"
                   error={errors.emailVerify?.message !== undefined}
-                />
+                /> */}
               </div>
 
-              <Button
-                onClick={() => {
-                  setMailVerifyEndFlag(false);
-                  setMailVerify(false);
-                  setMailVerifyStartFlag(true);
-                  setTimeout(() => {
-                    if (watch('emailVerify') === '123') {
-                      console.log('인증됨');
-                      console.log(watch('emailVerify').valueOf());
-
-                      setMailVerify(true);
-                    } else {
-                      if (errors && errors.emailVerify) {
-                        errors.emailVerify.message = '에러임';
-                      }
-                      setError(
-                        'emailVerify',
-                        { message: '인증실패' },
-                        {
-                          shouldFocus: true,
-                        }
-                      );
-                      console.log('인증실패');
-                      setMailVerify(false);
-                    }
-                    setMailVerifyEndFlag(true);
-                  }, 1000);
-                }}
-              >
-                인증 확인
-              </Button>
               {errors.emailVerify?.message !== undefined && (
                 <FormHelperText>{errors.emailVerify?.message}</FormHelperText>
               )}

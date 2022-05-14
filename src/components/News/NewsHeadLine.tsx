@@ -12,7 +12,7 @@ const NewsHeadLine = () => {
     setNewsConfig({
       keyword: '',
       page: 1,
-      size: 5,
+      size: 6,
     });
   }, []);
 
@@ -22,7 +22,9 @@ const NewsHeadLine = () => {
         <Marquee gradient={false}>
           {news.state === 'loading' && <div>로딩중</div>}
           {news.state === 'hasValue' &&
-            news.contents?.map((item) => <NewsHeaderLineRow {...item} />)}
+            news.contents?.message?.data.map((item) => (
+              <NewsHeaderLineRow {...item} />
+            ))}
         </Marquee>
       </div>
     </>

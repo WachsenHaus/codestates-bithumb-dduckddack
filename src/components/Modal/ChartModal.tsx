@@ -1,4 +1,4 @@
-import { Modal } from '@mui/material';
+import { Button, Modal } from '@mui/material';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
@@ -50,9 +50,12 @@ const SignModal = () => {
         console.log(curT);
       }}
       className={classNames(
-        `fixed w-full h-full`,
-        `flex justify-center items-center`,
-        modal.modalState ? `visible` : `invisible`
+        `fixed w-screen h-screen`,
+        `bg-black bg-opacity-90`,
+        modal.modalState && modal.modalType === 'chartImage'
+          ? `visible`
+          : `invisible`,
+        `flex items-center justify-center`
       )}
       style={{
         zIndex: 9999,
@@ -60,16 +63,15 @@ const SignModal = () => {
     >
       <div
         className={classNames(
-          `h-5/6`,
           `p-10`,
-          // 'w-full', // `h-5/6 w-7/12`,
+          `h-1/2 w-2/3`,
           `bg-slate-300`,
           `rounded-2xl shadow-xl`,
           `shadow-xl`,
           `flex justify-center`
         )}
       >
-        {modal.modalType === 'sign' && <div> adsf</div>}
+        {/* {modal.modalType === 'sign' && <div> adsf</div>}
         {modal.modalType === 'image' && (
           <div>
             {modal.modalPayload && (
@@ -80,22 +82,26 @@ const SignModal = () => {
               />
             )}
           </div>
-        )}
+        )} */}
 
         <div
-          // className={classNames(
-          //   modal.modalType === 'chartImage' ? 'visible' : 'invisible'
-          // )}
           className={classNames(
-            `w-5/6 grid grid-cols-2 grid-rows-1 content-around `
+            `w-5/6 grid grid-cols-2 grid-rows-1 content-around gap-x-5`
           )}
         >
-          <div className={classNames(`w-full`)}>
+          <div className={classNames(`w-full`, `relative`)}>
             <img
+              className={classNames(`h-full`)}
               alt="modal_img"
               src={payload?.src}
-              // className={classNames(`w-full h-full`)}
             />
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classNames(`left-1/2`, `absolute -translate-x-1/2`)}
+            >
+              공유하기
+            </Button>
           </div>
           <div className={classNames(`w-full`)} ref={wrapperRef} />
         </div>

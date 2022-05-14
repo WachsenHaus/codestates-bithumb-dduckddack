@@ -70,7 +70,6 @@ export const selectorTradeData = selector({
       if (coinType === '') {
         return;
       }
-      console.log('recvTradeDAta');
       const url = {
         type: 'custom',
         crncCd: siseCrncCd,

@@ -13,8 +13,6 @@ const NewsPage = () => {
       <div
         className={classNames(
           `xl:py-20 2xl:py-10`,
-          // `flex
-          // `my-auto`,
           `h-full w-full`,
           `col-start-2 col-span-9`,
           `grid grid-cols-12 gap-x-5`
@@ -24,7 +22,6 @@ const NewsPage = () => {
           <NewsMain />
         </MainWrapper>
         <MainWrapper className={classNames(`col-start-8 col-end-11`)}>
-          {/* <div>이곳은 뉴스룸</div> */}
           <NewsForCoinHotList />
         </MainWrapper>
       </div>

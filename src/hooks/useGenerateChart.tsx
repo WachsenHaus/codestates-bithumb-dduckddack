@@ -63,7 +63,7 @@ const useGenerateChart = () => {
         // height: wrapperRef.current.getBoundingClientRect().height,
         // width: wrapperRef.current.getBoundingClientRect().width,
         height: 350,
-        // width: 1000,
+        // width: 600,
         crosshair: {
           mode: 0,
         },
@@ -92,15 +92,15 @@ const useGenerateChart = () => {
           timeVisible: true,
         },
       });
-      wrapperRef.current.addEventListener(
-        'resize',
-        onResize(chartRef, wrapperRef)
-      );
-      window.addEventListener('resize', onResize(chartRef, wrapperRef));
-      wrapperRef.current.addEventListener(
-        'load',
-        onResize(chartRef, wrapperRef)
-      );
+      // wrapperRef.current.addEventListener(
+      //   'resize',
+      //   onResize(chartRef, wrapperRef)
+      // );
+      // window.addEventListener('resize', onResize(chartRef, wrapperRef));
+      // wrapperRef.current.addEventListener(
+      //   'load',
+      //   onResize(chartRef, wrapperRef)
+      // );
       // wrapperRef.current.addEventListener(
       //   'load',
       //   onResize(chartRef, wrapperRef)

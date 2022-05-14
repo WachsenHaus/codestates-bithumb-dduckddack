@@ -3,10 +3,17 @@ import classNames from 'classnames';
 import moment from 'moment';
 import React from 'react';
 import { useRef, useEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { atomModalState } from '../../atom/modal.atom';
+import { atomUserInfo } from '../../atom/user.atom';
 
-const ChatContent = ({ message }: { message?: string }) => {
+const ChatContent = ({
+  message,
+  className,
+}: {
+  message?: string;
+  className?: string;
+}) => {
   const [type, setType] = useState<'img' | 'text'>('text');
   const [imagePath, setImagePath] = useState('');
   const setModal = useSetRecoilState(atomModalState);
@@ -26,7 +33,7 @@ const ChatContent = ({ message }: { message?: string }) => {
         <img
           src={imagePath}
           alt={'chart_img'}
-          className={classNames('w-10 h-10 hover:cursor-pointer')}
+          className={classNames('w-10 h-10 hover:cursor-pointer', className)}
           onClick={() => {
             setModal({
               modalType: 'image',
@@ -36,7 +43,9 @@ const ChatContent = ({ message }: { message?: string }) => {
           }}
         />
       )}
-      {type === 'text' && <span className={classNames(`ml-5`)}>{message}</span>}
+      {type === 'text' && (
+        <span className={classNames(`ml-5`, className)}>{message}</span>
+      )}
     </>
   );
 };
@@ -58,6 +67,8 @@ const ChatRow = ({
   roomId?: string;
   timestamp?: number;
 }) => {
+  const userInfo = useRecoilValue(atomUserInfo);
+
   const scrollRef = useRef<HTMLLIElement>(null);
   useEffect(() => {
     if (lastLength && scrollRef && index === lastLength - 1) {
@@ -78,11 +89,36 @@ const ChatRow = ({
     }
   }, [message]);
 
-  return (
+  return userInfo.userInfo?.nickName === username ? (
+    <>
+      <li
+        className={classNames(
+          `w-full`,
+          `flex justify-start items-center text-red-50`,
+          `px-10 py-2`,
+          `flex-1`
+        )}
+        ref={scrollRef}
+      >
+        <Avatar
+          className={classNames(`shadow-2xl`)}
+          alt={username}
+          src={avatar}
+        />
+        <span className={classNames(`ml-5`)}>나 :</span>
+        <ChatContent className={classNames(`flex-grow`)} message={message} />
+        <span className={classNames(`flex-grow-0`)}>
+          {moment(timestamp).utc(true).format('HH:mm')}
+        </span>
+      </li>
+    </>
+  ) : (
     <li
       className={classNames(
+        `w-full`,
         `flex justify-start items-center text-bithumb`,
-        `px-10 py-2`
+        `px-10 py-2`,
+        `flex-1`
       )}
       ref={scrollRef}
     >
@@ -94,10 +130,10 @@ const ChatRow = ({
       <span className={classNames(`ml-5`)}>
         ({roomId}){username} :{' '}
       </span>
-      <ChatContent message={message} />
+      <ChatContent className={classNames(`flex-grow`)} message={message} />
       {/* <span className={classNames(`ml-5`)}>{message}</span> */}
-      <span className={classNames(``)}>
-        {moment(timestamp).format('HH:mm')}
+      <span className={classNames(`flex-grow-0`)}>
+        {moment(timestamp).utc(true).format('HH:mm')}
       </span>
     </li>
   );
