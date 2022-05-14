@@ -25,8 +25,11 @@ import MainWrapper from '../components/Common/MainWrapper';
 import DrawTool from '../components/DrawTool/DrawTool';
 import SearchIcon from '@mui/icons-material/Search';
 import NewsHeadLine from '../components/News/NewsHeadLine';
+import { useGenerateSocket } from '../hooks/useWebSocket';
 
 const ChatPage = () => {
+  useGenerateSocket('SUBSCRIBE');
+
   const coins = useRecoilValue(atomUseCoins);
   const [defaultCoin, setDefaultCoins] = useRecoilState(atomSelectCoinDefault);
   const [displayCoins, setDisplayCoins] = useState<TypeDrawTicker[]>();
@@ -117,20 +120,6 @@ const ChatPage = () => {
                     borderColor: 'transparent',
                   }}
                   label={'코인'}
-                  // InputProps={{
-                  //   startAdornment: (
-                  //     <InputAdornment position="start">
-                  //       <SearchIcon
-                  //         sx={{
-                  //           color: '#FF9900',
-                  //         }}
-                  //       />
-                  //     </InputAdornment>
-                  //   ),
-                  //   endAdornment: (
-                  //     <InputAdornment position="end"></InputAdornment>
-                  //   ),
-                  // }}
                 />
               )}
             />
