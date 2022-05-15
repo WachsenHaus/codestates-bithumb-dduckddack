@@ -11,6 +11,7 @@ import HeaderSignIn from './HeaderSignIn';
 import HeaderNavTab from './HeaderNavTab';
 import { useRecoilValue } from 'recoil';
 import { atomUserInfo } from '../../atom/user.atom';
+import CONST_ROUTE from '../../Routes';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -46,7 +47,7 @@ const Header = () => {
             backgroundPosition: '29px 14px',
           }}
           onClick={() => {
-            navigate('/');
+            navigate(CONST_ROUTE.HOME);
           }}
         />
         <Box>

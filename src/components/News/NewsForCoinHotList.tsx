@@ -24,6 +24,7 @@ const NewsForCoinHotList = () => {
       coinName: '비트코인',
     });
   }, []);
+
   const coins = useRecoilValue(atomPriceInfoUseCoins);
 
   return (

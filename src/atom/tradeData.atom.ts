@@ -101,8 +101,8 @@ export const selectPriceInfoToCoins = selector({
   key: 'selectPriceInfoToCoins',
   get: ({ get }) => {
     const tradeData = get(atomTradeData);
-    const selectDefaultCoin = get(atomSelectCoinDefault);
     const useCoins = get(atomUseCoins);
+    const selectDefaultCoin = get(atomSelectCoinDefault);
     if (tradeData === undefined) {
       return;
     }

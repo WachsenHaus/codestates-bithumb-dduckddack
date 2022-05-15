@@ -32,6 +32,7 @@ import {
 import _ from 'lodash';
 import produce from 'immer';
 import { Scale } from '@mui/icons-material';
+import CONST_ROUTE from '../../Routes';
 
 export const RenderFavoriteColumn = (e: TableRowProps) => {
   const [drawTicker, setDrawTicker] = useRecoilState(atomPriceInfoUseCoins);
@@ -111,7 +112,7 @@ export const RenderNameColumn = React.memo(
         const symbol = clickedCoinInfo.coinSymbol;
         const mSymbol = clickedCoinInfo.siseCrncCd === 'C0100' ? 'KRW' : 'BTC';
         if (navigate) {
-          navigate && navigate(`/trade/${symbol}_${mSymbol}`);
+          navigate && navigate(`${CONST_ROUTE.TRADE}/${symbol}_${mSymbol}`);
         }
       },
       [selectCoinDefault]
@@ -129,7 +130,10 @@ export const RenderNameColumn = React.memo(
           `${
             selectCoinDefault.coinType === e.rowData.coinType && ` text-bithumb`
           }`,
-          ` flex flex-col justify-center w-full h-full `
+          ` flex flex-col justify-center w-full h-full `,
+          `text-sm`,
+          `xl:text-xs`,
+          `sm:text-xs`
         )}
         onClick={onSelectClick(e)}
       >
@@ -145,14 +149,11 @@ export const RenderNameColumn = React.memo(
 export const RenderCurrentPriceColumn = React.memo((e: TableRowProps) => {
   return (
     <div className="flex items-center">
-      <div>
+      <div className={classNames(`text-sm`, `xl:text-xs`)}>
         {convertStringPriceToKRW(e.rowData.e)}
         <div
           className={classNames(
-            // `will-change-transform`,
             `${styles.effect}`,
-            // `animate-effect`,
-            // `border-transparent`,
             e.rowData.isUp === true && `border-red-600`,
             e.rowData.isUp === false && `border-blue-600`,
             e.rowData?.isUp === undefined && `border-transparent`,
@@ -184,6 +185,8 @@ export const RenderRateOfChange = React.memo((e: TableRowProps) => {
   return (
     <div
       className={classNames(
+        `text-base`,
+        `xl:text-sm`,
         `flex flex-col justify-center items-start`,
         `w-full h-full`,
         `${isUp ? `text-red-500` : ``}`,
@@ -191,7 +194,7 @@ export const RenderRateOfChange = React.memo((e: TableRowProps) => {
       )}
     >
       <div className="">{Number(e.rowData.r).toFixed(2)}%</div>
-      <div className="ml-4 text-sm">{price}</div>
+      <div className={classNames(`text-sm`, `xl:text-xs`)}>{price}</div>
     </div>
   );
 });
@@ -200,6 +203,8 @@ export const RenderU24 = React.memo((e: TableRowProps) => {
   return (
     <div
       className={classNames(
+        `text-base`,
+        `xl:text-sm`,
         `flex flex-col items-start justify-center`,
         `w-full h-full`
       )}

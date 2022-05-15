@@ -63,6 +63,7 @@ export const selectorNews = selector({
       return result.data;
     } catch (err) {
       console.log(err);
+      throw err;
     } finally {
     }
   },

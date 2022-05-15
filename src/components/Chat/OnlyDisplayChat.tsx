@@ -7,8 +7,10 @@ import {
   atomChatRecvChatMessage,
   atomChatWebSocket,
 } from '../../atom/chat.atom';
+import LottieDiv from '../Common/LottieDiv';
 import MainWrapper from '../Common/MainWrapper';
 import ChatRow from './ChatRow';
+import LoadingJSON from '../../asset/img/loading.json';
 
 const OnlyDisplayChat = ({ className }: { className?: string }) => {
   const chatMsg = useRecoilValue(atomChatRecvChatMessage);
@@ -40,10 +42,17 @@ const OnlyDisplayChat = ({ className }: { className?: string }) => {
                   avatar={item.payload?.user.avatar}
                   message={item.payload?.message}
                   roomId={item.payload?.roomId}
+                  timestamp={item.timestamp}
                 />
               );
             })}
-          {wsChat === undefined && <div>Chat Server Is Broken</div>}
+          {wsChat === undefined && (
+            <div
+              className={classNames(`h-full flex justify-center items-center`)}
+            >
+              <LottieDiv loop jsonData={LoadingJSON} />
+            </div>
+          )}
         </div>
       </MainWrapper>
     </div>

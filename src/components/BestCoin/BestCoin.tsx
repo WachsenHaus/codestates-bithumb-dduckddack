@@ -222,6 +222,7 @@ const BestCoin = ({ className }: { className?: string }) => {
       .reverse()
       .slice(0, 5);
     let result: any = [];
+    console.log(r.length);
     r.forEach((item) => {
       result.push(
         new Promise((resolve, reject) => {

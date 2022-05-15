@@ -10,6 +10,7 @@ import { atomModalState, TypeChartImg } from '../../atom/modal.atom';
 import { iStBar } from '../../atom/tvChart.atom';
 import { atomUserInfo, TypeUser } from '../../atom/user.atom';
 import useGenerateChart from '../../hooks/useGenerateChart';
+import CONST_ROUTE from '../../Routes';
 import { dduckddackResponseVO } from '../../type/api';
 import MainWrapper from '../Common/MainWrapper';
 
@@ -29,6 +30,7 @@ const SignInModal = () => {
     handleSubmit,
     watch,
     setError,
+    setValue,
     formState: { errors },
   } = useForm<Inputs>();
 
@@ -37,10 +39,8 @@ const SignInModal = () => {
       email: data.email,
       password: data.password,
     };
-    // const send = stringify(data);
+
     onSignIn(sendData);
-    // console.log(data);
-    // console.log(send);
   };
 
   const onSignIn = async (data: Inputs) => {
@@ -54,12 +54,14 @@ const SignInModal = () => {
         localStorage.setItem('email', userInfo?.email);
         localStorage.setItem('id', userInfo?.id);
         localStorage.setItem('nickName', userInfo?.nickName);
-        console.log('로그인성공');
         setUserInfo({
           accessToken: accessToken,
           refreshToken: refreshToken,
           userInfo: userInfo,
         });
+        setValue('email', '');
+        setValue('password', '');
+
         setModal({
           modalState: false,
           modalType: 'sign',
@@ -84,8 +86,9 @@ const SignInModal = () => {
             modalType: 'sign',
             modalPayload: undefined,
           });
+          setValue('email', '');
+          setValue('password', '');
         }
-        console.log(curT);
       }}
       className={classNames(
         `fixed w-screen h-screen`,
@@ -159,7 +162,7 @@ const SignInModal = () => {
                           modalState: false,
                         };
                       });
-                      navigate('/user');
+                      navigate(CONST_ROUTE.SIGN_UP);
                     }}
                   >
                     회원가입
@@ -169,17 +172,6 @@ const SignInModal = () => {
             </form>
           </div>
         )}
-        {/* {modal.modalType === 'image' && (
-          <div>
-            {modal.modalPayload && (
-              <img
-                alt="modal_img"
-                src={modal.modalPayload as string}
-                className={classNames(`w-full h-full`)}
-              />
-            )}
-          </div>
-        )} */}
       </MainWrapper>
     </div>
   );

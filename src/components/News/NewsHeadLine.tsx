@@ -6,15 +6,7 @@ import { atomNewsConfig, selectorNews } from '../../atom/news.atom';
 import NewsHeaderLineRow from './NewsHeaderLineRow';
 
 const NewsHeadLine = () => {
-  const setNewsConfig = useSetRecoilState(atomNewsConfig);
   const news = useRecoilValueLoadable(selectorNews);
-  useEffect(() => {
-    setNewsConfig({
-      keyword: '',
-      page: 1,
-      size: 6,
-    });
-  }, []);
 
   return (
     <>
@@ -31,4 +23,4 @@ const NewsHeadLine = () => {
   );
 };
 
-export default NewsHeadLine;
+export default React.memo(NewsHeadLine);

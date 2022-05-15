@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import React from 'react';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { atomSelectCoinDefault } from '../atom/selectCoinDefault.atom';
@@ -38,4 +39,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default React.memo(MainPage);

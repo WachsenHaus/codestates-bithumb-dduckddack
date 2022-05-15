@@ -47,7 +47,6 @@ const SignModal = () => {
             modalPayload: undefined,
           });
         }
-        console.log(curT);
       }}
       className={classNames(
         `fixed w-screen h-screen`,

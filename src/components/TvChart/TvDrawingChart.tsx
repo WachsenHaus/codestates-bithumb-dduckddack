@@ -79,9 +79,7 @@ const TvDrawingChart = () => {
   useEffect(() => {
     if (candleRef.current) {
       if (recordRange) {
-        console.log('변경됨');
         chartRef.current?.timeScale().setVisibleLogicalRange(recordRange);
-        //   setDrawingMode(true);
       }
     }
   }, [recordRange]);
@@ -103,44 +101,6 @@ const TvDrawingChart = () => {
         onRedo={onRedo}
         onSave={onSave}
       />
-      {/* <div className={classNames(`flex justify-center items-center`)}>
-        <DrawCanvasBar onDraw={onDrawToogleClick} onSave={onSave} />
-        <IconButton
-          onClick={() => {
-            canvasRef.current?.clearCanvas();
-          }}
-        >
-          <AddIcon />
-        </IconButton>
-      </div> */}
-      {/* 이미지저장되면 생기는곳 */}
-      {/* <div className={classNames(`flex justify-center items-center`)}>
-        {drawArr?.map((item) => (
-          <div
-            className={classNames(` px-10`)}
-            onClick={() => {
-              console.log(item.drawData);
-            }}
-          >
-            {item.time}
-            <img
-              className={classNames(`hover:cursor-pointer`)}
-              onClick={() => {
-                setModal({
-                  modalState: true,
-                  modalType: 'image',
-                  modalPayload: item.drawImageUrl,
-                });
-              }}
-              src={item.drawImageUrl}
-              alt={item.time}
-              width="100"
-              height="100"
-            />
-          </div>
-        ))}
-      </div> */}
-
       <div
         className={classNames(
           `w-full h-full relative z-20 rounded-3xl bg-nightBlack  drop-shadow-3xl`,

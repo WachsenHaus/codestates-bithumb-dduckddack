@@ -5,9 +5,11 @@ import MainWrapper from '../components/Common/MainWrapper';
 import NewsForCoinHotList from '../components/News/NewsForCoinHotList';
 import NewsMain from '../components/News/NewsMain';
 import { useCoinList } from '../hooks/useInitialize';
+import { useGenerateSocket } from '../hooks/useWebSocket';
 
 const NewsPage = () => {
   useCoinList();
+  useGenerateSocket('SUBSCRIBE');
   return (
     <>
       <div
@@ -21,7 +23,7 @@ const NewsPage = () => {
         <MainWrapper className={classNames(`col-start-3 col-end-8`)}>
           <NewsMain />
         </MainWrapper>
-        <MainWrapper className={classNames(`col-start-8 col-end-11`)}>
+        <MainWrapper className={classNames(`col-start-8 col-end-11 h-min`)}>
           <NewsForCoinHotList />
         </MainWrapper>
       </div>

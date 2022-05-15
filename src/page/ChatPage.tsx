@@ -59,6 +59,7 @@ const ChatPage = () => {
       // setDefaultCoins([]);
     };
   }, []);
+
   const filterOption = createFilterOptions({
     matchFrom: 'start',
     stringify: (option: TypeDrawTicker) => option.consonant!,

@@ -19,6 +19,7 @@ import stringify from 'fast-json-stable-stringify';
 import axios from 'axios';
 import { API_USER } from '../api/user.api';
 import { useNavigate } from 'react-router-dom';
+import CONST_ROUTE from '../Routes';
 
 const SignUpRow = (props: { children?: ReactNode; className?: string }) => {
   return (
@@ -145,7 +146,7 @@ const SiginUpPage = () => {
     try {
       const result = await axios.put(`${API_USER.CREATE_USER}`, data);
       if (result.data.status === 'ok') {
-        navigate('/');
+        navigate(CONST_ROUTE.HOME);
       }
     } catch (err) {
       console.log(err);

@@ -46,16 +46,6 @@ const Ticker = () => {
           }}
         >
           {e?.rowData && (
-            // <>
-            //   <RenderFavoriteColumn {...e} />
-            //   <RenderNameColumn e={e} key={e.rowData.coinName} />
-            //   <RenderCurrentPriceColumn
-            //     {...e}
-            //     key={`${e.rowData.e}_${e.rowData.u24}`}
-            //   />
-            //   <RenderRateOfChange {...e} key={e.rowData.r} />
-            //   <RenderU24 {...e} key={e.rowData.u24} />
-            // </>
             <>
               <RenderFavoriteColumn {...e} key={`${e.rowData.coinName}_1`} />
               <RenderNameColumn e={e} key={`${e.rowData.coinName}_2`} />
