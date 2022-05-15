@@ -394,7 +394,7 @@ export const useCoinChart = () => {
 export const useCoinList = () => {
   useGetCoinList();
   useGetTradeData();
+  useGetFiltredUseCoins();
   useGetPriceInfoList();
   // useMergeTickersWebsocketAndFilteredData();
-  // useGetFiltredUseCoins();
 };

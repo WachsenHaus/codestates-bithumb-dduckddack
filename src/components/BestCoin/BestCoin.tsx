@@ -13,7 +13,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import _ from 'lodash';
 import { ReactNode, useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { atomPriceInfoUseCoins } from '../../atom/total.atom';
 import {
   convertStringPriceToKRW,
@@ -24,6 +24,7 @@ import axios from 'axios';
 import BestCoinTitle from './BestCoinTitle';
 import { SvgIcon } from '@mui/material';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
+import { atomSelectCoinDefault } from '../../atom/selectCoinDefault.atom';
 
 ChartJS.register(
   CategoryScale,
@@ -212,6 +213,17 @@ const BestCoinRowVolume = ({ children }: { children?: ReactNode }) => {
 
 const BestCoin = ({ className }: { className?: string }) => {
   const coins = useRecoilValue(atomPriceInfoUseCoins);
+  const setDefaultCoins = useSetRecoilState(atomSelectCoinDefault);
+  useEffect(() => {
+    setDefaultCoins({
+      coinType: 'C0101',
+      coinSymbol: 'BTC',
+      marketSymbol: 'KRW',
+      siseCrncCd: 'C0100',
+      coinName: '비트코인',
+    });
+  }, []);
+
   const [data, setData] = useState<any[]>([]);
   useEffect(() => {
     getData();
@@ -222,7 +234,7 @@ const BestCoin = ({ className }: { className?: string }) => {
       .reverse()
       .slice(0, 5);
     let result: any = [];
-    console.log(r.length);
+
     r.forEach((item) => {
       result.push(
         new Promise((resolve, reject) => {

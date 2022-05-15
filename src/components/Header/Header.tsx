@@ -17,9 +17,6 @@ const Header = () => {
   const navigate = useNavigate();
   const userInfo = useRecoilValue(atomUserInfo);
 
-  useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
   // 로그인된 사용자 정보를 가져온다.
   return (
     <AppBar

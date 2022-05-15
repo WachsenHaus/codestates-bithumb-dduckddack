@@ -35,7 +35,7 @@ const OnlyDisplayChat = ({ className }: { className?: string }) => {
             chatMsg?.map((item, index) => {
               return (
                 <ChatRow
-                  // key={item.id || index}
+                  key={item.id || index}
                   index={index}
                   lastLength={chatMsg?.length}
                   username={item.payload?.user.username}
