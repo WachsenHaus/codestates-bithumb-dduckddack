@@ -103,7 +103,7 @@ const Ticker = () => {
               즐겨찾기
             </button>
           </div>
-          <div className={classNames(`w-full flex  items-center`)}>
+          <div className={classNames(`w-full flex  items-center `)}>
             <TextField
               variant="standard"
               sx={{

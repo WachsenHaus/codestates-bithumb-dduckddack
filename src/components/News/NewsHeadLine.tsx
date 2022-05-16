@@ -14,8 +14,8 @@ const NewsHeadLine = () => {
         <Marquee gradient={false}>
           {news.state === 'loading' && <div>로딩중</div>}
           {news.state === 'hasValue' &&
-            news.contents?.message?.data.map((item) => (
-              <NewsHeaderLineRow {...item} />
+            news.contents?.message?.data.map((item, index) => (
+              <NewsHeaderLineRow {...item} key={index} />
             ))}
         </Marquee>
       </div>

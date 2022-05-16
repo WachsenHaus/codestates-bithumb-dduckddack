@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   Autocomplete,
   Box,
   createFilterOptions,
+  IconButton,
   InputAdornment,
   TextField,
 } from '@mui/material';
@@ -26,17 +27,27 @@ import DrawTool from '../components/DrawTool/DrawTool';
 import SearchIcon from '@mui/icons-material/Search';
 import NewsHeadLine from '../components/News/NewsHeadLine';
 import { useGenerateSocket } from '../hooks/useWebSocket';
+import ClearIcon from '@mui/icons-material/Clear';
 
 const ChatPage = () => {
   useGenerateSocket('SUBSCRIBE');
 
   const coins = useRecoilValue(atomUseCoins);
-  const [defaultCoin, setDefaultCoins] = useRecoilState(atomSelectCoinDefault);
+  const setDefaultCoins = useSetRecoilState(atomSelectCoinDefault);
   const [displayCoins, setDisplayCoins] = useState<TypeDrawTicker[]>();
+  const [value, setValue] = useState<TypeDrawTicker>();
 
   useCoinChart();
-
-  useEffect(() => {
+  useLayoutEffect(() => {
+    setDefaultCoins({
+      coinType: 'C0101',
+      coinSymbol: 'BTC',
+      marketSymbol: 'KRW',
+      siseCrncCd: 'C0100',
+      coinName: '비트코인',
+    });
+  }, []);
+  useLayoutEffect(() => {
     const result = coins.filter((item) => {
       return (
         item.coinSymbol === 'ETH' ||
@@ -45,24 +56,14 @@ const ChatPage = () => {
       );
     });
     setDisplayCoins(result);
+    setValue(result[0]);
+    console.log(result[0]);
   }, [coins]);
-
-  useEffect(() => {
-    setDefaultCoins({
-      coinType: 'C0101',
-      coinSymbol: 'BTC',
-      marketSymbol: 'KRW',
-      siseCrncCd: 'C0100',
-      coinName: '비트코인',
-    });
-    return () => {
-      // setDefaultCoins([]);
-    };
-  }, []);
 
   const filterOption = createFilterOptions({
     matchFrom: 'start',
     stringify: (option: TypeDrawTicker) => option.consonant!,
+    trim: true,
   });
 
   return (
@@ -81,49 +82,65 @@ const ChatPage = () => {
           )}
         >
           <div className={classNames(`col-start-1 col-end-3 p-5`)}>
-            <Autocomplete
-              disablePortal
-              id="coin-comboBOx"
-              options={displayCoins || []}
-              sx={{ width: '100%' }}
-              filterOptions={filterOption}
-              getOptionLabel={(e) => {
-                return e.coinName!;
-              }}
-              onChange={(e, v) => {
-                setDefaultCoins({
-                  coinType: v?.coinType!,
-                  coinSymbol: v?.coinSymbol!,
-                  marketSymbol: 'KRW',
-                  siseCrncCd: v?.siseCrncCd!,
-                  coinName: v?.coinName!,
-                });
-              }}
-              isOptionEqualToValue={(e, v) => {
-                return e.coinName === v.coinName;
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  color="info"
-                  variant="standard"
-                  sx={{
-                    width: '100%',
-                    color: '#FF9900',
-                    input: {
-                      border: 0,
-                      color: '#FF9900',
-                    },
-                    label: {
-                      color: 'white',
-                    },
-                    border: 0,
-                    borderColor: 'transparent',
-                  }}
-                  label={'코인'}
-                />
-              )}
-            />
+            {value && (
+              <Autocomplete
+                id="coin-comboBox"
+                defaultValue={value}
+                options={displayCoins || []}
+                sx={{ width: '100%' }}
+                filterOptions={filterOption}
+                getOptionLabel={(e) => {
+                  return e.coinName!;
+                }}
+                // getOptionDisabled
+                // noOptionsText
+                onChange={(e, v) => {
+                  console.log(e);
+                  console.log(v);
+                  if (v === undefined || v === null) {
+                    displayCoins && setValue(displayCoins[0]);
+                    return;
+                  }
+                  setDefaultCoins({
+                    coinType: v?.coinType!,
+                    coinSymbol: v?.coinSymbol!,
+                    marketSymbol: 'KRW',
+                    siseCrncCd: v?.siseCrncCd!,
+                    coinName: v?.coinName!,
+                  });
+                }}
+                isOptionEqualToValue={(e, v) => {
+                  return e.coinName === v.coinName;
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    // label="코인"
+                    {...params}
+                    color="info"
+                    variant="standard"
+                    sx={{
+                      'width': '100%',
+                      'color': '#FF9900',
+                      'input': {
+                        border: 0,
+                        color: '#FF9900',
+                      },
+                      'label': {
+                        color: 'white',
+                      },
+
+                      'border': 0,
+                      'borderColor': 'transparent',
+
+                      '& .MuiAutocomplete-clearIndicator': {
+                        visibility: 'hidden',
+                        display: ' none',
+                      },
+                    }}
+                  />
+                )}
+              />
+            )}
           </div>
 
           <div className={classNames(`col-start-3 col-end-13 p-5`)}>

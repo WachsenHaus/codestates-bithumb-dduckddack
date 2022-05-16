@@ -52,11 +52,17 @@ const SiginUpPage = () => {
     handleSubmit,
     watch,
     setError,
+    getFieldState,
+    setFocus,
+    control,
+    getValues,
+    trigger,
+
     formState: { errors },
   } = useForm<Inputs>();
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     if (mailVerify === false) {
-      console.log('이메일 인증안되었는데 감히 어딜');
       setError(
         'emailVerify',
         { message: '인증실패' },
@@ -64,16 +70,16 @@ const SiginUpPage = () => {
           shouldFocus: true,
         }
       );
+      setMailVerify(false);
+      setMailVerifyStartFlag(true);
+      setMailVerifyEndFlag(true);
     }
     const sendData = {
       email: data.email,
       password: data.password1,
       nickName: data.nickName,
     };
-    // const send = stringify(data);
     onUserCreate(sendData);
-    // console.log(data);
-    // console.log(send);
   };
 
   // const [mailFlag, setMailFlag] = useState(false);
@@ -95,7 +101,12 @@ const SiginUpPage = () => {
       if (result.data?.status === 'ok') {
         setMailSenderEndFlag(true);
         setMailSender(true);
-        console.log(result.data?.message);
+        if (result.data?.message === '이미 인증된 이메일') {
+          setMailVerifyStartFlag(true);
+          setMailVerifyEndFlag(false);
+          setMailVerify(false);
+          onEmailVerified(watch('email'));
+        }
       }
     } catch (err) {
       setMailSenderStartFlag(false);
@@ -127,6 +138,8 @@ const SiginUpPage = () => {
           }
         );
         setMailVerify(false);
+        setMailVerifyStartFlag(true);
+        setMailVerifyEndFlag(true);
       }
     } catch (err) {
       setMailVerify(false);
@@ -197,11 +210,10 @@ const SiginUpPage = () => {
                   {...register('email', {
                     required: true,
                     maxLength: 40,
-                    // validate: {
-                    //   checkUrl: async () =>
-                    //     (await false) || '이메일 인증전송에 실패하였습니다.',
-                    // },
+                    pattern:
+                      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/,
                   })}
+                  error={errors.email?.type === 'pattern'}
                   required
                   fullWidth
                   type="email"
@@ -211,9 +223,25 @@ const SiginUpPage = () => {
 
               <Button
                 onClick={() => {
-                  setMailSenderStartFlag(true);
-                  setMailSender(false);
-                  onSendEmail(watch('email'));
+                  // console.log(getFieldState('email'));
+                  // console.log(watch('email'));
+                  // console.log(getValues('email'));
+                  trigger('email')
+                    .then((e) => {
+                      console.log('이메일전송');
+                      if (e) {
+                        setMailSenderStartFlag(true);
+                        setMailSender(false);
+                        onSendEmail(watch('email'));
+                      } else {
+                        setFocus('email');
+                      }
+                    })
+                    .catch((e) => {
+                      setMailSenderStartFlag(true);
+                      setMailSenderEndFlag(true);
+                      setMailSender(false);
+                    });
                 }}
               >
                 인증 보내기
@@ -242,34 +270,14 @@ const SiginUpPage = () => {
                 <Button
                   {...register('emailVerify')}
                   onClick={() => {
+                    setMailVerifyStartFlag(true);
                     setMailVerifyEndFlag(false);
                     setMailVerify(false);
-                    setMailVerifyStartFlag(true);
                     onEmailVerified(watch('email'));
-                    // setTimeout(() => {
-                    //   if (watch('emailVerify') === '123') {
-                    //     console.log('인증됨');
-                    //     console.log(watch('emailVerify').valueOf());
-
-                    //     setMailVerify(true);
-                    //   } else {
-                    //   }
-                    //   setMailVerifyEndFlag(true);
-                    // }, 1000);
                   }}
                 >
                   인증 확인
                 </Button>
-                {/* <TextField
-                  required
-                  fullWidth
-                  {...register('emailVerify', {
-                    // 서버랑 확인하는 무언가 있어야되는듯.
-                    // validate: (value) => value === '123' || '인증번호가 틀림',
-                  })}
-                  label="이메일 인증번호"
-                  error={errors.emailVerify?.message !== undefined}
-                /> */}
               </div>
 
               {errors.emailVerify?.message !== undefined && (
@@ -309,7 +317,6 @@ const SiginUpPage = () => {
                   type="password"
                   label="비밀번호"
                   error={errors.password1?.type === 'pattern'}
-                  // error={nickNameError !== '' || false}
                 />
               </div>
 

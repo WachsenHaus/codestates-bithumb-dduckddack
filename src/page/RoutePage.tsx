@@ -78,7 +78,7 @@ const RoutePage = () => {
                 <Route path={CONST_ROUTE.MY} element={<MyPage />} />
 
                 <Route path={CONST_ROUTE.NEWS} element={<NewsPage />} />
-                <Route path={CONST_ROUTE.NEWS} element={<SiginUpPage />} />
+                <Route path={CONST_ROUTE.SIGN_UP} element={<SiginUpPage />} />
                 <Route path={CONST_ROUTE.CHAT} element={<ChatPage />} />
                 <Route path={CONST_ROUTE.TRADE} element={<TradePage />} />
                 <Route

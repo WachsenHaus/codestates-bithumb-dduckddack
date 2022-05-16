@@ -9,17 +9,7 @@ import { useCoinList } from '../hooks/useInitialize';
 import { useGenerateSocket } from '../hooks/useWebSocket';
 
 const MainPage = () => {
-  const setDefaultCoins = useSetRecoilState(atomSelectCoinDefault);
   useCoinList();
-  // useEffect(() => {
-  //   setDefaultCoins({
-  //     coinType: 'C0101',
-  //     coinSymbol: 'BTC',
-  //     marketSymbol: 'KRW',
-  //     siseCrncCd: 'C0100',
-  //     coinName: '비트코인',
-  //   });
-  // }, []);
 
   return (
     <div className={classNames(`grid grid-cols-12 `, `max-h-full`, `h-full`)}>

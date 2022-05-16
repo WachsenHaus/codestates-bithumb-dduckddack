@@ -42,7 +42,7 @@ const ChatRoom = () => {
             chatMsg?.map((item, index) => {
               return item.payload?.roomId === selectCoin.coinName ? (
                 <ChatRow
-                  // key={item.id || index}
+                  key={item.timestamp || index}
                   index={index}
                   lastLength={chatMsg?.length}
                   username={item.payload?.user.username}

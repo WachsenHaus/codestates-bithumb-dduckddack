@@ -29,6 +29,15 @@ const NewsMain = () => {
   }, [news]);
 
   useEffect(() => {
+    setNewsConfig((prevData) => {
+      return {
+        ...prevData,
+        page: 1,
+      };
+    });
+  }, []);
+
+  useEffect(() => {
     if (newsConfig.keyword === keyword) {
       return;
     }
@@ -80,6 +89,7 @@ const NewsMain = () => {
                   },
                 }}
                 count={Number(totalPages)}
+                page={newsConfig.page}
                 onChange={(e, page) => {
                   setNewsConfig((prevData) => {
                     return {

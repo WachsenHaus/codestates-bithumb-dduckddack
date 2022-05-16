@@ -92,6 +92,7 @@ const ChatRow = ({
   return userInfo.userInfo?.nickName === username ? (
     <>
       <li
+        key={timestamp}
         className={classNames(
           `w-full`,
           `flex justify-start items-center text-red-50`,
@@ -114,6 +115,7 @@ const ChatRow = ({
     </>
   ) : (
     <li
+      key={timestamp}
       className={classNames(
         `w-full`,
         `flex justify-start items-center text-bithumb`,
