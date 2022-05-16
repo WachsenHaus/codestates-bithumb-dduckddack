@@ -1,16 +1,26 @@
+import axios from 'axios';
 import html2canvas from 'html2canvas';
 import { IChartApi, LogicalRange } from 'lightweight-charts';
 import _ from 'lodash';
 import moment from 'moment';
+import { userInfo } from 'os';
 import { useEffect, useRef, useState } from 'react';
 import { ReactSketchCanvasRef } from 'react-sketch-canvas';
-import { useRecoilState, useRecoilValueLoadable } from 'recoil';
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from 'recoil';
+import { API_DRAW } from '../../api/draw.api';
+import { atomSelectCoinDefault } from '../../atom/selectCoinDefault.atom';
+import { atomSelectCoinDetail } from '../../atom/selectCoinDetail.atom';
 import {
   atomChartData,
   atomDrawStBars,
   selectorDrawStBars,
 } from '../../atom/tvChart.atom';
-import { atomUserChartDatas, IUserChatDatas } from '../../atom/user.atom';
+import {
+  atomUserChartDatas,
+  atomUserInfo,
+  IUserChatDatas,
+} from '../../atom/user.atom';
+import { dduckddackResponseVO } from '../../type/api';
 import useGetContext from './useGetContext';
 import useResizeCanvas from './useResizeCanvas';
 
@@ -28,6 +38,8 @@ const useGenerateDrawCanvas = (
   const [uesrData, setUserData] = useRecoilState(atomUserChartDatas);
   const [chartData, setChartData] = useRecoilState(atomDrawStBars);
   const selectorDrawStbars = useRecoilValueLoadable(selectorDrawStBars);
+  const userInfo = useRecoilValue(atomUserInfo);
+  const selectedCoin = useRecoilValue(atomSelectCoinDefault);
 
   useEffect(() => {
     const { state, contents } = selectorDrawStbars;
@@ -54,19 +66,6 @@ const useGenerateDrawCanvas = (
     }>
   >([]);
 
-  const [drawArr, setDrawArr] = useState<
-    Array<{
-      time: string;
-      drawData: {
-        x: any;
-        y: any;
-        originX: any;
-        originY: any;
-      };
-      drawImageUrl: string;
-    }>
-  >([]);
-
   const [moveAxis, setMoveAxis] = useState<{
     x: any;
     y: any;
@@ -88,7 +87,7 @@ const useGenerateDrawCanvas = (
 
   const onSave = async () => {
     // 이미지로 저장
-    let imageUrl = '';
+    // let imageUrl = '';
 
     const mTime = moment().format('YYYY-MM-DD HH:mm:ss');
     const timeTitle = document.createElement('h1');
@@ -102,45 +101,72 @@ const useGenerateDrawCanvas = (
       await html2canvas(saveWrapperRef.current)
         .then((canvas) => {
           if (saveWrapperRef.current) {
-            console.log(canvas);
-            imageUrl = canvas.toDataURL();
-            const data: IUserChatDatas = {
-              chartData: chartData,
-              date: moment().format('YYYY-MM-DD / HH:mm:ss'),
-              chartImg: imageUrl,
-            };
-            const prevData = JSON.parse(JSON.stringify(uesrData));
-            prevData.push(data);
-            setUserData(prevData);
+            if (
+              userInfo.accessToken === undefined &&
+              userInfo.userInfo === undefined
+            ) {
+              return;
+            }
 
-            console.log(imageUrl);
-            saveWrapperRef.current.removeChild(timeTitle);
-            saveWrapperRef.current.style.transform = 'translateX(0%)';
+            canvas.toBlob(async (e) => {
+              let imageUrl: Blob | null = e;
+              if (userInfo.userInfo && imageUrl !== null) {
+                const id = userInfo.userInfo?.id?.toString() as string;
+                const today = moment().utc(true).valueOf().toString();
+                const formData = new FormData();
+                formData.append(
+                  'image',
+                  imageUrl,
+                  `${userInfo.userInfo.email}_${today}.png`
+                );
+                formData.append('userId', id);
+                formData.append('time', today);
+                formData.append('coin', selectedCoin.coinSymbol);
+                if (formData) {
+                  try {
+                    const result = await axios.post<
+                      dduckddackResponseVO<IUserChatDatas>
+                    >(API_DRAW.UPLOAD_IMAGE, formData, {
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                    });
+
+                    if (result.data.status === 'ok') {
+                      const resultData = result.data.message;
+                      const prevData = JSON.parse(JSON.stringify(uesrData));
+                      prevData.push(resultData);
+                      setUserData(prevData);
+                    }
+                  } catch (err) {
+                    console.log(err);
+                  }
+                }
+              }
+            });
           }
         })
         .catch((err) => {
           console.log(err);
+        })
+        .finally(() => {
+          if (saveWrapperRef.current) {
+            saveWrapperRef.current.removeChild(timeTitle);
+            saveWrapperRef.current.style.transform = 'translateX(0%)';
+          }
         });
     }
-
-    const prev = JSON.parse(JSON.stringify(drawAxisDatas));
+    // const prev = JSON.parse(JSON.stringify(drawAxisDatas));
     // 드로우 배열에 넣는다.
-    const result = {
-      time: mTime,
-      drawData: prev,
-      drawImageUrl: imageUrl,
-    };
-    const next = _.clone(drawArr);
-    next.push(result);
-    setDrawArr(next);
-    setDrawAxisDatas([]);
-    // 트레이딩뷰 좌표 기억
-    if (chartRef.current) {
-      const range = chartRef.current?.timeScale().getVisibleLogicalRange();
-      if (range) {
-        setRecordRange(range);
-      }
-    }
+
+    // setDrawAxisDatas([]);
+    // // 트레이딩뷰 좌표 기억
+    // if (chartRef.current) {
+    //   const range = chartRef.current?.timeScale().getVisibleLogicalRange();
+    //   if (range) {
+    //     setRecordRange(range);
+    //   }
+    // }
   };
 
   const onSaveAs = (uri: any, filename: any) => {
@@ -182,7 +208,7 @@ const useGenerateDrawCanvas = (
     onErase,
     onUndo,
     onRedo,
-    drawArr,
+
     width,
     height,
   ] as const;

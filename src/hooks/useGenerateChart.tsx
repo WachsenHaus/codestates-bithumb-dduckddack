@@ -6,42 +6,12 @@ const useGenerateChart = () => {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const candleChart = useRef<ISeriesApi<'Candlestick'> | null>();
   const chartRef = useRef<IChartApi | null | undefined>();
-
-  // const onResize = useCallback(
-  //   (
-  //       chart: React.MutableRefObject<IChartApi | null | undefined>,
-  //       ref: React.MutableRefObject<HTMLDivElement | null>
-  //     ) =>
-  //     () => {
-  //       console.log('차트 리사이징');
-  //       console.log(ref?.current?.offsetWidth);
-  //       console.log(ref?.current?.offsetHeight);
-  //       chart.current &&
-  //         ref.current &&
-  //         chart.current.resize(
-  //           ref?.current?.offsetWidth,
-  //           ref?.current?.offsetHeight
-  //         );
-  //     },
-  //   []
-  // );
-
   const onResize =
     (
       chart: React.MutableRefObject<IChartApi | null | undefined>,
       ref: React.MutableRefObject<HTMLDivElement | null>
     ) =>
     () => {
-      console.log('차트 리사이징');
-      // console.log(ref?.current?.clientWidth);
-      console.log(ref?.current);
-      console.log(ref?.current?.getBoundingClientRect().width);
-      console.log(ref?.current?.scrollWidth);
-      console.log(ref?.current?.clientWidth);
-      console.log(ref?.current?.offsetWidth);
-      console.log(ref?.current?.getBoundingClientRect().height);
-      console.log(ref?.current?.scrollHeight);
-      // console.log(ref?.current?.clientHeight);
       chart.current &&
         ref.current &&
         chart.current.resize(
@@ -53,7 +23,6 @@ const useGenerateChart = () => {
 
   useEffect(() => {
     if (chartRef.current) {
-      console.log('생성');
       onResize(chartRef, wrapperRef)();
     }
   }, [chartRef.current]);
@@ -114,7 +83,7 @@ const useGenerateChart = () => {
             return convertStringPriceToKRW(f);
           },
         },
-        // priceLineVisible: false,
+
         upColor: `#eb2f06`,
         borderUpColor: `#eb2f06`,
         downColor: `#b8e994`,
@@ -123,12 +92,7 @@ const useGenerateChart = () => {
         wickUpColor: `#ffffff`,
         wickDownColor: `#d400ff`,
         priceLineColor: '#f8c291',
-        // borderColor: 'green',
-        // baseLineColor: '#f8c291',
       });
-      // setTimeout(() => {
-      //   onResize(chartRef, wrapperRef);
-      // }, 1000);
     }
     return () => {
       wrapperRef.current = null;

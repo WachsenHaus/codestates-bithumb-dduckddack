@@ -17,13 +17,13 @@ const NewsMain = () => {
   const [newsConfig, setNewsConfig] = useRecoilState(atomNewsConfig);
   const news = useRecoilValueLoadable(selectorNews);
   const [totalPages, setTotalPages] = useState(0);
-  const [totalElements, setTotalElements] = useState(0);
+  // const [totalElements, setTotalElements] = useState(0);
 
   useEffect(() => {
     if (news.state === 'hasValue') {
       if (news.contents?.message) {
         setTotalPages(news.contents?.message.totalPages);
-        setTotalElements(news.contents?.message.totalElements);
+        // setTotalElements(news.contents?.message.totalElements);
       }
     }
   }, [news]);

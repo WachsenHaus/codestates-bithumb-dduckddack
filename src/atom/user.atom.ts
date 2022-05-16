@@ -1,9 +1,10 @@
 import { atom } from 'recoil';
 
 export interface IUserChatDatas {
-  date?: string;
-  chartData: any;
-  chartImg: string;
+  image: string;
+  userId: string;
+  time: string;
+  coin: string;
 }
 export const atomUserChartDatas = atom<IUserChatDatas[]>({
   key: 'atomUserChartImg',

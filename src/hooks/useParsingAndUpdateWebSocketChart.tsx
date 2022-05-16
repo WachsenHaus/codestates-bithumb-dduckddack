@@ -100,7 +100,6 @@ const useParsingAndUpdateWebSocketChart = (
         to: nextTo,
       };
       if (setRecordRange) {
-        console.log(result);
         setRecordRange(result);
       }
     }

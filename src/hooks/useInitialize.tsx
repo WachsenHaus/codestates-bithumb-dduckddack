@@ -71,7 +71,6 @@ const useGetTradeParam = () => {
           (item) => item.coinSymbol === result[0]
         );
         if (item === undefined) {
-          console.log('params');
           setSelectCoin({
             coinType: 'C0101',
             coinSymbol: 'BTC',
@@ -86,7 +85,6 @@ const useGetTradeParam = () => {
         const marketSymbol = result[1];
 
         if (type && siseCrncCd && coinSymbol && marketSymbol) {
-          console.log('??');
           setSelectCoin((prevData) => {
             return {
               coinType: type,
@@ -98,7 +96,6 @@ const useGetTradeParam = () => {
         }
       }
     } else if (ready === true && coinName === undefined) {
-      console.log('first');
       setSelectCoin({
         coinType: 'C0101',
         coinSymbol: 'BTC',
@@ -106,7 +103,6 @@ const useGetTradeParam = () => {
         siseCrncCd: 'C0100',
       });
     }
-    //params, ready
   }, [coinName, ready]);
 
   useEffect(() => {

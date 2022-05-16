@@ -51,7 +51,7 @@ export const selectorNews = selector({
       get(atomForceGetNews);
       const config = get(atomNewsConfig);
       const result = await axios.get<dduckddackResponseVO<TypeReturnNews>>(
-        API_NEWS.NEWS,
+        API_NEWS.GET_NEWS,
         {
           params: {
             page: config.page,

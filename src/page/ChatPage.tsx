@@ -1,19 +1,6 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import {
-  Autocomplete,
-  Box,
-  createFilterOptions,
-  IconButton,
-  InputAdornment,
-  TextField,
-} from '@mui/material';
-import {
-  selector,
-  useRecoilState,
-  useRecoilValue,
-  useRecoilValueLoadable,
-  useSetRecoilState,
-} from 'recoil';
+import React, { useLayoutEffect, useState } from 'react';
+import { Autocomplete, createFilterOptions, TextField } from '@mui/material';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useCoinChart } from '../hooks/useInitialize';
 import { atomUseCoins } from '../atom/total.atom';
 import { TypeDrawTicker } from '../atom/drawData.atom';
@@ -23,30 +10,25 @@ import classNames from 'classnames';
 import ChatRoom from '../components/Chat/ChatRoom';
 import CoinBarForChat from '../components/CoinBar/CoinBarForChat';
 import MainWrapper from '../components/Common/MainWrapper';
-import DrawTool from '../components/DrawTool/DrawTool';
-import SearchIcon from '@mui/icons-material/Search';
 import NewsHeadLine from '../components/News/NewsHeadLine';
 import { useGenerateSocket } from '../hooks/useWebSocket';
-import ClearIcon from '@mui/icons-material/Clear';
+import useSetDefaultCoin from '../hooks/useSetDefaultCoin';
 
 const ChatPage = () => {
+  // 기본코인을 비트코인으로 설정
+  useSetDefaultCoin();
+  // 차트를 사용하기 위한 설정들
+  useCoinChart();
+  // 차트갱신을 위한 소켓 연결
   useGenerateSocket('SUBSCRIBE');
 
+  /**
+   * 훅스로 리팩토링할 것
+   */
   const coins = useRecoilValue(atomUseCoins);
   const setDefaultCoins = useSetRecoilState(atomSelectCoinDefault);
   const [displayCoins, setDisplayCoins] = useState<TypeDrawTicker[]>();
   const [value, setValue] = useState<TypeDrawTicker>();
-
-  useCoinChart();
-  useLayoutEffect(() => {
-    setDefaultCoins({
-      coinType: 'C0101',
-      coinSymbol: 'BTC',
-      marketSymbol: 'KRW',
-      siseCrncCd: 'C0100',
-      coinName: '비트코인',
-    });
-  }, []);
   useLayoutEffect(() => {
     const result = coins.filter((item) => {
       return (
@@ -57,7 +39,6 @@ const ChatPage = () => {
     });
     setDisplayCoins(result);
     setValue(result[0]);
-    console.log(result[0]);
   }, [coins]);
 
   const filterOption = createFilterOptions({
@@ -81,7 +62,12 @@ const ChatPage = () => {
             `w-full h-full grid grid-cols-12`
           )}
         >
-          <div className={classNames(`col-start-1 col-end-3 p-5`)}>
+          <div
+            className={classNames(
+              `col-start-1 col-end-3 p-5`,
+              `flex justify-center items-center`
+            )}
+          >
             {value && (
               <Autocomplete
                 id="coin-comboBox"
@@ -92,11 +78,7 @@ const ChatPage = () => {
                 getOptionLabel={(e) => {
                   return e.coinName!;
                 }}
-                // getOptionDisabled
-                // noOptionsText
                 onChange={(e, v) => {
-                  console.log(e);
-                  console.log(v);
                   if (v === undefined || v === null) {
                     displayCoins && setValue(displayCoins[0]);
                     return;
@@ -114,7 +96,6 @@ const ChatPage = () => {
                 }}
                 renderInput={(params) => (
                   <TextField
-                    // label="코인"
                     {...params}
                     color="info"
                     variant="standard"
@@ -179,10 +160,6 @@ const ChatPage = () => {
             }}
           >
             <CoinBarForChat />
-
-            {/* <div className={classNames(`text-white`)}>
-              여기가 그림판 도구가 들어간다..
-            </div> */}
             <TvDrawingChart />
           </div>
         </div>
@@ -190,7 +167,6 @@ const ChatPage = () => {
         {/* 채팅방 */}
         <div
           className={classNames(
-            // `p-5`,
             `xl:col-start-8 xl:col-end-13`,
             `2xl:col-start-9 2xl:col-end-13`
           )}

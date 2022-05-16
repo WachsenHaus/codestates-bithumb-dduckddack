@@ -25,6 +25,8 @@ import BestCoinTitle from './BestCoinTitle';
 import { SvgIcon } from '@mui/material';
 import WhatshotIcon from '@mui/icons-material/Whatshot';
 import { atomSelectCoinDefault } from '../../atom/selectCoinDefault.atom';
+import useSetDefaultCoin from '../../hooks/useSetDefaultCoin';
+import useGetTopChart from './useGetTopChart';
 
 ChartJS.register(
   CategoryScale,
@@ -213,43 +215,9 @@ const BestCoinRowVolume = ({ children }: { children?: ReactNode }) => {
 
 const BestCoin = ({ className }: { className?: string }) => {
   const coins = useRecoilValue(atomPriceInfoUseCoins);
-  const setDefaultCoins = useSetRecoilState(atomSelectCoinDefault);
-  useEffect(() => {
-    setDefaultCoins({
-      coinType: 'C0101',
-      coinSymbol: 'BTC',
-      marketSymbol: 'KRW',
-      siseCrncCd: 'C0100',
-      coinName: '비트코인',
-    });
-  }, []);
 
-  const [data, setData] = useState<any[]>([]);
-  useEffect(() => {
-    getData();
-  }, [coins]);
-
-  const getData = async () => {
-    const r = _.sortBy(coins, (item) => Number(item.u24))
-      .reverse()
-      .slice(0, 5);
-    let result: any = [];
-
-    r.forEach((item) => {
-      result.push(
-        new Promise((resolve, reject) => {
-          const res = axios.get(
-            `https://pub2.bithumb.com/public/candlesticknew/${item.coinType}_C0100/1M`
-          );
-          res.then((_) => resolve(_.data.data.map((item: any) => item[2])));
-          res.catch((err) => reject(err));
-        })
-      );
-    });
-    Promise.all(result).then((values) => {
-      setData(values);
-    });
-  };
+  useSetDefaultCoin();
+  const [drawData, chartData] = useGetTopChart('u24');
 
   return (
     <div className={classNames(`${className}`)}>
@@ -288,13 +256,11 @@ const BestCoin = ({ className }: { className?: string }) => {
           <BestCoinRow>
             <BestCoinTitle />
           </BestCoinRow>
-          {_.sortBy(coins, (item) => Number(item.u24))
-            .reverse()
-            .slice(0, 5)
-            .map((item, index) => {
+          {drawData &&
+            drawData.map((item, index) => {
               return (
                 <BestCoinRow>
-                  <BestCoinRowChart data={data[index]} />
+                  <BestCoinRowChart data={chartData[index]} />
                   <BestCoinRowName
                     coinName={item.coinName}
                     coinSymbol={item.coinSymbol}

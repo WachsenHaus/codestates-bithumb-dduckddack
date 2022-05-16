@@ -92,7 +92,6 @@ const ChatRow = ({
   return userInfo.userInfo?.nickName === username ? (
     <>
       <li
-        key={timestamp}
         className={classNames(
           `w-full`,
           `flex justify-start items-center text-red-50`,
@@ -115,7 +114,6 @@ const ChatRow = ({
     </>
   ) : (
     <li
-      key={timestamp}
       className={classNames(
         `w-full`,
         `flex justify-start items-center text-bithumb`,
@@ -133,7 +131,6 @@ const ChatRow = ({
         ({roomId}){username} :{' '}
       </span>
       <ChatContent className={classNames(`flex-grow`)} message={message} />
-      {/* <span className={classNames(`ml-5`)}>{message}</span> */}
       <span className={classNames(`flex-grow-0`)}>
         {moment(timestamp).utc(true).format('HH:mm')}
       </span>

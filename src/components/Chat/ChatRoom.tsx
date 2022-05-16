@@ -1,16 +1,14 @@
-import { Avatar, Input, InputAdornment, TextField } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { InputAdornment, TextField } from '@mui/material';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import classNames from 'classnames';
-import moment from 'moment';
 import { useRecoilValue } from 'recoil';
 import {
   atomChatRecvChatMessage,
   atomChatWebSocket,
 } from '../../atom/chat.atom';
-import { atomUserInfo, atomUserName } from '../../atom/user.atom';
+import { atomUserInfo } from '../../atom/user.atom';
 import MainWrapper from '../Common/MainWrapper';
-import { useRef, useEffect, useState } from 'react';
+import { useState } from 'react';
 import ChatRow from './ChatRow';
 import { TypeWebSocketChatSend } from './../../atom/ws.type';
 import stringify from 'fast-json-stable-stringify';
@@ -42,7 +40,7 @@ const ChatRoom = () => {
             chatMsg?.map((item, index) => {
               return item.payload?.roomId === selectCoin.coinName ? (
                 <ChatRow
-                  key={item.timestamp || index}
+                  key={`${item.timestamp}_${item.id}`}
                   index={index}
                   lastLength={chatMsg?.length}
                   username={item.payload?.user.username}
