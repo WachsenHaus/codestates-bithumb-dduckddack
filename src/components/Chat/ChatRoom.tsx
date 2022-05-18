@@ -44,6 +44,7 @@ const ChatRoom = () => {
                   index={index}
                   lastLength={chatMsg?.length}
                   username={item.payload?.user.username}
+                  userId={item.payload?.user.userId}
                   avatar={item.payload?.user.avatar}
                   message={item.payload?.message}
                   roomId={item.payload?.roomId}
@@ -55,6 +56,7 @@ const ChatRoom = () => {
             })}
         </div>
         <TextField
+          disabled={userInfo.userInfo === undefined ? true : false}
           className={classNames(`text-white`)}
           sx={{
             input: {
@@ -74,6 +76,7 @@ const ChatRoom = () => {
                   user: {
                     username: userInfo?.userInfo?.nickName || '익명',
                     avatar: '',
+                    userId: userInfo?.userInfo?.id?.toString() || '1',
                   },
                   message: keyword,
                 },
@@ -84,7 +87,9 @@ const ChatRoom = () => {
               setKeyword('');
             }
           }}
-          placeholder=""
+          placeholder={`${
+            userInfo.userInfo === undefined ? '로그인 후 이용가능합니다.' : ''
+          }`}
           value={keyword}
           InputProps={{
             startAdornment: (

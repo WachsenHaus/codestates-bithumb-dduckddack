@@ -36,7 +36,7 @@ export const atomNewsConfig = atom<iNewsConfig>({
   default: {
     keyword: '',
     size: 6,
-    page: 1,
+    page: 0,
   },
 });
 export const atomNewsData = atom<TypeNews[]>({

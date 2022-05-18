@@ -11,13 +11,31 @@ import LottieDiv from '../Common/LottieDiv';
 import MainWrapper from '../Common/MainWrapper';
 import ChatRow from './ChatRow';
 import LoadingJSON from '../../asset/img/loading.json';
+import { motion } from 'framer-motion';
 
 const OnlyDisplayChat = ({ className }: { className?: string }) => {
   const chatMsg = useRecoilValue(atomChatRecvChatMessage);
   const wsChat = useRecoilValue(atomChatWebSocket);
 
   return (
-    <div className={classNames(`${className}`)}>
+    <motion.div
+      transition={{
+        delay: 1.2,
+        x: { type: 'spring', stiffness: 100 },
+        default: { duration: 1 },
+      }}
+      initial={{
+        scale: 0,
+        opacity: 0,
+        translateX: '100%',
+      }}
+      animate={{
+        scale: 1,
+        opacity: 1,
+        translateX: 0,
+      }}
+      className={classNames(`${className}`)}
+    >
       <MainWrapper
         className={classNames(
           `w-full h-full grid grid-rows-1`,
@@ -36,6 +54,7 @@ const OnlyDisplayChat = ({ className }: { className?: string }) => {
               return (
                 <ChatRow
                   key={item.id || index}
+                  userId={item.payload?.user.userId}
                   index={index}
                   lastLength={chatMsg?.length}
                   username={item.payload?.user.username}
@@ -55,7 +74,7 @@ const OnlyDisplayChat = ({ className }: { className?: string }) => {
           )}
         </div>
       </MainWrapper>
-    </div>
+    </motion.div>
   );
 };
 export default OnlyDisplayChat;

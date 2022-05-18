@@ -27,6 +27,7 @@ import WhatshotIcon from '@mui/icons-material/Whatshot';
 import { atomSelectCoinDefault } from '../../atom/selectCoinDefault.atom';
 import useSetDefaultCoin from '../../hooks/useSetDefaultCoin';
 import useGetTopChart from './useGetTopChart';
+import { motion } from 'framer-motion';
 
 ChartJS.register(
   CategoryScale,
@@ -214,13 +215,30 @@ const BestCoinRowVolume = ({ children }: { children?: ReactNode }) => {
 };
 
 const BestCoin = ({ className }: { className?: string }) => {
-  const coins = useRecoilValue(atomPriceInfoUseCoins);
+  // const coins = useRecoilValue(atomPriceInfoUseCoins);
 
   useSetDefaultCoin();
   const [drawData, chartData] = useGetTopChart('u24');
 
   return (
-    <div className={classNames(`${className}`)}>
+    <motion.div
+      transition={{
+        delay: 0.2,
+        x: { type: 'spring', stiffness: 100 },
+        default: { duration: 1 },
+      }}
+      initial={{
+        scale: 0,
+        opacity: 0,
+        translateX: '-100%',
+      }}
+      animate={{
+        scale: 1,
+        opacity: 1,
+        translateX: 0,
+      }}
+      className={classNames(`${className}`)}
+    >
       <MainWrapper
         className={classNames(`w-full h-full grid `)}
         style={{
@@ -277,7 +295,7 @@ const BestCoin = ({ className }: { className?: string }) => {
             })}
         </div>
       </MainWrapper>
-    </div>
+    </motion.div>
   );
 };
 

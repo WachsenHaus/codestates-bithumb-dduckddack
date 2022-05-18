@@ -58,6 +58,7 @@ const ChatRow = ({
   message,
   timestamp,
   roomId,
+  userId,
 }: {
   index?: number;
   lastLength?: number;
@@ -66,6 +67,7 @@ const ChatRow = ({
   message?: string;
   roomId?: string;
   timestamp?: number;
+  userId?: string;
 }) => {
   const userInfo = useRecoilValue(atomUserInfo);
 
@@ -89,27 +91,27 @@ const ChatRow = ({
     }
   }, [message]);
 
-  return userInfo.userInfo?.nickName === username ? (
+  return userInfo.userInfo?.id === userId ? (
     <>
       <li
         className={classNames(
           `w-full`,
-          `flex justify-start items-center text-red-50`,
+          `flex justify-end items-center text-red-50`,
           `px-10 py-2`,
           `flex-1`
         )}
         ref={scrollRef}
       >
-        <Avatar
+        {/* <Avatar
           className={classNames(`shadow-2xl`)}
           alt={username}
           src={avatar}
-        />
-        <span className={classNames(`ml-5`)}>나 :</span>
-        <ChatContent className={classNames(`flex-grow`)} message={message} />
-        <span className={classNames(`flex-grow-0`)}>
+        /> */}
+        <span className={classNames(`flex-grow-0 text-xs`)}>
           {moment(timestamp).utc(true).format('HH:mm')}
         </span>
+        {/* <span className={classNames(`ml-5`)}>나 :</span> */}
+        <ChatContent className={classNames(`flex-grow-0`)} message={message} />
       </li>
     </>
   ) : (
@@ -131,7 +133,7 @@ const ChatRow = ({
         ({roomId}){username} :{' '}
       </span>
       <ChatContent className={classNames(`flex-grow`)} message={message} />
-      <span className={classNames(`flex-grow-0`)}>
+      <span className={classNames(`flex-grow-0 text-xs`)}>
         {moment(timestamp).utc(true).format('HH:mm')}
       </span>
     </li>

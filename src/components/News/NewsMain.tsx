@@ -28,14 +28,14 @@ const NewsMain = () => {
     }
   }, [news]);
 
-  useEffect(() => {
-    setNewsConfig((prevData) => {
-      return {
-        ...prevData,
-        page: 1,
-      };
-    });
-  }, []);
+  // useEffect(() => {
+  //   setNewsConfig((prevData) => {
+  //     return {
+  //       ...prevData,
+  //       page: 0,
+  //     };
+  //   });
+  // }, []);
 
   useEffect(() => {
     if (newsConfig.keyword === keyword) {
@@ -89,12 +89,12 @@ const NewsMain = () => {
                   },
                 }}
                 count={Number(totalPages)}
-                page={newsConfig.page}
+                page={newsConfig.page + 1}
                 onChange={(e, page) => {
                   setNewsConfig((prevData) => {
                     return {
                       ...prevData,
-                      page: page,
+                      page: page - 1,
                     };
                   });
                 }}

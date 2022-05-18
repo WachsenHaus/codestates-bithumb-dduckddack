@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { motion } from 'framer-motion';
 import React from 'react';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
@@ -12,7 +13,13 @@ const MainPage = () => {
   useCoinList();
 
   return (
-    <div className={classNames(`grid grid-cols-12 `, `max-h-full`, `h-full`)}>
+    <div
+      className={classNames(
+        `grid grid-cols-12 `,
+        `max-h-full`,
+        `h-full overflow-hidden scrollbar-hide`
+      )}
+    >
       <BestCoin
         className={classNames(
           `col-start-3 col-end-7  drop-shadow-2xl`,

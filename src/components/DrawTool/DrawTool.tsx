@@ -519,10 +519,10 @@ const DrawTool = ({
         </div>
       </div>
       {/* 이미지 슬라이더 */}
-      <div>
+      <div className={classNames(`max-w-lg`)}>
         <Swiper
           onSwiper={(e) => {}}
-          className={classNames(` h-full w-1/2 px-10`)}
+          className={classNames(`h-full px-10`)}
           slidesPerView={5}
           spaceBetween={30}
         >
