@@ -318,7 +318,7 @@ const ImgItem = () => {
               }}
             /> */}
             <img
-              src={`${item.coin}`}
+              src={`${item.image}`}
               alt={`Chart Draw ${index}`}
               className={classNames(`w-12 h-12 hover:cursor-pointer`)}
               onClick={() => {
@@ -326,7 +326,7 @@ const ImgItem = () => {
                   modalState: true,
                   modalType: 'chartImage',
                   modalPayload: {
-                    src: item.coin,
+                    src: item.image,
                     data: [],
                   },
                 });
