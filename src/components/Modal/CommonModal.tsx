@@ -227,7 +227,13 @@ const CommonModal = () => {
                 <div
                   className={classNames(
                     `col-start-2`,
-                    `w-full flex justify-center items-center`
+                    `w-full flex justify-center items-center`,
+                    `hidden`,
+                    modal.modalState &&
+                      (modal.modalType === 'sign' ||
+                        modal.modalType === 'image')
+                      ? `block`
+                      : `hidden`
                   )}
                 >
                   {isLoading === false && (
