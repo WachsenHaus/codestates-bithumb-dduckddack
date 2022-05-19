@@ -55,6 +55,14 @@ const ChatContent = ({
   );
 };
 
+const TimeSpan = ({ timestamp }: { timestamp?: number }) => {
+  return (
+    <span className={classNames(`flex-grow-0 text-xss`)}>
+      {moment(timestamp).utc(true).format('MM-DD / HH:mm')}
+    </span>
+  );
+};
+
 const ChatRow = ({
   index,
   lastLength,
@@ -77,7 +85,6 @@ const ChatRow = ({
   type?: 'ALL' | 'SELECT';
 }) => {
   const userInfo = useRecoilValue(atomUserInfo);
-  const setModal = useSetRecoilState(atomModalState);
 
   const scrollRef = useRef<HTMLLIElement>(null);
   useEffect(() => {
@@ -90,21 +97,6 @@ const ChatRow = ({
     }
   }, [index, lastLength]);
 
-  //chatimg:https://images.unsplash.com/photo-1651978595428-b79169f223a5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80
-  // useEffect(() => {
-  //   if (message?.includes('chatimg')) {
-  //     console.log('사진인데?');
-
-  //     setModal({
-  //       modalState: true,
-  //       modalType: 'image',
-  //       modalPayload: message?.split('chatimg:')[1],
-  //     });
-  //   } else {
-  //     // console.log('글인데?');
-  //   }
-  // }, [message]);
-
   return userInfo.userInfo?.id === userId ? (
     <>
       <li
@@ -116,15 +108,7 @@ const ChatRow = ({
         )}
         ref={scrollRef}
       >
-        {/* <Avatar
-          className={classNames(`shadow-2xl`)}
-          alt={username}
-          src={avatar}
-        /> */}
-        <span className={classNames(`flex-grow-0 text-xss`)}>
-          {moment(timestamp).utc(true).format('HH:mm')}
-        </span>
-        {/* <span className={classNames(`ml-5`)}>나 :</span> */}
+        <TimeSpan timestamp={timestamp} />
         <ChatContent
           className={classNames(
             `flex-grow-0`,
@@ -164,13 +148,7 @@ const ChatRow = ({
         )}
         message={message}
       />
-      {/* <div className={classNames(`flex-grow`)}>
-        <ChatContent message={message} />
-      </div> */}
-
-      <span className={classNames(`flex-grow-0 text-xss`)}>
-        {moment(timestamp).utc(true).format('HH:mm')}
-      </span>
+      <TimeSpan timestamp={timestamp} />
     </li>
   );
 };

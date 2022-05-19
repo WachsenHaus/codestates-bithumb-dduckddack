@@ -1,4 +1,4 @@
-import { Box, IconButton, Slider, Switch, Tooltip } from '@mui/material';
+import { IconButton, Slider, Switch, Tooltip } from '@mui/material';
 import classNames from 'classnames';
 import { ReactNode, useEffect, useState } from 'react';
 import MainWrapper from '../Common/MainWrapper';
@@ -9,40 +9,21 @@ import SwiperCore, {
   Pagination,
   Scrollbar,
 } from 'swiper';
-
 import { Swiper, SwiperSlide } from 'swiper/react';
-
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-// import 'swiper/css';
-// import 'swiper/css/pagination';
-// import 'swiper/css/navigation';
-import 'swiper/css';
-
-// modules styles
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import {
-  useRecoilState,
-  useRecoilValue,
-  useRecoilValueLoadable,
-  useSetRecoilState,
-} from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { atomModalState } from '../../atom/modal.atom';
 import { HexColorPicker } from 'react-colorful';
 import { atomDrawConfig, atomDrawStatus } from '../../atom/drawConfig.atom';
 import { atomUserChartDatas, atomUserInfo } from '../../atom/user.atom';
-// import 'swiper/modules/navigation/navigation.scss'; // Navigation module
-// import 'swiper/modules/pagination/pagination.scss'; // Pagination module
 import ModeEditOutlineIcon from '@mui/icons-material/ModeEditOutline';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import SaveIcon from '@mui/icons-material/Save';
-import ShareIcon from '@mui/icons-material/Share';
 import PaletteIcon from '@mui/icons-material/Palette';
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
-import ModeIcon from '@mui/icons-material/Mode';
 import BrushIcon from '@mui/icons-material/Brush';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEraser } from '@fortawesome/free-solid-svg-icons';
@@ -50,21 +31,7 @@ import React from 'react';
 import { API_DATA_LAKE } from '../../api/dataLake.api';
 import axios from 'axios';
 import { dduckddackResponseVO } from '../../type/api';
-import {
-  atomChartData,
-  atomDrawStBars,
-  CONST_KR_UTC,
-  ICoinChart,
-  iStBar,
-  selectorDrawStBars,
-} from '../../atom/tvChart.atom';
-import stringify from 'fast-json-stable-stringify';
-import {
-  atomChatRecvChatMessage,
-  atomChatWebSocket,
-} from '../../atom/chat.atom';
-import { atomSelectCoinDefault } from '../../atom/selectCoinDefault.atom';
-import { TypeWebSocketChatSend } from '../../atom/ws.type';
+import { CONST_KR_UTC, ICoinChart, iStBar } from '../../atom/tvChart.atom';
 import { UTCTimestamp } from 'lightweight-charts';
 import LOADING_ATOM from '../../asset/img/loading_atom.json';
 import LottieDiv from '../Common/LottieDiv';
@@ -195,27 +162,6 @@ const DrawToolSaveCanvas = ({
     </Tooltip>
   );
 };
-const DrawToolShareCanvas = ({
-  onClick,
-  isDraw,
-}: {
-  onClick: () => void;
-  isDraw: boolean;
-}) => {
-  return (
-    <Tooltip title="채팅방에 공유하기">
-      <SubWrapper onClick={onClick} isDraw={isDraw}>
-        <IconButton
-          sx={{
-            color: '#FAD390',
-          }}
-        >
-          <ShareIcon />
-        </IconButton>
-      </SubWrapper>
-    </Tooltip>
-  );
-};
 
 const DrawToolEraseButton = ({
   onClick,
@@ -246,23 +192,10 @@ const DrawToolEraseButton = ({
             color: '#FAD390',
           }}
         >
-          <BrushIcon
-          // onClick={() => {
-          //   setState(!state);
-          //   onClick();
-          // }}
-          />
+          <BrushIcon />
         </IconButton>
       </Tooltip>
-      <Switch
-        sx={
-          {
-            // width: '100%',
-          }
-        }
-        checked={state}
-        defaultChecked={state}
-      />
+      <Switch checked={state} defaultChecked={state} />
       <Tooltip title="지우개모드">
         <IconButton
           sx={{
@@ -271,16 +204,10 @@ const DrawToolEraseButton = ({
           onClick={() => {
             setState(!state);
           }}
-          // onClick={() => {
-          //   setState(!state);
-          //   onClick();
-          // }}
         >
           <FontAwesomeIcon icon={faEraser} />
         </IconButton>
       </Tooltip>
-
-      {/* 지우개 {state ? '지우개' : '펜'} */}
     </SubWrapper>
   );
 };
@@ -319,15 +246,6 @@ const ImgItem = () => {
   const [drawResult, setDrawResult] = useState<any>(undefined);
   const setDrawStatus = useSetRecoilState(atomDrawStatus);
 
-  const [chartData, setChartData] = useRecoilState(atomChartData);
-
-  // const [drawChart, setDrawChart] = useState<ICoinChart>();
-  // useEffect(()=>{
-  //   if(setDrawStBars)
-  // },[setDrawStBars])
-
-  //
-
   // 이미지를 눌렀을 떄만 데이터를 받아오게 수정해야함.
   const getDataLake = async (coin: string, time: string) => {
     try {
@@ -340,49 +258,21 @@ const ImgItem = () => {
         }
       );
       if (result.data.status === '0000') {
-        setChartData(result.data.message);
-        // let obj: iStBar[] = [];
-        // const { c, h, l, o, t, v } = result.data.message;
-        // for (let i = 0; i < t.length; i++) {
-        //   // const time = ((t[i] - CONST_KR_UTC) / 1000) as UTCTimestamp;
-        //   const time = (t[i] / 1000) as UTCTimestamp;
-        //   // const time = t[i] as UTCTimestamp;
-        //   obj.push({
-        //     time: time,
-        //     open: o[i],
-        //     high: h[i],
-        //     low: l[i],
-        //     close: c[i],
-        //   });
-        // }
-        // console.log(obj);
-        // return obj;
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+        let obj: iStBar[] = [];
+        const { c, h, l, o, t, v } = result.data.message;
+        for (let i = 0; i < t.length; i++) {
+          const time = ((t[i] + CONST_KR_UTC) / 1000) as UTCTimestamp;
+          obj.push({
+            time: time,
+            open: o[i],
+            high: h[i],
+            low: l[i],
+            close: c[i],
+          });
+        }
 
-  // 이미지를 눌렀을 떄만 데이터를 받아오게 수정해야함.
-  const getMockDataLake = () => {
-    try {
-      let obj: iStBar[] = [];
-      const { c, h, l, o, t, v } = chartData;
-      console.log(chartData);
-      for (let i = 0; i < t.length; i++) {
-        // const time = ((t[i] - CONST_KR_UTC) / 1000) as UTCTimestamp;
-        const time = (t[i] / 1000) as UTCTimestamp;
-        // const time = t[i] as UTCTimestamp;
-        obj.push({
-          time: time,
-          open: o[i],
-          high: h[i],
-          low: l[i],
-          close: c[i],
-        });
+        return obj;
       }
-      console.log(obj);
-      return obj;
     } catch (err) {
       console.log(err);
     }
@@ -401,8 +291,8 @@ const ImgItem = () => {
               src={`${item.image}`}
               alt={`Chart Draw ${index}`}
               className={classNames(`w-16 h-16 hover:cursor-pointer`)}
-              onClick={() => {
-                const stData = getMockDataLake();
+              onClick={async () => {
+                const stData = await getDataLake(item.coin, item.time);
                 setModal({
                   modalState: true,
                   modalType: 'chartImage',
@@ -441,13 +331,6 @@ const DrawTool = ({
   onRedo: () => void;
   onSave: () => Promise<boolean>;
 }) => {
-  // const chatMsg = useRecoilValue(atomChatRecvChatMessage);
-  // const wsChat = useRecoilValue(atomChatWebSocket);
-  // const userInfo = useRecoilValue(atomUserInfo);
-  // const selectCoin = useRecoilValue(atomSelectCoinDefault);
-
-  // const [modal, setModal] = useRecoilState(atomModalState);
-  const userChartData = useRecoilValueLoadable(atomUserChartDatas);
   const [drawStatus, setDrawStatus] = useRecoilState(atomDrawStatus);
   const [config, setDrawConfig] = useRecoilState(atomDrawConfig);
   const [isDraw, setIsDraw] = useState(false);
@@ -625,10 +508,6 @@ const DrawTool = ({
           onSwiper={(e) => {}}
           className={classNames(`h-full px-10 `)}
           slidesPerView={perView}
-          // slider
-          // centeredSlides
-          // spaceBetween={}
-          // pagination={{}}
           navigation
         >
           {ImgItem()}

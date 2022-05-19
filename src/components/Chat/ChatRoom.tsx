@@ -17,6 +17,7 @@ import {
 import stringify from 'fast-json-stable-stringify';
 import { atomSelectCoinDefault } from '../../atom/selectCoinDefault.atom';
 import useSetDefaultCoin from '../../hooks/useSetDefaultCoin';
+// import Tetrapod from 'tetrapod-klleon';
 
 const ChatRoom = () => {
   useSetDefaultCoin();
@@ -79,6 +80,8 @@ const ChatRoom = () => {
           onKeyUpCapture={(e) => {
             if (e.key === 'Enter') {
               // 키보드 센드
+              // console.log(Tetrapod.isBad(keyword, false));
+
               if (keyword === '') {
                 return;
               }
@@ -95,9 +98,9 @@ const ChatRoom = () => {
                 },
               };
 
-              const sendData = stringify(data);
-              wsChat?.send(sendData);
-              setKeyword('');
+              // const sendData = stringify(data);
+              // wsChat?.send(sendData);
+              // setKeyword('');
             }
           }}
           placeholder={`${

@@ -15,6 +15,7 @@ import {
   atomDrawStBars,
   selectorDrawStBars,
 } from '../atom/tvChart.atom';
+import { testDummy } from '../components/TvChart/dummy';
 
 const CONST_KR_UTC = 9 * 60 * 60 * 1000;
 
@@ -74,21 +75,19 @@ const useParsingAndUpdateWebSocketChart = (
    */
   useEffect(() => {
     pause === false && currentBar && candleRef.current?.update(currentBar);
-    // currentBar && candleRef.current?.update(currentBar);
   }, [currentBar]);
 
   /**
    * 주기적으로 변경하는 차트데이터는 set
    */
   useEffect(() => {
-    // pause && drawStBars && candleRef.current?.setData(drawStBars);
+    // drawStBars && candleRef.current?.setData(testDummy);
     drawStBars && candleRef.current?.setData(drawStBars);
 
     /**
-     * 한틱 쌓일때마다 차트를 뒤로 밀어서 동기화되게 하는 기능이긴함,,
+     * 차트 동기화 기능인데 사용하지 않음
      */
     if (recordRange) {
-      // const prev  = JSON.parse(JSON.stringify(recordRange));
       const prev = recordRange;
       const from = Number(prev.from) - 1;
       const to = Number(prev.to) - 1;

@@ -176,23 +176,18 @@ const useGetPriceInfoList = () => {
 const useMergeTickersWebsocketAndFilteredData = () => {
   // 티커정보와 코인정보를 합칩니다.
   const getAtomTicker = useRecoilValue(atomTickers);
-  const getDefaultCoin = useRecoilValue(atomSelectCoinDefault);
+  const selectCoin = useRecoilValue(atomSelectCoinDefault);
   const getDetailCoin = useRecoilValue(atomSelectCoinDetail);
   const [priceInfoUseCoin, setPriceInfoUseCoins] = useRecoilState(
     atomPriceInfoUseCoins
   );
-  const [worker, setWorker] = useState<any>();
+  const [worker, setWorker] = useState<Worker | undefined>();
 
   useEffect(() => {
     const worker: Worker = new Worker(
       new URL('./worker/mergePriceInfoUseCoins.ts', import.meta.url)
     );
     setWorker(worker);
-    worker.onmessage = (e) => {
-      setTimeout(() => {
-        setPriceInfoUseCoins(e.data.coinList);
-      }, 0);
-    };
 
     return () => {
       setWorker(undefined);
@@ -201,15 +196,25 @@ const useMergeTickersWebsocketAndFilteredData = () => {
   }, []);
 
   useEffect(() => {
+    if (worker) {
+      worker.onmessage = (e) => {
+        setTimeout(() => {
+          setPriceInfoUseCoins(e.data.coinList);
+        }, 0);
+      };
+    }
+  }, [worker, selectCoin]);
+
+  useEffect(() => {
     worker &&
       worker.postMessage({
         tickerObj: getAtomTicker,
         coins: priceInfoUseCoin,
         detail: getDetailCoin,
-        default: getDefaultCoin,
+        default: selectCoin,
       });
     setTimeout(() => {}, 0);
-  }, [worker, getAtomTicker, getDefaultCoin, getDetailCoin]);
+  }, [worker, getAtomTicker, selectCoin, getDetailCoin]);
 };
 
 /**
@@ -320,16 +325,22 @@ const useMergeTransactionWebsocketAndInitData = () => {
   useEffect(() => {
     if (worker) {
       worker.onmessage = (e) => {
+        console.log('worker on message', selectCoin);
+
         if (selectCoin.coinType === e.data.c) {
-          setSelectDetailCoin((prev) => {
-            return {
-              ...prev,
-              e: e.data.p,
-              r: e.data.r,
-            };
-          });
+          setTimeout(() => {
+            setSelectDetailCoin((prev) => {
+              return {
+                ...prev,
+                e: e.data.p,
+                r: e.data.r,
+              };
+            });
+          }, 0);
         }
-        setDrawTransaction(e.data.cloneDrawTransaction);
+        setTimeout(() => {
+          setDrawTransaction(e.data.cloneDrawTransaction);
+        }, 0);
       };
     }
   }, [worker, selectCoin]);
@@ -380,11 +391,6 @@ export const useCoinChart = () => {
   useGetFiltredUseCoins();
   // 추린 코인리스트에 가격정보를 병합한다.
   useGetPriceInfoList();
-  // useMergeTickersWebsocketAndFilteredData();
-
-  // useGetInitTransactionData();
-  // 받아온 트랜잭션 데이터와 웹소켓 데이터를 병합한다.
-  // useMergeTransactionWebsocketAndInitData();
 };
 
 export const useCoinList = () => {
@@ -392,5 +398,4 @@ export const useCoinList = () => {
   useGetTradeData();
   useGetFiltredUseCoins();
   useGetPriceInfoList();
-  // useMergeTickersWebsocketAndFilteredData();
 };

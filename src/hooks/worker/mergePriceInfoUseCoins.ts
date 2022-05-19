@@ -9,13 +9,11 @@ self.onmessage = function (e) {
   const detail = data.detail;
   const defaultCoin = data.default;
 
-  // console.log(item.coinType === ticker.c ,item.coinType === defaultCoin.coinType )
   const isExist = _.findIndex(
     coinList,
     (item: any) =>
       item.coinType === ticker.c || item.coinType === defaultCoin.coinType
   );
-  // const isExist = coinList.findIndex();
   if (isExist === -1) {
     return;
   } else if (ticker.m === 'C0101') {
@@ -32,20 +30,7 @@ self.onmessage = function (e) {
     } else {
       isUp = false;
     }
-    // if (coinList[isExist].coinType === defaultCoin.coinType) {
-    //   coinList[isExist] = {
-    //     ...coinList[isExist],
-    //     e: detail.e,
-    //     r: detail.r,
-    //     isUp,
-    //   };
-    //   console.log(coinList[isExist]);
-    // } else if (coinList[isExist].coinType === ticker.c) {
-    //   coinList[isExist] = { ...coinList[isExist], ...ticker, isUp };
-    //   console.log(coinList[isExist]);
-    // }
 
-    // let resultDetail;
     if (coinList[isExist].coinType === defaultCoin.coinType) {
       coinList[isExist] = {
         ...coinList[isExist],
@@ -53,16 +38,15 @@ self.onmessage = function (e) {
         r: detail.r,
         isUp,
       };
-      // resultDetail = coinList[isExist];
     }
     if (coinList[isExist].coinType === ticker.c) {
       coinList[isExist] = { ...coinList[isExist], ...ticker, isUp };
-      // console.log(coinList[isExist]);
     }
-    self.postMessage({
+    const result = {
       // detail: resultDetail,
       coinList: coinList,
-    });
+    };
+    self.postMessage(result);
   }
 };
 export {};

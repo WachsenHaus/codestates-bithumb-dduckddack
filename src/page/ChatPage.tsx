@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Autocomplete, createFilterOptions, TextField } from '@mui/material';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useCoinChart } from '../hooks/useInitialize';
@@ -14,14 +14,49 @@ import NewsHeadLine from '../components/News/NewsHeadLine';
 import { useGenerateSocket } from '../hooks/useWebSocket';
 import useSetDefaultCoin from '../hooks/useSetDefaultCoin';
 import { motion } from 'framer-motion';
+import {
+  atomUserChartDatas,
+  atomUserInfo,
+  IUserChatDatas,
+} from '../atom/user.atom';
+import { API_DRAW } from '../api/draw.api';
+import { DDUCKDDACK_AXIOS } from '../App';
+import { dduckddackResponseVO } from '../type/api';
 
 const ChatPage = () => {
-  // useGenerateSocket('SUBSCRIBE');
   // 기본코인을 비트코인으로 설정
   useSetDefaultCoin();
   // 차트를 사용하기 위한 설정들
   useCoinChart();
-  // 차트갱신을 위한 소켓 연결
+
+  // 선택된 코인이 변경되면 이미지들을 불러옴.
+  const userInfo = useRecoilValue(atomUserInfo);
+  const selectCoins = useRecoilValue(atomSelectCoinDefault);
+  const setUserImageData = useSetRecoilState(atomUserChartDatas);
+  const getDrawImage = async (id: number, coinName: string) => {
+    try {
+      const result = await DDUCKDDACK_AXIOS.post<
+        dduckddackResponseVO<IUserChatDatas[]>
+      >(`${API_DRAW.GET_IMAGE}`, {
+        userId: id,
+        coin: coinName,
+      });
+      if (result.data.status === 'ok') {
+        const data = result.data.message;
+        setUserImageData(data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // 코인 변경에 따른 이미지를 불러오는 기능
+  useEffect(() => {
+    if (userInfo.userInfo && selectCoins.coinSymbol) {
+      userInfo.userInfo?.id &&
+        getDrawImage(userInfo.userInfo.id, selectCoins.coinSymbol);
+    }
+  }, [userInfo, selectCoins]);
 
   /**
    * 훅스로 리팩토링할 것
@@ -31,7 +66,7 @@ const ChatPage = () => {
   const [displayCoins, setDisplayCoins] = useState<TypeDrawTicker[]>();
   const [value, setValue] = useState<TypeDrawTicker>();
   useLayoutEffect(() => {
-    const ALLOW_ALL_COINS = true;
+    const ALLOW_ALL_COINS = false;
     if (ALLOW_ALL_COINS) {
       setDisplayCoins(coins);
       setValue(coins[0]);

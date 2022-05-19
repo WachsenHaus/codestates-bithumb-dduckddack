@@ -32,7 +32,7 @@ const RoutePage = () => {
   useGenerateSocket('SUBSCRIBE');
 
   const setUserInfo = useSetRecoilState(atomUserInfo);
-  const setUserImageData = useSetRecoilState(atomUserChartDatas);
+
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     const refreshToken = localStorage.getItem('refreshToken');
@@ -56,30 +56,33 @@ const RoutePage = () => {
 
       DDUCKDDACK_AXIOS.defaults.headers.common['Authorization'] = accessToken;
 
-      getDrawImage(Number(id));
+      // getDrawImage(Number(id),);
       setUserInfo(userInfo);
     }
   }, []);
 
+  useEffect(() => {}, []);
+
   // 도화지 도메인으로부터 데이터를 받아옴
 
-  const getDrawImage = async (id: number) => {
-    try {
-      const result = await DDUCKDDACK_AXIOS.get<
-        dduckddackResponseVO<IUserChatDatas[]>
-      >(`${API_DRAW.GET_IMAGE}`, {
-        params: {
-          userId: id,
-        },
-      });
-      if (result.data.status === 'ok') {
-        const data = result.data.message;
-        setUserImageData(data);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const getDrawImage = async (id: number, coinName: string) => {
+  //   try {
+  //     const result = await DDUCKDDACK_AXIOS.get<
+  //       dduckddackResponseVO<IUserChatDatas[]>
+  //     >(`${API_DRAW.GET_IMAGE}`, {
+  //       params: {
+  //         userId: id,
+  //         coin: coinName,
+  //       },
+  //     });
+  //     if (result.data.status === 'ok') {
+  //       const data = result.data.message;
+  //       setUserImageData(data);
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   return (
     <>

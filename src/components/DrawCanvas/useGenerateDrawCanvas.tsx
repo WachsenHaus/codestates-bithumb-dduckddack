@@ -131,7 +131,7 @@ const useGenerateDrawCanvas = (
               let imageUrl: Blob | null = e;
               if (userInfo.userInfo && imageUrl !== null) {
                 const id = userInfo.userInfo?.id?.toString() as string;
-                const today = moment().utc(true).valueOf().toString();
+                const today = moment().utc().valueOf().toString();
                 const formData = new FormData();
                 formData.append(
                   'image',

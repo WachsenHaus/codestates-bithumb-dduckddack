@@ -24,17 +24,14 @@ import { useCoinChart } from '../../hooks/useInitialize';
 import useSetDefaultCoin from '../../hooks/useSetDefaultCoin';
 
 const ChartModal = () => {
-  useCoinChart();
-  const [getChartData, reload] = useRecoilStateLoadable(selectorGetChartData);
-  const setChartData = useSetRecoilState(atomChartData);
-  /**
-   * 차트데이터를 성공적으로 받아오면 atomchartdata에 할당합니다.
-   */
-  useEffect(() => {
-    if (getChartData.state === 'hasValue') {
-      getChartData.contents && setChartData(getChartData.contents);
-    }
-  }, [getChartData]);
+  // useCoinChart();
+  // const [getChartData, reload] = useRecoilStateLoadable(selectorGetChartData);
+  // const setChartData = useSetRecoilState(atomChartData);
+  // useEffect(() => {
+  //   if (getChartData.state === 'hasValue') {
+  //     getChartData.contents && setChartData(getChartData.contents);
+  //   }
+  // }, [getChartData]);
 
   const [modal, setModal] = useRecoilState(atomModalState);
   const wsChat = useRecoilValue(atomChatWebSocket);
@@ -56,8 +53,6 @@ const ChartModal = () => {
       setPayload(result);
     }
   }, [modal, modal.modalPayload]);
-
-  useEffect(() => {}, []);
 
   return (
     <div
