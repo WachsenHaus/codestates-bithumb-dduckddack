@@ -1,4 +1,4 @@
-import { IconButton, Slider, Switch, Tooltip } from '@mui/material';
+import { Box, IconButton, Slider, Switch, Tooltip } from '@mui/material';
 import classNames from 'classnames';
 import { ReactNode, useEffect, useState } from 'react';
 import MainWrapper from '../Common/MainWrapper';
@@ -80,6 +80,7 @@ const SubWrapper = React.forwardRef(
       isDraw?: boolean;
       ref?: any;
       className?: string;
+      disabled?: boolean;
     },
     ref: any
   ) => {
@@ -133,18 +134,34 @@ const DrawToolNewCanvas = ({
 };
 const DrawToolDrawButton = ({ onClick }: { onClick: () => void }) => {
   const [state, setState] = useState(false);
+  const userInfo = useRecoilValue(atomUserInfo);
+  const [isLogin, setIsLogin] = useState(userInfo.userInfo ? true : false);
+
+  useEffect(() => {
+    if (userInfo.userInfo) {
+      setIsLogin(true);
+    } else {
+      setIsLogin(false);
+    }
+  }, [userInfo]);
   return (
-    <Tooltip title="그림그리기 모드">
+    <Tooltip title={isLogin ? '그림그리기 모드' : '로그인 하세요'}>
       <SubWrapper
         onClick={() => {
-          setState(!state);
-          onClick();
+          if (isLogin) {
+            setState(!state);
+            onClick();
+          }
         }}
+        className={classNames(
+          isLogin ? `pointer-events-auto` : `pointer-events-none`,
+          isLogin ? `hover:cursor-pointer` : `hover:cursor-not-allowed`
+        )}
         active={state}
         isDraw={true}
-        // ref={ref}
       >
         <IconButton
+          disabled={isLogin === false}
           sx={{
             color: '#FAD390',
           }}

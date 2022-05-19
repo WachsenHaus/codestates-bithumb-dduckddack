@@ -123,7 +123,9 @@ const MyPage = () => {
 
               <div className={classNames(``)}>
                 <TextField
-                  {...register('nickName')}
+                  {...register('nickName', {
+                    pattern: /^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{1,10}$/,
+                  })}
                   required
                   fullWidth
                   type="text"
@@ -132,20 +134,27 @@ const MyPage = () => {
               </div>
               <div className={classNames(``)}>
                 <TextField
-                  {...register('password1')}
+                  {...register('password1', {
+                    pattern:
+                      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                  })}
                   required
                   fullWidth
                   type="password"
                   label="password1"
+                  error={errors.password1?.type === 'pattern'}
                 />
               </div>
               <div className={classNames(``)}>
                 <TextField
-                  {...register('password2')}
+                  {...register('password2', {
+                    validate: (value) => value === watch('password1'),
+                  })}
                   required
                   fullWidth
                   type="password"
                   label="password2"
+                  error={errors.password2?.message !== undefined}
                 />
               </div>
             </div>
@@ -156,7 +165,7 @@ const MyPage = () => {
                 )}
               >
                 <Avatar
-                  src={profileImg}
+                  src={profileImg || userInfo.userInfo?.imagePath || ''}
                   onClick={async () => {
                     const element = document.querySelector(
                       'input[data-inputProfile]'
@@ -192,8 +201,6 @@ const MyPage = () => {
                     file && reader.readAsDataURL(file[0]);
                     if (reader) {
                       reader.onload = () => {
-                        // reader.result
-                        console.log(reader.readAsBinaryString);
                         if (typeof reader.result === 'string') {
                           setProfileImg(reader.result);
                         }

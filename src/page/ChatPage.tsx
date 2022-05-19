@@ -15,7 +15,7 @@ import { useGenerateSocket } from '../hooks/useWebSocket';
 import useSetDefaultCoin from '../hooks/useSetDefaultCoin';
 
 const ChatPage = () => {
-  useGenerateSocket('SUBSCRIBE');
+  // useGenerateSocket('SUBSCRIBE');
   // 기본코인을 비트코인으로 설정
   useSetDefaultCoin();
   // 차트를 사용하기 위한 설정들

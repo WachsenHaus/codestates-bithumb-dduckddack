@@ -29,6 +29,7 @@ import CommonModal from '../components/Modal/CommonModal';
 
 const RoutePage = () => {
   useGenerateSocket('CHAT');
+  useGenerateSocket('SUBSCRIBE');
 
   const setUserInfo = useSetRecoilState(atomUserInfo);
   const setUserImageData = useSetRecoilState(atomUserChartDatas);
