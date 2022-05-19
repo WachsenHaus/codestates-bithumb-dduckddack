@@ -1,17 +1,41 @@
 import { Button, Modal } from '@mui/material';
 import classNames from 'classnames';
 import stringify from 'fast-json-stable-stringify';
-import { useEffect, useState } from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useEffect, useRef, useState } from 'react';
+import {
+  useRecoilRefresher_UNSTABLE,
+  useRecoilState,
+  useRecoilStateLoadable,
+  useRecoilValue,
+  useSetRecoilState,
+} from 'recoil';
 import { atomChatWebSocket } from '../../atom/chat.atom';
 import { atomModalState, TypeChartImg } from '../../atom/modal.atom';
 import { atomSelectCoinDefault } from '../../atom/selectCoinDefault.atom';
-import { iStBar } from '../../atom/tvChart.atom';
+import {
+  atomChartData,
+  iStBar,
+  selectorGetChartData,
+} from '../../atom/tvChart.atom';
 import { atomUserInfo } from '../../atom/user.atom';
 import { TypeWebSocketChatSend } from '../../atom/ws.type';
 import useGenerateChart from '../../hooks/useGenerateChart';
+import { useCoinChart } from '../../hooks/useInitialize';
+import useSetDefaultCoin from '../../hooks/useSetDefaultCoin';
 
-const SignModal = () => {
+const ChartModal = () => {
+  useCoinChart();
+  const [getChartData, reload] = useRecoilStateLoadable(selectorGetChartData);
+  const setChartData = useSetRecoilState(atomChartData);
+  /**
+   * 차트데이터를 성공적으로 받아오면 atomchartdata에 할당합니다.
+   */
+  useEffect(() => {
+    if (getChartData.state === 'hasValue') {
+      getChartData.contents && setChartData(getChartData.contents);
+    }
+  }, [getChartData]);
+
   const [modal, setModal] = useRecoilState(atomModalState);
   const wsChat = useRecoilValue(atomChatWebSocket);
   const userInfo = useRecoilValue(atomUserInfo);
@@ -118,4 +142,4 @@ const SignModal = () => {
   );
 };
 
-export default SignModal;
+export default ChartModal;

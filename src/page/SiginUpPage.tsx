@@ -109,6 +109,13 @@ const SiginUpPage = () => {
         }
       }
     } catch (err) {
+      setError(
+        'email',
+        { message: '서버 상태를 확인해주세요.' },
+        {
+          shouldFocus: true,
+        }
+      );
       setMailSenderStartFlag(false);
       setMailSenderEndFlag(false);
       setMailSender(false);
@@ -128,26 +135,26 @@ const SiginUpPage = () => {
         console.log(result.data?.message);
       } else {
         if (errors && errors.emailVerify) {
-          errors.emailVerify.message = '에러임';
+          errors.emailVerify.message = '인증 실패';
         }
         setError(
           'emailVerify',
-          { message: '인증실패' },
+          { message: '인증 실패' },
           {
             shouldFocus: true,
           }
         );
         setMailVerify(false);
-        setMailVerifyStartFlag(true);
-        setMailVerifyEndFlag(true);
+        setMailVerifyStartFlag(false);
+        setMailVerifyEndFlag(false);
       }
     } catch (err) {
       setMailVerify(false);
-      setMailSenderEndFlag(false);
-      setMailSender(false);
+      setMailVerifyEndFlag(false);
+      setMailVerifyStartFlag(false);
       setError(
         'emailVerify',
-        { message: '인증실패' },
+        { message: '서버 상태를 확인해주세요.' },
         {
           shouldFocus: true,
         }
@@ -238,6 +245,7 @@ const SiginUpPage = () => {
               </div>
 
               <Button
+                disabled={mailSender || mailSenderStartFlag}
                 onClick={() => {
                   trigger('email')
                     .then((e) => {
@@ -259,6 +267,19 @@ const SiginUpPage = () => {
                 인증 보내기
               </Button>
             </SignUpRow>
+            {errors.email?.message !== undefined && (
+              <SignUpRow
+                className={classNames(`flex justify-center items-center`)}
+              >
+                <FormHelperText
+                  sx={{
+                    color: 'red',
+                  }}
+                >
+                  {errors.email?.message}
+                </FormHelperText>
+              </SignUpRow>
+            )}
             <SignUpRow>
               <div
                 className={classNames(
@@ -280,6 +301,7 @@ const SiginUpPage = () => {
 
               <div className={classNames(`flex-1`)}>
                 <Button
+                  disabled={mailVerify || mailVerifyStartFlag}
                   {...register('emailVerify')}
                   onClick={() => {
                     setMailVerifyStartFlag(true);
@@ -291,11 +313,20 @@ const SiginUpPage = () => {
                   인증 확인
                 </Button>
               </div>
-
-              {errors.emailVerify?.message !== undefined && (
-                <FormHelperText>{errors.emailVerify?.message}</FormHelperText>
-              )}
             </SignUpRow>
+            {errors.emailVerify?.message !== undefined && (
+              <SignUpRow
+                className={classNames(`flex justify-center items-center`)}
+              >
+                <FormHelperText
+                  sx={{
+                    color: 'red',
+                  }}
+                >
+                  {errors.emailVerify?.message}
+                </FormHelperText>
+              </SignUpRow>
+            )}
             <SignUpRow>
               <div className={classNames(`w-10`)}></div>
               <div className={classNames(`flex-1`)}>
@@ -303,19 +334,26 @@ const SiginUpPage = () => {
                   required
                   fullWidth
                   {...register('nickName', {
-                    pattern: /^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{1,10}$/,
+                    pattern: /^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{5,10}$/,
                   })}
                   label="닉네임"
                   error={errors.nickName?.type === 'pattern'}
                 />
               </div>
-
-              {errors.nickName?.type && (
-                <FormHelperText>
-                  1~10글자 숫자,영문,한글로 구성해주세요
-                </FormHelperText>
-              )}
             </SignUpRow>
+            {errors.nickName?.message !== undefined && (
+              <SignUpRow
+                className={classNames(`flex justify-center items-center`)}
+              >
+                <FormHelperText
+                  sx={{
+                    color: 'red',
+                  }}
+                >
+                  5~10글자 숫자,영문,한글로 구성해주세요
+                </FormHelperText>
+              </SignUpRow>
+            )}
             <SignUpRow>
               <div className={classNames(`w-10`)}></div>
               <div className={classNames(`flex-1`)}>
@@ -331,13 +369,20 @@ const SiginUpPage = () => {
                   error={errors.password1?.type === 'pattern'}
                 />
               </div>
-
-              {errors.password1?.type && (
-                <FormHelperText>
+            </SignUpRow>
+            {errors.password1?.type && (
+              <SignUpRow
+                className={classNames(`flex justify-center items-center`)}
+              >
+                <FormHelperText
+                  sx={{
+                    color: 'red',
+                  }}
+                >
                   1개 이상의 영문자, 숫자, 특수문자로 10글자 이상
                 </FormHelperText>
-              )}
-            </SignUpRow>
+              </SignUpRow>
+            )}
             <SignUpRow>
               <div className={classNames(`w-10`)}></div>
               <div className={classNames(`flex-1`)}>
@@ -352,11 +397,21 @@ const SiginUpPage = () => {
                   error={errors.password2?.message !== undefined}
                 />
               </div>
-
-              {errors.password2?.message !== undefined && (
-                <FormHelperText>비밀번호가 일치하지 않습니다.</FormHelperText>
-              )}
             </SignUpRow>
+            {errors.password2?.message !== undefined && (
+              <SignUpRow
+                className={classNames(`flex justify-center items-center`)}
+              >
+                <FormHelperText
+                  sx={{
+                    color: 'red',
+                  }}
+                >
+                  비밀번호가 일치하지 않습니다.
+                </FormHelperText>
+              </SignUpRow>
+            )}
+
             <SignUpRow>
               <Button fullWidth type="submit" value="회원가입">
                 회원가입

@@ -27,6 +27,7 @@ const CommonModal = () => {
   const [modal, setModal] = useRecoilState(atomModalState);
   const [payload, setPayload] = useState<any | TypeChartImg | string>();
   const [flag, setFlag] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const {
@@ -46,8 +47,8 @@ const CommonModal = () => {
 
     // 로딩 시작
 
-    const result = await onSignIn(sendData);
     setIsLoading(true);
+    const result = await onSignIn(sendData);
     if (result) {
       setIsSuccess(true);
       setTimeout(() => {
@@ -109,10 +110,12 @@ const CommonModal = () => {
           return true;
         }
       } else {
+        setErrorMsg('등록된 회원정보가 아닙니다.');
         setUserInfo({});
         return false;
       }
     } catch (err) {
+      setErrorMsg('회원가입 서버 상태를 확인해주세요.');
       console.log(err);
       return false;
     }
@@ -196,7 +199,7 @@ const CommonModal = () => {
 
                 {flag && (
                   <div className={classNames(`col-span-full text-upBox`)}>
-                    등록된 회원 정보가 없습니다.
+                    {errorMsg}
                   </div>
                 )}
                 <div
@@ -204,7 +207,9 @@ const CommonModal = () => {
                     `col-span-full flex justify-center items-center`
                   )}
                 >
-                  <Button type="submit">로그인</Button>
+                  <Button type="submit" disabled={isLoading}>
+                    로그인
+                  </Button>
                   <Button
                     onClick={() => {
                       setModal((prevData) => {

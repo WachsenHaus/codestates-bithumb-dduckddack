@@ -368,6 +368,7 @@ const ImgItem = () => {
     try {
       let obj: iStBar[] = [];
       const { c, h, l, o, t, v } = chartData;
+      console.log(chartData);
       for (let i = 0; i < t.length; i++) {
         // const time = ((t[i] - CONST_KR_UTC) / 1000) as UTCTimestamp;
         const time = (t[i] / 1000) as UTCTimestamp;
