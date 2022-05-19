@@ -316,19 +316,16 @@ const useMergeTransactionWebsocketAndInitData = () => {
   useEffect(() => {
     if (worker) {
       worker.onmessage = (e) => {
-        setTimeout(() => {
-          if (selectCoin.coinType === e.data.c) {
-            setSelectDetailCoin((prev) => {
-              return {
-                ...prev,
-                e: e.data.p,
-                r: e.data.r,
-              };
-            });
-          }
-
-          setDrawTransaction(e.data.cloneDrawTransaction);
-        }, 0);
+        if (selectCoin.coinType === e.data.c) {
+          setSelectDetailCoin((prev) => {
+            return {
+              ...prev,
+              e: e.data.p,
+              r: e.data.r,
+            };
+          });
+        }
+        setDrawTransaction(e.data.cloneDrawTransaction);
       };
     }
   }, [worker, selectCoin]);
@@ -371,9 +368,8 @@ export const useInitialize = () => {
 };
 
 export const useCoinChart = () => {
-  useGetCoinList();
   // URL을 분석하여 선택된 코인을 변경한다.
-  // useGetTradeParam();
+  useGetCoinList();
   // 초기 거래 데이터들을 받아옵니다.
   useGetTradeData();
   // 사용할 코인리스트만 추린다.
@@ -384,7 +380,7 @@ export const useCoinChart = () => {
 
   // useGetInitTransactionData();
   // 받아온 트랜잭션 데이터와 웹소켓 데이터를 병합한다.
-  useMergeTransactionWebsocketAndInitData();
+  // useMergeTransactionWebsocketAndInitData();
 };
 
 export const useCoinList = () => {

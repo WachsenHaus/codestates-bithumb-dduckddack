@@ -16,12 +16,15 @@ export const atomUserName = atom<string>({
   default: '홍길동',
 });
 
+export type TypeUserInfoDetail = {
+  email?: string;
+  id?: number;
+  nickName?: string;
+  imagePath?: string;
+};
+
 export type TypeUserInfo = {
-  userInfo?: {
-    email?: string;
-    id?: number;
-    nickName?: string;
-  };
+  userInfo?: TypeUserInfoDetail;
 };
 
 export type TypeUserToken = {
@@ -35,3 +38,11 @@ export const atomUserInfo = atom<TypeUser>({
   key: 'atomUserInfo',
   default: {},
 });
+
+export type TypeLoginResponse = {
+  status: 'ok' | 'error' | '0000';
+  message: string;
+  accessToken: string;
+  refreshToken: string;
+  userInfo?: TypeUserInfoDetail;
+};

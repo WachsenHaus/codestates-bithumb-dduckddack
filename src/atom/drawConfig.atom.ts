@@ -14,3 +14,8 @@ export const atomDrawConfig = atom<IDrawSetConfig>({
     penColor: '#F6B93B',
   },
 });
+
+export const atomDrawStatus = atom({
+  key: 'atomDrawStatus',
+  default: false,
+});

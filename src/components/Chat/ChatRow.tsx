@@ -35,6 +35,7 @@ const ChatContent = ({
           alt={'chart_img'}
           className={classNames('w-10 h-10 hover:cursor-pointer', className)}
           onClick={() => {
+            console.log('네');
             setModal({
               modalType: 'image',
               modalState: true,
@@ -70,6 +71,7 @@ const ChatRow = ({
   userId?: string;
 }) => {
   const userInfo = useRecoilValue(atomUserInfo);
+  const setModal = useSetRecoilState(atomModalState);
 
   const scrollRef = useRef<HTMLLIElement>(null);
   useEffect(() => {
@@ -83,13 +85,19 @@ const ChatRow = ({
   }, [index, lastLength]);
 
   //chatimg:https://images.unsplash.com/photo-1651978595428-b79169f223a5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80
-  useEffect(() => {
-    if (message?.includes('chatimg')) {
-      // console.log('사진인데?');
-    } else {
-      // console.log('글인데?');
-    }
-  }, [message]);
+  // useEffect(() => {
+  //   if (message?.includes('chatimg')) {
+  //     console.log('사진인데?');
+
+  //     setModal({
+  //       modalState: true,
+  //       modalType: 'image',
+  //       modalPayload: message?.split('chatimg:')[1],
+  //     });
+  //   } else {
+  //     // console.log('글인데?');
+  //   }
+  // }, [message]);
 
   return userInfo.userInfo?.id === userId ? (
     <>
@@ -132,7 +140,10 @@ const ChatRow = ({
       <span className={classNames(`ml-5`)}>
         ({roomId}){username} :{' '}
       </span>
-      <ChatContent className={classNames(`flex-grow`)} message={message} />
+      <div className={classNames(`flex-grow`)}>
+        <ChatContent message={message} />
+      </div>
+
       <span className={classNames(`flex-grow-0 text-xs`)}>
         {moment(timestamp).utc(true).format('HH:mm')}
       </span>

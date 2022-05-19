@@ -25,7 +25,7 @@ const AvatarWrapper = () => {
       <Avatar
         className={classNames(`shadow-2xl mr-10`)}
         alt={userInfo.userInfo?.nickName}
-        src=""
+        src={userInfo.userInfo?.imagePath || ''}
       />
       <Popper open={open} anchorEl={containerRef.current}>
         <AnimatePresence>

@@ -6,6 +6,6 @@ export interface ResponseVO<T> {
 }
 
 export interface dduckddackResponseVO<T> {
-  status: 'ok' | 'error';
+  status: 'ok' | 'error' | '0000';
   message: T;
 }

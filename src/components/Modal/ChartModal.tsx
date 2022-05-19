@@ -1,14 +1,21 @@
 import { Button, Modal } from '@mui/material';
 import classNames from 'classnames';
+import stringify from 'fast-json-stable-stringify';
 import { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { atomChatWebSocket } from '../../atom/chat.atom';
 import { atomModalState, TypeChartImg } from '../../atom/modal.atom';
+import { atomSelectCoinDefault } from '../../atom/selectCoinDefault.atom';
 import { iStBar } from '../../atom/tvChart.atom';
+import { atomUserInfo } from '../../atom/user.atom';
+import { TypeWebSocketChatSend } from '../../atom/ws.type';
 import useGenerateChart from '../../hooks/useGenerateChart';
 
 const SignModal = () => {
   const [modal, setModal] = useRecoilState(atomModalState);
-
+  const wsChat = useRecoilValue(atomChatWebSocket);
+  const userInfo = useRecoilValue(atomUserInfo);
+  const selectCoin = useRecoilValue(atomSelectCoinDefault);
   const [payload, setPayload] = useState<any | TypeChartImg | string>();
   const [wrapperRef, candleRef, chartRef] = useGenerateChart();
 
@@ -20,7 +27,6 @@ const SignModal = () => {
         return;
       }
       const chartData = result?.data;
-      // console.log(candleRef);
       candleRef.current?.setData(chartData);
       console.log(chartData);
       setPayload(result);
@@ -31,12 +37,6 @@ const SignModal = () => {
 
   return (
     <div
-      // onClose={() => {
-      //   setModal({
-      //     modalState: false,
-      //     modalType: 'sign',
-      //   });
-      // }}
       data-name="modal"
       onClick={(e) => {
         const curT = e.target as HTMLElement;
@@ -70,19 +70,6 @@ const SignModal = () => {
           `flex justify-center`
         )}
       >
-        {/* {modal.modalType === 'sign' && <div> adsf</div>}
-        {modal.modalType === 'image' && (
-          <div>
-            {modal.modalPayload && (
-              <img
-                alt="modal_img"
-                src={modal.modalPayload as string}
-                className={classNames(`w-full h-full`)}
-              />
-            )}
-          </div>
-        )} */}
-
         <div
           className={classNames(
             `w-5/6 grid grid-cols-2 grid-rows-1 content-around gap-x-5`
@@ -98,6 +85,28 @@ const SignModal = () => {
               variant="contained"
               color="secondary"
               className={classNames(`left-1/2`, `absolute -translate-x-1/2`)}
+              onClick={() => {
+                const data: TypeWebSocketChatSend = {
+                  type: 'CHAT_MESSAGE',
+                  payload: {
+                    roomId: selectCoin.coinName || '비트코인',
+                    user: {
+                      username: userInfo?.userInfo?.nickName || '익명',
+                      avatar: '',
+                      userId: userInfo?.userInfo?.id?.toString() || '1',
+                    },
+                    message: `chatimg:${payload.src}`,
+                  },
+                };
+
+                const sendData = stringify(data);
+                wsChat?.send(sendData);
+                setModal({
+                  modalState: false,
+                  modalType: 'chartImage',
+                  modalPayload: undefined,
+                });
+              }}
             >
               공유하기
             </Button>

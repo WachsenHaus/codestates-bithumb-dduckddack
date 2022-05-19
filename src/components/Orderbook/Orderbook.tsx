@@ -1,6 +1,6 @@
 import { Skeleton } from '@mui/material';
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import {
   atomOrderBook,
@@ -154,6 +154,20 @@ const Orderbook = () => {
   const maxQuantity = useGetMaxQuantity();
   const lastTransaction = useGetLastTransaction();
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (scrollRef.current) {
+      const { scrollHeight } = scrollRef.current;
+      if (
+        orderBook.ask.length > 10 &&
+        orderBook.bid.length > 10 &&
+        scrollHeight > 1000
+      ) {
+        scrollRef.current.scrollTop = scrollHeight / 2.6;
+      }
+    }
+  }, [orderBook]);
+
   return (
     <MainWrapper
       className={classNames(`w-full h-full`)}
@@ -182,6 +196,7 @@ const Orderbook = () => {
       </div>
       <div className={classNames(`py-4`)}>
         <div
+          ref={scrollRef}
           className={classNames(
             `max-h-full`,
             `w-full`,

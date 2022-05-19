@@ -71,7 +71,7 @@ export const atomForceGetChartData = atom<undefined | number>({
   default: undefined,
 });
 
-const CONST_KR_UTC = 9 * 60 * 60 * 1000;
+export const CONST_KR_UTC = 9 * 60 * 60 * 1000;
 
 export interface iStBar {
   close: string;
@@ -90,7 +90,7 @@ export const selectorDrawStBars = selector({
   get: ({ get }) => {
     const stbars = get(atomChartData);
     const { c, h, l, o, t, v } = stbars;
-    let obj = [];
+    let obj: iStBar[] = [];
     for (let i = 0; i < t.length; i++) {
       const time = ((t[i] + CONST_KR_UTC) / 1000) as UTCTimestamp;
       obj.push({
@@ -125,7 +125,9 @@ export const selectorGetChartData = selector({
       const { chartTime } = get(atomSelectChartSetup);
       const coinDataUrl = `${coinType}_${siseCrncCd}/${chartTime}`;
 
-      const result = await axios.get<ResponseVO<ICoinChart>>(`${API_BITHUMB.GET_CANDLESTICKNEW_TRVIEW}/${coinDataUrl}`);
+      const result = await axios.get<ResponseVO<ICoinChart>>(
+        `${API_BITHUMB.GET_CANDLESTICKNEW_TRVIEW}/${coinDataUrl}`
+      );
       return result.data.data;
     } catch (err) {}
   },

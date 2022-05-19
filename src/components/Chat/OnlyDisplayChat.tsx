@@ -1,7 +1,7 @@
 import { Avatar } from '@mui/material';
 import classNames from 'classnames';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import {
   atomChatRecvChatMessage,
@@ -16,7 +16,13 @@ import { motion } from 'framer-motion';
 const OnlyDisplayChat = ({ className }: { className?: string }) => {
   const chatMsg = useRecoilValue(atomChatRecvChatMessage);
   const wsChat = useRecoilValue(atomChatWebSocket);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current?.scrollHeight;
+    }
+  }, [chatMsg]);
   return (
     <motion.div
       transition={{
@@ -43,6 +49,7 @@ const OnlyDisplayChat = ({ className }: { className?: string }) => {
         )}
       >
         <div
+          ref={scrollRef}
           className={classNames(`py-2`, `overflow-auto`)}
           style={{
             height: '40rem',

@@ -8,12 +8,12 @@ import {
 } from '@mui/material';
 import { LocalizationProvider } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-
 import DebugObserver from './RecoilDebug';
 import RoutePage from './page/RoutePage';
 import ChartModal from './components/Modal/ChartModal';
-import SignInModal from './components/Modal/SignInModal';
+import axios from 'axios';
 
+export const DDUCKDDACK_AXIOS = axios.create({});
 const App = () => {
   const darkTheme = createTheme({
     palette: {

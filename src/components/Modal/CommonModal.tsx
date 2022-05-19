@@ -1,4 +1,4 @@
-import { Button, Modal, TextField, Typography } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
@@ -7,11 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { API_USER } from '../../api/user.api';
 import { atomModalState, TypeChartImg } from '../../atom/modal.atom';
-import { iStBar } from '../../atom/tvChart.atom';
-import { atomUserInfo, TypeUser } from '../../atom/user.atom';
-import useGenerateChart from '../../hooks/useGenerateChart';
+import { atomUserInfo, TypeLoginResponse } from '../../atom/user.atom';
 import CONST_ROUTE from '../../Routes';
-import { dduckddackResponseVO } from '../../type/api';
 import MainWrapper from '../Common/MainWrapper';
 
 type Inputs = {
@@ -19,7 +16,7 @@ type Inputs = {
   password: string;
 };
 
-const SignInModal = () => {
+const CommonModal = () => {
   const navigate = useNavigate();
   const setUserInfo = useSetRecoilState(atomUserInfo);
 
@@ -28,8 +25,6 @@ const SignInModal = () => {
   const {
     register,
     handleSubmit,
-    watch,
-    setError,
     setValue,
     formState: { errors },
   } = useForm<Inputs>();
@@ -43,30 +38,50 @@ const SignInModal = () => {
     onSignIn(sendData);
   };
 
+  useEffect(() => {
+    if (modal.modalType === 'image') {
+      const result = modal.modalPayload as string;
+      if (result === undefined) {
+        return;
+      }
+      setPayload(result);
+    }
+  }, [modal, modal.modalPayload]);
+
   const onSignIn = async (data: Inputs) => {
     try {
       // 이슈
-      const result = await axios.post(API_USER.LOGIN_USER, data);
+      const result = await axios.post<TypeLoginResponse>(
+        API_USER.LOGIN_USER,
+        data
+      );
       if (result.data.status === 'ok') {
         const { accessToken, refreshToken, userInfo } = result.data;
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('refreshToken', refreshToken);
-        localStorage.setItem('email', userInfo?.email);
-        localStorage.setItem('id', userInfo?.id);
-        localStorage.setItem('nickName', userInfo?.nickName);
-        setUserInfo({
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-          userInfo: userInfo,
-        });
-        setValue('email', '');
-        setValue('password', '');
+        if (userInfo === undefined) {
+          return;
+        }
+        const { email, id, imagePath, nickName } = userInfo;
+        if (email && id && imagePath && nickName) {
+          localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('refreshToken', refreshToken);
+          localStorage.setItem('email', email);
+          localStorage.setItem('id', id.toString());
+          localStorage.setItem('nickName', nickName);
+          localStorage.setItem('imagePath', imagePath);
+          setUserInfo({
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+            userInfo: userInfo,
+          });
+          setValue('email', '');
+          setValue('password', '');
 
-        setModal({
-          modalState: false,
-          modalType: 'sign',
-          modalPayload: undefined,
-        });
+          setModal({
+            modalState: false,
+            modalType: 'sign',
+            modalPayload: undefined,
+          });
+        }
       } else {
         setUserInfo({});
       }
@@ -93,9 +108,11 @@ const SignInModal = () => {
       className={classNames(
         `fixed w-screen h-screen`,
         `bg-black bg-opacity-90`,
-        modal.modalState && modal.modalType === 'sign'
+        modal.modalState &&
+          (modal.modalType === 'sign' || modal.modalType === 'image')
           ? `visible`
           : `invisible`,
+
         `flex items-center justify-center`
       )}
       style={{
@@ -105,7 +122,8 @@ const SignInModal = () => {
       <MainWrapper
         className={classNames(
           `p-10`,
-          `h-1/2 w-2/6`,
+          modal.modalType === 'sign' && `h-1/2 w-2/6`,
+          modal.modalType === 'image' && `h-fit`,
 
           `rounded-2xl shadow-xl`,
           `shadow-xl`,
@@ -155,7 +173,6 @@ const SignInModal = () => {
                   <Button type="submit">로그인</Button>
                   <Button
                     onClick={() => {
-                      //   window.history.go('./user');
                       setModal((prevData) => {
                         return {
                           ...prevData,
@@ -172,9 +189,18 @@ const SignInModal = () => {
             </form>
           </div>
         )}
+        {modal.modalType === 'image' && (
+          <div
+            className={classNames(
+              `w-full flex flex-col justify-center items-center `
+            )}
+          >
+            <img src={payload} alt="chartImg" />
+          </div>
+        )}
       </MainWrapper>
     </div>
   );
 };
 
-export default SignInModal;
+export default CommonModal;

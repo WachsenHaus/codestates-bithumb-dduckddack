@@ -29,6 +29,7 @@ const TvDrawingChart = () => {
     canvasRef,
     canvasWrapperRef,
     saveWrapperRef,
+    statusDrawRef,
     drawingMode,
     onDrawToogleClick,
     onSave,
@@ -62,6 +63,7 @@ const TvDrawingChart = () => {
       }}
     >
       <DrawTool
+        status={statusDrawRef.current}
         onNewButton={() => {
           canvasRef.current?.clearCanvas();
         }}

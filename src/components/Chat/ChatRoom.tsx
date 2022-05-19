@@ -75,7 +75,7 @@ const ChatRoom = () => {
                   roomId: selectCoin.coinName || '비트코인',
                   user: {
                     username: userInfo?.userInfo?.nickName || '익명',
-                    avatar: '',
+                    avatar: userInfo.userInfo?.imagePath || '',
                     userId: userInfo?.userInfo?.id?.toString() || '1',
                   },
                   message: keyword,

@@ -91,7 +91,7 @@ const SiginUpPage = () => {
   const [mailVerifyEndFlag, setMailVerifyEndFlag] = useState(false);
   const [mailVerify, setMailVerify] = useState(false);
 
-  const [mailVerifyCode, setMailVerifyCode] = useState<any>();
+  // const [mailVerifyCode, setMailVerifyCode] = useState<any>();
 
   const onSendEmail = async (email: string) => {
     try {
@@ -155,11 +155,27 @@ const SiginUpPage = () => {
     }
   };
 
-  const onUserCreate = async (data: any) => {
+  const onUserCreate = async (data: {
+    email: string;
+    password: string;
+    nickName: string;
+  }) => {
     try {
-      const result = await axios.put(`${API_USER.CREATE_USER}`, data);
-      if (result.data.status === 'ok') {
-        navigate(CONST_ROUTE.HOME);
+      const formData = new FormData();
+      formData.append('email', data.email);
+      formData.append('password', data.password);
+      formData.append('nickName', data.nickName);
+      if (formData) {
+        const result = await axios.put(`${API_USER.CREATE_USER}`, formData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (result.data.status === 'ok') {
+          navigate(CONST_ROUTE.HOME);
+        }
+      } else {
+        console.log('회원가입 실패');
       }
     } catch (err) {
       console.log(err);
@@ -223,12 +239,8 @@ const SiginUpPage = () => {
 
               <Button
                 onClick={() => {
-                  // console.log(getFieldState('email'));
-                  // console.log(watch('email'));
-                  // console.log(getValues('email'));
                   trigger('email')
                     .then((e) => {
-                      console.log('이메일전송');
                       if (e) {
                         setMailSenderStartFlag(true);
                         setMailSender(false);

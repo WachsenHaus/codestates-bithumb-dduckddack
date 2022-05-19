@@ -9,7 +9,6 @@ import NewsPage from './NewsPage';
 import MainPage from './MainPage';
 import { useGenerateSocket } from '../hooks/useWebSocket';
 import SiginUpPage from './SiginUpPage';
-import SignInModal from '../components/Modal/SignInModal';
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import {
@@ -25,22 +24,11 @@ import CONST_ROUTE from '../Routes';
 import MyPage from './MyPage';
 import { API_DRAW } from '../api/draw.api';
 import { dduckddackResponseVO } from '../type/api';
+import { DDUCKDDACK_AXIOS } from '../App';
+import CommonModal from '../components/Modal/CommonModal';
 
 const RoutePage = () => {
   useGenerateSocket('CHAT');
-  // useGenerateSocket('SUBSCRIBE');
-
-  const login = async (data: { email: string; password: string }) => {
-    try {
-      const result = await axios.post(API_USER.LOGIN_USER, data);
-      if (result.data.status === 'ok') {
-        return true;
-      }
-      return false;
-    } catch (err) {
-      return false;
-    }
-  };
 
   const setUserInfo = useSetRecoilState(atomUserInfo);
   const setUserImageData = useSetRecoilState(atomUserChartDatas);
@@ -50,8 +38,9 @@ const RoutePage = () => {
     const email = localStorage.getItem('email');
     const id = localStorage.getItem('id');
     const nickName = localStorage.getItem('nickName');
+    const imagePath = localStorage.getItem('imagePath');
 
-    if (accessToken && refreshToken && email && id && nickName) {
+    if (accessToken && refreshToken && email && id && nickName && imagePath) {
       // 로그인 시도후 성공적으로 된다면 저장할것,,
       const userInfo: TypeUser = {
         accessToken: accessToken,
@@ -60,8 +49,12 @@ const RoutePage = () => {
           email: email,
           id: Number(id),
           nickName: nickName,
+          imagePath: imagePath,
         },
       };
+
+      DDUCKDDACK_AXIOS.defaults.headers.common['Authorization'] = accessToken;
+
       getDrawImage(Number(id));
       setUserInfo(userInfo);
     }
@@ -71,14 +64,13 @@ const RoutePage = () => {
 
   const getDrawImage = async (id: number) => {
     try {
-      const result = await axios.get<dduckddackResponseVO<IUserChatDatas[]>>(
-        `${API_DRAW.GET_IMAGE}`,
-        {
-          params: {
-            userId: id,
-          },
-        }
-      );
+      const result = await DDUCKDDACK_AXIOS.get<
+        dduckddackResponseVO<IUserChatDatas[]>
+      >(`${API_DRAW.GET_IMAGE}`, {
+        params: {
+          userId: id,
+        },
+      });
       if (result.data.status === 'ok') {
         const data = result.data.message;
         setUserImageData(data);
@@ -91,7 +83,7 @@ const RoutePage = () => {
   return (
     <>
       <BrowserRouter>
-        <SignInModal />
+        <CommonModal />
         <div className={classNames(`w-screen h-screen max-w-full max-h-full`)}>
           <div
             className={classNames('grid grid-cols-12 ', ` h-full w-full`)}

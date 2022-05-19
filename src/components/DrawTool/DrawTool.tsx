@@ -2,7 +2,13 @@ import { IconButton, Slider, Switch, Tooltip } from '@mui/material';
 import classNames from 'classnames';
 import { ReactNode, useEffect, useState } from 'react';
 import MainWrapper from '../Common/MainWrapper';
-import SwiperCore, { Autoplay, Navigation } from 'swiper';
+import SwiperCore, {
+  A11y,
+  Autoplay,
+  Navigation,
+  Pagination,
+  Scrollbar,
+} from 'swiper';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -17,10 +23,15 @@ import 'swiper/css';
 // modules styles
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  useRecoilState,
+  useRecoilValue,
+  useRecoilValueLoadable,
+  useSetRecoilState,
+} from 'recoil';
 import { atomModalState } from '../../atom/modal.atom';
 import { HexColorPicker } from 'react-colorful';
-import { atomDrawConfig } from '../../atom/drawConfig.atom';
+import { atomDrawConfig, atomDrawStatus } from '../../atom/drawConfig.atom';
 import { atomUserChartDatas, atomUserInfo } from '../../atom/user.atom';
 // import 'swiper/modules/navigation/navigation.scss'; // Navigation module
 // import 'swiper/modules/pagination/pagination.scss'; // Pagination module
@@ -41,7 +52,9 @@ import axios from 'axios';
 import { dduckddackResponseVO } from '../../type/api';
 import {
   atomChartData,
+  CONST_KR_UTC,
   ICoinChart,
+  iStBar,
   selectorDrawStBars,
 } from '../../atom/tvChart.atom';
 import stringify from 'fast-json-stable-stringify';
@@ -51,8 +64,12 @@ import {
 } from '../../atom/chat.atom';
 import { atomSelectCoinDefault } from '../../atom/selectCoinDefault.atom';
 import { TypeWebSocketChatSend } from '../../atom/ws.type';
+import { UTCTimestamp } from 'lightweight-charts';
+import LOADING_ATOM from '../../asset/img/loading_atom.json';
+import LottieDiv from '../Common/LottieDiv';
+import DrawCommon from './DrawCommon';
 
-SwiperCore.use([Autoplay, Navigation]);
+SwiperCore.use([Autoplay, Navigation, Pagination, Scrollbar, A11y]);
 
 const SubWrapper = React.forwardRef(
   (
@@ -62,6 +79,7 @@ const SubWrapper = React.forwardRef(
       active?: boolean;
       isDraw?: boolean;
       ref?: any;
+      className?: string;
     },
     ref: any
   ) => {
@@ -81,7 +99,8 @@ const SubWrapper = React.forwardRef(
           props?.active === true ? `border-blue-700 border-2` : '',
           props?.isDraw === true
             ? `pointer-events-auto opacity-100`
-            : `pointer-events-none opacity-10`
+            : `pointer-events-none opacity-10`,
+          props.className
         )}
         onClick={props.onClick}
       >
@@ -183,14 +202,17 @@ const DrawToolShareCanvas = ({
 const DrawToolEraseButton = ({
   onClick,
   isDraw,
+  className,
 }: {
   onClick: () => void;
   isDraw: boolean;
+  className?: string;
 }) => {
   const [state, setState] = useState(false);
   useEffect(() => {}, [state]);
   return (
     <SubWrapper
+      className={className}
       onClick={() => {
         setState(!state);
         onClick();
@@ -264,10 +286,11 @@ const ImgItem = () => {
   const userChartData = useRecoilValue(atomUserChartDatas);
   const setChartData = useSetRecoilState(atomChartData);
   const [drawResult, setDrawResult] = useState<any>(undefined);
+  const setDrawStatus = useSetRecoilState(atomDrawStatus);
 
-  // const [drawChart, setDrawChart] = useState<ICoinChart>();
   const drawStBars = useRecoilValue(selectorDrawStBars);
 
+  // const [drawChart, setDrawChart] = useState<ICoinChart>();
   // useEffect(()=>{
   //   if(setDrawStBars)
   // },[setDrawStBars])
@@ -282,31 +305,47 @@ const ImgItem = () => {
         {
           coin: coin,
           time: time,
+          chartIntervals: '1m',
         }
       );
-      if (result.data.status === 'ok') {
-        // return result.data.message;
+      if (result.data.status === '0000') {
         setChartData(result.data.message);
+        // let obj: iStBar[] = [];
+        // const { c, h, l, o, t, v } = result.data.message;
+        // for (let i = 0; i < t.length; i++) {
+        //   // const time = ((t[i] - CONST_KR_UTC) / 1000) as UTCTimestamp;
+        //   const time = (t[i] / 1000) as UTCTimestamp;
+        //   // const time = t[i] as UTCTimestamp;
+        //   obj.push({
+        //     time: time,
+        //     open: o[i],
+        //     high: h[i],
+        //     low: l[i],
+        //     close: c[i],
+        //   });
+        // }
+        // console.log(obj);
+        // return obj;
       }
     } catch (err) {
       console.log(err);
     }
   };
   useEffect(() => {
+    setDrawStatus(true);
     const result = userChartData.map((item, index) => {
-      // getDataLake(item.coin, item.time);
-
       return (
         <>
           <SwiperSlide
             key={index}
             className={classNames(`flex justify-center items-center`)}
           >
-            {/* <img
+            <img
               src={`${item.image}`}
               alt={`Chart Draw ${index}`}
-              className={classNames(`w-12 h-12 hover:cursor-pointer`)}
-              onClick={() => {
+              className={classNames(`w-16 h-16 hover:cursor-pointer`)}
+              onClick={async () => {
+                const chartData = await getDataLake(item.coin, item.time);
                 setModal({
                   modalState: true,
                   modalType: 'chartImage',
@@ -316,26 +355,12 @@ const ImgItem = () => {
                   },
                 });
               }}
-            /> */}
-            <img
-              src={`${item.image}`}
-              alt={`Chart Draw ${index}`}
-              className={classNames(`w-12 h-12 hover:cursor-pointer`)}
-              onClick={() => {
-                setModal({
-                  modalState: true,
-                  modalType: 'chartImage',
-                  modalPayload: {
-                    src: item.image,
-                    data: [],
-                  },
-                });
-              }}
             />
           </SwiperSlide>
         </>
       );
     });
+    setDrawStatus(false);
     setDrawResult(result);
   }, [userChartData]);
 
@@ -343,6 +368,7 @@ const ImgItem = () => {
 };
 
 const DrawTool = ({
+  status,
   onNewButton,
   onDrawButton,
   onErase,
@@ -350,12 +376,13 @@ const DrawTool = ({
   onRedo,
   onSave,
 }: {
+  status: boolean;
   onNewButton: () => void;
   onDrawButton: () => void;
   onErase: () => void;
   onUndo: () => void;
   onRedo: () => void;
-  onSave: () => void;
+  onSave: () => Promise<boolean>;
 }) => {
   // const chatMsg = useRecoilValue(atomChatRecvChatMessage);
   // const wsChat = useRecoilValue(atomChatWebSocket);
@@ -363,64 +390,71 @@ const DrawTool = ({
   // const selectCoin = useRecoilValue(atomSelectCoinDefault);
 
   // const [modal, setModal] = useRecoilState(atomModalState);
+  const userChartData = useRecoilValueLoadable(atomUserChartDatas);
+  const [drawStatus, setDrawStatus] = useRecoilState(atomDrawStatus);
   const [config, setDrawConfig] = useRecoilState(atomDrawConfig);
   const [isDraw, setIsDraw] = useState(false);
 
   const [onColorPannel, setOnColorPannel] = useState(false);
+  const [perView, setPerView] = useState(4);
+  useEffect(() => {
+    console.log(document.documentElement.clientWidth);
+    const width = document.documentElement.clientWidth;
+    if (width < 1450) {
+      setPerView(2);
+    } else if (width < 1800) {
+      setPerView(3);
+    }
+  }, [document.documentElement.clientWidth]);
 
   return (
     <MainWrapper
       className={classNames(`h-full w-full`, `mx-auto`, `shadow-2xl`, `grid`)}
       style={{ gridTemplateColumns: '40% 20% 40%', borderRadius: '4rem' }}
     >
-      <div className={classNames(`w-full  h-full grid grid-cols-3`)}>
-        {/* col1 */}
-        <div className={classNames(`flex  flex-col items-center h-full`)}>
-          <DrawToolDrawButton
-            onClick={() => {
-              setIsDraw(!isDraw);
-              onDrawButton();
-            }}
-          />
-          <DrawToolNewCanvas onClick={onNewButton} isDraw={isDraw} />
-        </div>
-        {/* col2 */}
-        <div className={classNames(`flex  flex-col items-center  h-full`)}>
-          <DrawToolSaveCanvas onClick={onSave} isDraw={isDraw} />
-          <DrawToolEraseButton onClick={onErase} isDraw={isDraw} />
-        </div>
-        {/* col3 */}
-        <div className={classNames(`flex flex-col items-center  h-full`)}>
-          <DrawToolShareCanvas
-            onClick={() => {
-              onSave && onSave();
-              console.log('여기 이미지 보내는거잖아,,');
-              //  const data: TypeWebSocketChatSend = {
-              //   type: 'CHAT_MESSAGE',
-              //   payload: {
-              //     roomId: selectCoin.coinName || '비트코인',
-              //     user: {
-              //       username: userInfo?.userInfo?.nickName || '익명',
-              //       avatar: '',
-              //     },
-              //     message: `chartimg:${modal.modalPayload}`,
-              //   },
-              // };
+      <div className={classNames(`w-full  h-full grid grid-rows-2`)}>
+        {/* row1 */}
+        <div className={classNames(`w-full grid grid-cols-3 `)}>
+          <DrawCommon>
+            <DrawToolDrawButton
+              onClick={() => {
+                setIsDraw(!isDraw);
+                onDrawButton();
+              }}
+            />
+          </DrawCommon>
 
-              // const sendData = stringify(data);
-              // wsChat?.send(sendData);
-            }}
-            isDraw={isDraw}
-          />
-          <div
-            className={classNames(
-              `h-1/2 w-3/4 m-2`,
-              `flex justify-center items-center`
-            )}
-          >
-            <DrawToolRedoButton onClick={onRedo} isDraw={isDraw} />
-            <DrawToolUndoButton onClick={onUndo} isDraw={isDraw} />
-          </div>
+          <DrawCommon>
+            <DrawToolSaveCanvas
+              onClick={() => {
+                setDrawStatus(true);
+                onSave && onSave();
+              }}
+              isDraw={isDraw}
+            />
+          </DrawCommon>
+
+          <DrawCommon>
+            <div
+              className={classNames(
+                `h-1/2 w-3/4 m-2`,
+                `flex justify-center items-center`
+              )}
+            >
+              <DrawToolRedoButton onClick={onRedo} isDraw={isDraw} />
+              <DrawToolUndoButton onClick={onUndo} isDraw={isDraw} />
+            </div>
+          </DrawCommon>
+        </div>
+
+        {/* row2 */}
+        <div className={classNames(`w-full grid grid-cols-3`)}>
+          <DrawCommon>
+            <DrawToolNewCanvas onClick={onNewButton} isDraw={isDraw} />
+          </DrawCommon>
+          <DrawCommon className={classNames(`col-span-2`)}>
+            <DrawToolEraseButton onClick={onErase} isDraw={isDraw} />
+          </DrawCommon>
         </div>
       </div>
       {/* 스트로크 */}
@@ -428,10 +462,11 @@ const DrawTool = ({
         <div>
           <span
             className={classNames(
-              `flex justify-start items-center`,
+              `flex justify-between items-center`,
               `text-bithumbYellow`
             )}
           >
+            Pen Stroke & Color
             <div
               className={classNames(
                 `relative hover:cursor-pointer`,
@@ -452,7 +487,6 @@ const DrawTool = ({
               <Tooltip title="색상 팔레트">
                 <PaletteIcon />
               </Tooltip>
-
               {onColorPannel && (
                 <Tooltip title="팔레트">
                   <IconButton>
@@ -476,8 +510,8 @@ const DrawTool = ({
                   </IconButton>
                 </Tooltip>
               )}
+              {config.penStroke}px
             </div>
-            Pen Stroke & Color
           </span>
           <Slider
             about=""
@@ -498,7 +532,15 @@ const DrawTool = ({
           />
         </div>
         <div>
-          <span className={classNames(`text-bithumbYellow`)}>Erase Stroke</span>
+          <span
+            className={classNames(
+              `text-bithumbYellow`,
+              `flex justify-between items-center`
+            )}
+          >
+            Erase Stroke
+            <div>{config.eraseStroke}px</div>
+          </span>
           <Slider
             about=""
             max={99}
@@ -519,15 +561,38 @@ const DrawTool = ({
         </div>
       </div>
       {/* 이미지 슬라이더 */}
-      <div className={classNames(`max-w-lg`)}>
+      <div className={classNames(`max-w-lg relative`)}>
         <Swiper
+          modules={[Navigation, Pagination, Scrollbar]}
           onSwiper={(e) => {}}
-          className={classNames(`h-full px-10`)}
-          slidesPerView={5}
-          spaceBetween={30}
+          className={classNames(`h-full px-10 `)}
+          slidesPerView={perView}
+          // slider
+          // centeredSlides
+          // spaceBetween={}
+          // pagination={{}}
+          navigation
         >
           {ImgItem()}
         </Swiper>
+
+        {drawStatus && (
+          <div
+            className={classNames(
+              `z-50`,
+              `absolute`,
+              `w-full h-full`,
+              `bg-nightBlack`,
+              `left-0 top-0`
+            )}
+          >
+            <LottieDiv
+              className={classNames(`w-full h-full`)}
+              jsonData={LOADING_ATOM}
+              loop
+            />
+          </div>
+        )}
       </div>
     </MainWrapper>
   );

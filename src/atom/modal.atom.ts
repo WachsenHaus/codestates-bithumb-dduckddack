@@ -1,5 +1,5 @@
 import { atom } from 'recoil';
-import { iStBar } from './tvChart.atom';
+import { ICoinChart, iStBar } from './tvChart.atom';
 
 export type TypeChartImg = {
   src: string;

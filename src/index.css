@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+::-webkit-scrollbar {
+  width: 5px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 100vh;
+  background: #3d3535;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d0d0d0;
+  border-radius: 100vh;
+  border: 3px solid #d0d0d0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d0d0d0;
+}
 @font-face {
   font-family: 'bmjua';
   src: url('./asset/font/BMJUA_otf.otf') format('otf');
