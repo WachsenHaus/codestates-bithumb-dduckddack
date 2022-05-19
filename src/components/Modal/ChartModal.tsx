@@ -31,12 +31,12 @@ const ChartModal = () => {
       }
       const chartData = result?.data;
       if (chartData.length === 0) {
-        setPayload(result);
         setIsLoading(true);
         return;
       }
       candleRef.current?.setData(chartData);
 
+      setPayload(result);
       setIsLoading(false);
     }
   }, [modal, modal.modalPayload]);
