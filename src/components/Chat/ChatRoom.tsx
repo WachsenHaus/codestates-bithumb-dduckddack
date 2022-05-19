@@ -17,7 +17,7 @@ import {
 import stringify from 'fast-json-stable-stringify';
 import { atomSelectCoinDefault } from '../../atom/selectCoinDefault.atom';
 import useSetDefaultCoin from '../../hooks/useSetDefaultCoin';
-import { BadWord } from '../../word/BadWord';
+import { BadWord } from '../../word/badWord';
 // import Tetrapod from 'tetrapod-klleon';
 
 const ChatRoom = () => {

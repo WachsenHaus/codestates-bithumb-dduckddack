@@ -1,56 +1,43 @@
-import { Button, Modal } from '@mui/material';
+import { Button } from '@mui/material';
 import classNames from 'classnames';
 import stringify from 'fast-json-stable-stringify';
-import { useEffect, useRef, useState } from 'react';
-import {
-  useRecoilRefresher_UNSTABLE,
-  useRecoilState,
-  useRecoilStateLoadable,
-  useRecoilValue,
-  useSetRecoilState,
-} from 'recoil';
+import { useEffect, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { atomChatWebSocket } from '../../atom/chat.atom';
 import { atomModalState, TypeChartImg } from '../../atom/modal.atom';
 import { atomSelectCoinDefault } from '../../atom/selectCoinDefault.atom';
-import {
-  atomChartData,
-  iStBar,
-  selectorGetChartData,
-} from '../../atom/tvChart.atom';
 import { atomUserInfo } from '../../atom/user.atom';
 import { TypeWebSocketChatSend } from '../../atom/ws.type';
 import useGenerateChart from '../../hooks/useGenerateChart';
-import { useCoinChart } from '../../hooks/useInitialize';
-import useSetDefaultCoin from '../../hooks/useSetDefaultCoin';
+import LOADING_ATOM from '../../asset/img/loading_atom.json';
+import LottieDiv from '../Common/LottieDiv';
 
 const ChartModal = () => {
-  // useCoinChart();
-  // const [getChartData, reload] = useRecoilStateLoadable(selectorGetChartData);
-  // const setChartData = useSetRecoilState(atomChartData);
-  // useEffect(() => {
-  //   if (getChartData.state === 'hasValue') {
-  //     getChartData.contents && setChartData(getChartData.contents);
-  //   }
-  // }, [getChartData]);
-
   const [modal, setModal] = useRecoilState(atomModalState);
   const wsChat = useRecoilValue(atomChatWebSocket);
   const userInfo = useRecoilValue(atomUserInfo);
   const selectCoin = useRecoilValue(atomSelectCoinDefault);
   const [payload, setPayload] = useState<any | TypeChartImg | string>();
   const [wrapperRef, candleRef, chartRef] = useGenerateChart();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (modal.modalType === 'chartImage') {
+      setIsLoading(true);
       const result = modal.modalPayload as TypeChartImg;
       if (result === undefined) {
         candleRef.current?.setData([]);
         return;
       }
       const chartData = result?.data;
+      if (chartData.length === 0) {
+        setPayload(result);
+        setIsLoading(true);
+        return;
+      }
       candleRef.current?.setData(chartData);
-      console.log(chartData);
-      setPayload(result);
+
+      setIsLoading(false);
     }
   }, [modal, modal.modalPayload]);
 
@@ -130,7 +117,17 @@ const ChartModal = () => {
               공유하기
             </Button>
           </div>
-          <div className={classNames(`w-full`)} ref={wrapperRef} />
+          <div className={classNames(`w-full h-full relative`)}>
+            <div className={classNames(`w-full h-full`)} ref={wrapperRef} />
+            {isLoading && (
+              <LottieDiv
+                className={classNames(`w-full h-full left-0 top-0 z-50`)}
+                position="absolute"
+                loop
+                jsonData={LOADING_ATOM}
+              />
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -262,6 +262,7 @@ const ImgItem = () => {
         const { c, h, l, o, t, v } = result.data.message;
         for (let i = 0; i < t.length; i++) {
           const time = ((t[i] + CONST_KR_UTC) / 1000) as UTCTimestamp;
+          // const time = ((t[i]) / 1000) as UTCTimestamp;
           obj.push({
             time: time,
             open: o[i],
@@ -292,6 +293,14 @@ const ImgItem = () => {
               alt={`Chart Draw ${index}`}
               className={classNames(`w-16 h-16 hover:cursor-pointer`)}
               onClick={async () => {
+                setModal({
+                  modalState: true,
+                  modalType: 'chartImage',
+                  modalPayload: {
+                    src: item.image,
+                    data: []!,
+                  },
+                });
                 const stData = await getDataLake(item.coin, item.time);
                 setModal({
                   modalState: true,

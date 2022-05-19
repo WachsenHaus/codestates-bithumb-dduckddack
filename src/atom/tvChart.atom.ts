@@ -102,11 +102,6 @@ export const selectorDrawStBars = selector({
       });
     }
     return obj;
-    // const result = new Promise<iStBar[]>((resolve, reject) => {
-
-    //   resolve(obj);
-    // });
-    // return await result;
   },
   cachePolicy_UNSTABLE: {
     eviction: 'most-recent',
