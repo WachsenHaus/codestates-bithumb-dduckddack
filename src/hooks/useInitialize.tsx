@@ -76,21 +76,24 @@ const useGetTradeParam = () => {
             coinSymbol: 'BTC',
             marketSymbol: 'KRW',
             siseCrncCd: 'C0100',
+            coinName: '비트코인',
           });
           return;
         }
         const type = item?.coinType;
         const siseCrncCd = item?.siseCrncCd;
         const coinSymbol = item?.coinSymbol;
+        const coinName = item?.coinName;
         const marketSymbol = result[1];
 
-        if (type && siseCrncCd && coinSymbol && marketSymbol) {
+        if (type && siseCrncCd && coinSymbol && marketSymbol && coinName) {
           setSelectCoin((prevData) => {
             return {
               coinType: type,
               coinSymbol: coinSymbol,
               marketSymbol: marketSymbol,
               siseCrncCd: siseCrncCd,
+              coinName: coinName,
             };
           });
         }
@@ -101,6 +104,7 @@ const useGetTradeParam = () => {
         coinSymbol: 'BTC',
         marketSymbol: 'KRW',
         siseCrncCd: 'C0100',
+        coinName: '비트코인',
       });
     }
   }, [coinName, ready]);

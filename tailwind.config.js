@@ -5,6 +5,9 @@ module.exports = {
       bmjua: ['bmjua'],
     },
     extend: {
+      fontSize: {
+        xss: '0.5rem',
+      },
       maxHeight: {
         128: '32rem',
       },

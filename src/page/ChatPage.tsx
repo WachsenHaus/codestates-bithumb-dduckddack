@@ -13,6 +13,7 @@ import MainWrapper from '../components/Common/MainWrapper';
 import NewsHeadLine from '../components/News/NewsHeadLine';
 import { useGenerateSocket } from '../hooks/useWebSocket';
 import useSetDefaultCoin from '../hooks/useSetDefaultCoin';
+import { motion } from 'framer-motion';
 
 const ChatPage = () => {
   // useGenerateSocket('SUBSCRIBE');
@@ -30,21 +31,27 @@ const ChatPage = () => {
   const [displayCoins, setDisplayCoins] = useState<TypeDrawTicker[]>();
   const [value, setValue] = useState<TypeDrawTicker>();
   useLayoutEffect(() => {
-    const result = coins.filter((item) => {
-      return (
-        item.coinSymbol === 'ETH' ||
-        item.coinSymbol === 'BTC' ||
-        item.coinSymbol === 'XRP'
-      );
-    });
-    setDisplayCoins(result);
-    setValue(result[0]);
+    const ALLOW_ALL_COINS = true;
+    if (ALLOW_ALL_COINS) {
+      setDisplayCoins(coins);
+      setValue(coins[0]);
+    } else {
+      const result = coins.filter((item) => {
+        return (
+          item.coinSymbol === 'ETH' ||
+          item.coinSymbol === 'BTC' ||
+          item.coinSymbol === 'XRP'
+        );
+      });
+      setDisplayCoins(result);
+      setValue(result[0]);
+    }
   }, [coins]);
 
   const filterOption = createFilterOptions({
-    matchFrom: 'start',
+    matchFrom: 'any',
     stringify: (option: TypeDrawTicker) => option.consonant!,
-    trim: true,
+    // trim: true,
   });
 
   return (
@@ -54,7 +61,8 @@ const ChatPage = () => {
         gridTemplateRows: 'auto auto',
       }}
     >
-      <div className={classNames(`grid grid-cols-12`)}>
+      {/* 코인검색, 헤드라인 */}
+      <motion.div className={classNames(`grid grid-cols-12`)}>
         <div
           className={classNames(
             `xl:col-start-1 xl:col-end-13`,
@@ -139,14 +147,27 @@ const ChatPage = () => {
             </MainWrapper>
           </div>
         </div>
-      </div>
-
-      {/* 코인검색, 헤드라인 */}
+      </motion.div>
 
       {/* 본문 */}
       <div className={classNames(`grid grid-cols-12 gap-5`)}>
         {/*  좌측 코인/차트 정보*/}
-        <div
+        <motion.div
+          transition={{
+            delay: 0.2,
+            x: { type: 'spring', stiffness: 200 },
+            default: { duration: 1 },
+          }}
+          initial={{
+            scale: 0,
+            opacity: 0,
+            translateY: '-100%',
+          }}
+          animate={{
+            scale: 1,
+            opacity: 1,
+            translateY: 0,
+          }}
           className={classNames(
             // `p-5`,
             `xl:col-start-1 xl:col-end-8`,
@@ -162,17 +183,32 @@ const ChatPage = () => {
             <CoinBarForChat />
             <TvDrawingChart />
           </div>
-        </div>
+        </motion.div>
 
         {/* 채팅방 */}
-        <div
+        <motion.div
+          transition={{
+            delay: 0.2,
+            x: { type: 'spring', stiffness: 200 },
+            default: { duration: 1 },
+          }}
+          initial={{
+            scale: 0,
+            opacity: 0,
+            translateY: '-100%',
+          }}
+          animate={{
+            scale: 1,
+            opacity: 1,
+            translateY: 0,
+          }}
           className={classNames(
             `xl:col-start-8 xl:col-end-13`,
             `2xl:col-start-9 2xl:col-end-13`
           )}
         >
           <ChatRoom />
-        </div>
+        </motion.div>
       </div>
     </div>
   );

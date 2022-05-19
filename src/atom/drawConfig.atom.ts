@@ -10,7 +10,7 @@ export const atomDrawConfig = atom<IDrawSetConfig>({
   key: 'atomDrawConfig',
   default: {
     penStroke: 10,
-    eraseStroke: 20,
+    eraseStroke: 40,
     penColor: '#F6B93B',
   },
 });

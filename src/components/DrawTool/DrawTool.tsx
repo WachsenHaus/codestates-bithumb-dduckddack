@@ -52,6 +52,7 @@ import axios from 'axios';
 import { dduckddackResponseVO } from '../../type/api';
 import {
   atomChartData,
+  atomDrawStBars,
   CONST_KR_UTC,
   ICoinChart,
   iStBar,
@@ -226,7 +227,7 @@ const DrawToolEraseButton = ({
   className?: string;
 }) => {
   const [state, setState] = useState(false);
-  useEffect(() => {}, [state]);
+
   return (
     <SubWrapper
       className={className}
@@ -238,19 +239,30 @@ const DrawToolEraseButton = ({
     >
       <Tooltip title="펜모드">
         <IconButton
+          onClick={() => {
+            setState(!state);
+          }}
           sx={{
             color: '#FAD390',
           }}
         >
           <BrushIcon
-            onClick={() => {
-              setState(!state);
-              onClick();
-            }}
+          // onClick={() => {
+          //   setState(!state);
+          //   onClick();
+          // }}
           />
         </IconButton>
       </Tooltip>
-      <Switch defaultChecked={state} />
+      <Switch
+        sx={
+          {
+            // width: '100%',
+          }
+        }
+        checked={state}
+        defaultChecked={state}
+      />
       <Tooltip title="지우개모드">
         <IconButton
           sx={{
@@ -258,8 +270,11 @@ const DrawToolEraseButton = ({
           }}
           onClick={() => {
             setState(!state);
-            onClick();
           }}
+          // onClick={() => {
+          //   setState(!state);
+          //   onClick();
+          // }}
         >
           <FontAwesomeIcon icon={faEraser} />
         </IconButton>
@@ -301,11 +316,10 @@ const DrawToolUndoButton = ({
 const ImgItem = () => {
   const setModal = useSetRecoilState(atomModalState);
   const userChartData = useRecoilValue(atomUserChartDatas);
-  const setChartData = useSetRecoilState(atomChartData);
   const [drawResult, setDrawResult] = useState<any>(undefined);
   const setDrawStatus = useSetRecoilState(atomDrawStatus);
 
-  const drawStBars = useRecoilValue(selectorDrawStBars);
+  const [chartData, setChartData] = useRecoilState(atomChartData);
 
   // const [drawChart, setDrawChart] = useState<ICoinChart>();
   // useEffect(()=>{
@@ -348,6 +362,31 @@ const ImgItem = () => {
       console.log(err);
     }
   };
+
+  // 이미지를 눌렀을 떄만 데이터를 받아오게 수정해야함.
+  const getMockDataLake = () => {
+    try {
+      let obj: iStBar[] = [];
+      const { c, h, l, o, t, v } = chartData;
+      for (let i = 0; i < t.length; i++) {
+        // const time = ((t[i] - CONST_KR_UTC) / 1000) as UTCTimestamp;
+        const time = (t[i] / 1000) as UTCTimestamp;
+        // const time = t[i] as UTCTimestamp;
+        obj.push({
+          time: time,
+          open: o[i],
+          high: h[i],
+          low: l[i],
+          close: c[i],
+        });
+      }
+      console.log(obj);
+      return obj;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     setDrawStatus(true);
     const result = userChartData.map((item, index) => {
@@ -361,14 +400,14 @@ const ImgItem = () => {
               src={`${item.image}`}
               alt={`Chart Draw ${index}`}
               className={classNames(`w-16 h-16 hover:cursor-pointer`)}
-              onClick={async () => {
-                const chartData = await getDataLake(item.coin, item.time);
+              onClick={() => {
+                const stData = getMockDataLake();
                 setModal({
                   modalState: true,
                   modalType: 'chartImage',
                   modalPayload: {
                     src: item.image,
-                    data: drawStBars,
+                    data: stData!,
                   },
                 });
               }}
@@ -415,7 +454,6 @@ const DrawTool = ({
   const [onColorPannel, setOnColorPannel] = useState(false);
   const [perView, setPerView] = useState(4);
   useEffect(() => {
-    console.log(document.documentElement.clientWidth);
     const width = document.documentElement.clientWidth;
     if (width < 1450) {
       setPerView(2);
@@ -480,7 +518,8 @@ const DrawTool = ({
           <span
             className={classNames(
               `flex justify-between items-center`,
-              `text-bithumbYellow`
+              `text-bithumbYellow`,
+              `xl:text-xs`
             )}
           >
             Pen Stroke & Color
@@ -552,7 +591,8 @@ const DrawTool = ({
           <span
             className={classNames(
               `text-bithumbYellow`,
-              `flex justify-between items-center`
+              `flex justify-between items-center`,
+              `xl:text-xs`
             )}
           >
             Erase Stroke

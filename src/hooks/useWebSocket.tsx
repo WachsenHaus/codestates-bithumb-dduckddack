@@ -59,11 +59,11 @@ export const useGenerateSocket = (type: TypeWebSocketTypes) => {
 
   useEffect(() => {
     if (wsSubscribe) {
-      console.log('생성');
+      // console.log('생성');
     }
     return () => {
       if (wsSubscribe) {
-        console.log('종료');
+        // console.log('종료');
         wsSubscribe?.close();
         setWsSubscribe(undefined);
       }

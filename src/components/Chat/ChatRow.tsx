@@ -33,7 +33,11 @@ const ChatContent = ({
         <img
           src={imagePath}
           alt={'chart_img'}
-          className={classNames('w-10 h-10 hover:cursor-pointer', className)}
+          className={classNames(
+            'w-24 h-10 hover:cursor-pointer',
+            className,
+            `bg-nightBlack`
+          )}
           onClick={() => {
             console.log('네');
             setModal({
@@ -60,6 +64,7 @@ const ChatRow = ({
   timestamp,
   roomId,
   userId,
+  type,
 }: {
   index?: number;
   lastLength?: number;
@@ -69,6 +74,7 @@ const ChatRow = ({
   roomId?: string;
   timestamp?: number;
   userId?: string;
+  type?: 'ALL' | 'SELECT';
 }) => {
   const userInfo = useRecoilValue(atomUserInfo);
   const setModal = useSetRecoilState(atomModalState);
@@ -115,11 +121,19 @@ const ChatRow = ({
           alt={username}
           src={avatar}
         /> */}
-        <span className={classNames(`flex-grow-0 text-xs`)}>
+        <span className={classNames(`flex-grow-0 text-xss`)}>
           {moment(timestamp).utc(true).format('HH:mm')}
         </span>
         {/* <span className={classNames(`ml-5`)}>나 :</span> */}
-        <ChatContent className={classNames(`flex-grow-0`)} message={message} />
+        <ChatContent
+          className={classNames(
+            `flex-grow-0`,
+            `bg-bithumbSubGray rounded-2xl px-4`,
+            `text-black`,
+            `mx-2`
+          )}
+          message={message}
+        />
       </li>
     </>
   ) : (
@@ -137,14 +151,24 @@ const ChatRow = ({
         alt={username}
         src={avatar}
       />
-      <span className={classNames(`ml-5`)}>
-        ({roomId}){username} :{' '}
+      <span className={classNames(`ml-2`)}>
+        {type === 'ALL' ? `(${roomId}):${username} : ` : `${username} : `}
       </span>
-      <div className={classNames(`flex-grow`)}>
-        <ChatContent message={message} />
-      </div>
 
-      <span className={classNames(`flex-grow-0 text-xs`)}>
+      <ChatContent
+        className={classNames(
+          `flex-grow-0`,
+          `bg-bithumbYellow rounded-2xl px-4`,
+          `text-black`,
+          `mx-2`
+        )}
+        message={message}
+      />
+      {/* <div className={classNames(`flex-grow`)}>
+        <ChatContent message={message} />
+      </div> */}
+
+      <span className={classNames(`flex-grow-0 text-xss`)}>
         {moment(timestamp).utc(true).format('HH:mm')}
       </span>
     </li>

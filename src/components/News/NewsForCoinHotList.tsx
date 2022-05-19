@@ -7,23 +7,12 @@ import {
   atomFilteredCoins,
   atomPriceInfoUseCoins,
 } from '../../atom/total.atom';
+import useSetDefaultCoin from '../../hooks/useSetDefaultCoin';
 import MainWrapper from '../Common/MainWrapper';
 import NewsForCoinHotListRow from './NewsForCoinHotListRow';
 
 const NewsForCoinHotList = () => {
-  /**
-   * 초기값이 없으면 priceinfousecoin등 값을가져오지 않기떄문에 news페이지로 들어오면 초기값을 강제로 설정함. mainpage도 동일한 로직임.
-   */
-  const setDefaultCoins = useSetRecoilState(atomSelectCoinDefault);
-  useEffect(() => {
-    setDefaultCoins({
-      coinType: 'C0101',
-      coinSymbol: 'BTC',
-      marketSymbol: 'KRW',
-      siseCrncCd: 'C0100',
-      coinName: '비트코인',
-    });
-  }, []);
+  useSetDefaultCoin();
 
   const coins = useRecoilValue(atomPriceInfoUseCoins);
 

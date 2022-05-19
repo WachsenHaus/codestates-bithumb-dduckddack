@@ -8,19 +8,30 @@ import {
 } from '../../atom/chat.atom';
 import { atomUserInfo } from '../../atom/user.atom';
 import MainWrapper from '../Common/MainWrapper';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ChatRow from './ChatRow';
-import { TypeWebSocketChatSend } from './../../atom/ws.type';
+import {
+  TypeWebSocketChatMessageRecv,
+  TypeWebSocketChatSend,
+} from './../../atom/ws.type';
 import stringify from 'fast-json-stable-stringify';
 import { atomSelectCoinDefault } from '../../atom/selectCoinDefault.atom';
+import useSetDefaultCoin from '../../hooks/useSetDefaultCoin';
 
 const ChatRoom = () => {
+  useSetDefaultCoin();
   const chatMsg = useRecoilValue(atomChatRecvChatMessage);
   const wsChat = useRecoilValue(atomChatWebSocket);
   const userInfo = useRecoilValue(atomUserInfo);
   const selectCoin = useRecoilValue(atomSelectCoinDefault);
   const [keyword, setKeyword] = useState('');
+  const chatWrapper = useRef<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    if (chatWrapper.current) {
+      chatWrapper.current.scrollTop = 9999;
+    }
+  }, [chatWrapper, chatMsg]);
   return (
     <div className={classNames(`h-full`, `flex justify-center items-center`)}>
       <MainWrapper
@@ -30,16 +41,18 @@ const ChatRoom = () => {
         }}
       >
         <div
-          className={classNames(`scrollbar-hide overflow-auto `)}
+          ref={chatWrapper}
+          className={classNames(`overflow-auto `)}
           style={{
             height: '40rem',
             maxHeight: '100%',
           }}
         >
           {chatMsg &&
-            chatMsg?.map((item, index) => {
+            chatMsg.map((item, index) => {
               return item.payload?.roomId === selectCoin.coinName ? (
                 <ChatRow
+                  type="SELECT"
                   key={`${item.timestamp}_${item.id}`}
                   index={index}
                   lastLength={chatMsg?.length}

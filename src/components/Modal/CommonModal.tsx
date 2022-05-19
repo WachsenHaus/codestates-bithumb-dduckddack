@@ -10,6 +10,10 @@ import { atomModalState, TypeChartImg } from '../../atom/modal.atom';
 import { atomUserInfo, TypeLoginResponse } from '../../atom/user.atom';
 import CONST_ROUTE from '../../Routes';
 import MainWrapper from '../Common/MainWrapper';
+import signLoading from '../../asset/img/signLoading.json';
+import successSign from '../../asset/img/successSign.json';
+import nonUser from '../../asset/img/nonUser.json';
+import LottieDiv from '../Common/LottieDiv';
 
 type Inputs = {
   email: string;
@@ -22,20 +26,47 @@ const CommonModal = () => {
 
   const [modal, setModal] = useRecoilState(atomModalState);
   const [payload, setPayload] = useState<any | TypeChartImg | string>();
+  const [flag, setFlag] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const {
     register,
     handleSubmit,
     setValue,
+    setFocus,
+    setError,
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const sendData = {
       email: data.email,
       password: data.password,
     };
 
-    onSignIn(sendData);
+    // 로딩 시작
+
+    const result = await onSignIn(sendData);
+    setIsLoading(true);
+    if (result) {
+      setIsSuccess(true);
+      setTimeout(() => {
+        setIsLoading(false);
+        setIsSuccess(false);
+        setModal({
+          modalState: false,
+          modalType: 'sign',
+          modalPayload: undefined,
+        });
+      }, 1300);
+    } else {
+      setFlag(true);
+      setIsSuccess(false);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1300);
+    }
+    // 로딩 완료
   };
 
   useEffect(() => {
@@ -75,18 +106,15 @@ const CommonModal = () => {
           });
           setValue('email', '');
           setValue('password', '');
-
-          setModal({
-            modalState: false,
-            modalType: 'sign',
-            modalPayload: undefined,
-          });
+          return true;
         }
       } else {
         setUserInfo({});
+        return false;
       }
     } catch (err) {
       console.log(err);
+      return false;
     }
   };
 
@@ -122,7 +150,7 @@ const CommonModal = () => {
       <MainWrapper
         className={classNames(
           `p-10`,
-          modal.modalType === 'sign' && `h-1/2 w-2/6`,
+          modal.modalType === 'sign' && `h-fit w-2/6`,
           modal.modalType === 'image' && `h-fit`,
 
           `rounded-2xl shadow-xl`,
@@ -165,6 +193,12 @@ const CommonModal = () => {
                     label="PWD"
                   />
                 </div>
+
+                {flag && (
+                  <div className={classNames(`col-span-full text-upBox`)}>
+                    등록된 회원 정보가 없습니다.
+                  </div>
+                )}
                 <div
                   className={classNames(
                     `col-span-full flex justify-center items-center`
@@ -184,6 +218,34 @@ const CommonModal = () => {
                   >
                     회원가입
                   </Button>
+                </div>
+                <div
+                  className={classNames(
+                    `col-start-2`,
+                    `w-full flex justify-center items-center`
+                  )}
+                >
+                  {isLoading === false && (
+                    <LottieDiv
+                      className={classNames(`w-full h-full`)}
+                      jsonData={signLoading}
+                      loop
+                    />
+                  )}
+                  {isLoading && isSuccess && (
+                    <LottieDiv
+                      className={classNames(`w-full h-full`)}
+                      jsonData={successSign}
+                      loop
+                    />
+                  )}
+                  {isLoading && isSuccess === false && (
+                    <LottieDiv
+                      className={classNames(`w-full h-full`)}
+                      jsonData={nonUser}
+                      loop
+                    />
+                  )}
                 </div>
               </div>
             </form>

@@ -60,7 +60,9 @@ const OnlyDisplayChat = ({ className }: { className?: string }) => {
             chatMsg?.map((item, index) => {
               return (
                 <ChatRow
-                  key={item.id || index}
+                  type="ALL"
+                  // key={item.id || index}
+                  key={`${item.timestamp}_${item.id}`}
                   userId={item.payload?.user.userId}
                   index={index}
                   lastLength={chatMsg?.length}

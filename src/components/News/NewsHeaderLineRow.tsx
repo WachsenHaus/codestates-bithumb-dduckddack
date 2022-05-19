@@ -14,7 +14,8 @@ const NewsHeaderLineRow = (props: TypeNews) => {
       <p
         className={classNames(
           `hover:cursor-pointer`,
-          `flex justify-center items-center`
+          `flex justify-center items-center`,
+          `xl:text-xs`
         )}
         onClick={onClick(props.url)}
       >

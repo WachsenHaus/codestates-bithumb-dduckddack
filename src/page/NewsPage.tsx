@@ -9,7 +9,6 @@ import { useGenerateSocket } from '../hooks/useWebSocket';
 
 const NewsPage = () => {
   useCoinList();
-  useGenerateSocket('SUBSCRIBE');
   return (
     <>
       <div

@@ -75,9 +75,11 @@ const TvDrawingChart = () => {
       />
       <div
         className={classNames(
-          `w-full h-full relative z-20 rounded-3xl bg-nightBlack  drop-shadow-3xl`,
-          `box-border`,
-          `p-5`
+          `w-full h-full relative z-20 bg-nightBlack  drop-shadow-3xl`,
+          `p-5`,
+          `border-none`
+          // `box-border`,
+          // `rounded-3xl `
         )}
         ref={saveWrapperRef}
       >

@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
 import classNames from 'classnames';
+import { motion } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { atomDrawCoinBar } from '../atom/coinBar.atom';
@@ -27,21 +28,106 @@ const TradePage = () => {
 
   return (
     <div className={classNames(`w-full h-full grid grid-cols-12 gap-4`)}>
-      <div className={classNames(`col-start-3 col-span-8`)}>
+      <motion.div
+        transition={{
+          delay: 0.2,
+          x: { type: 'spring', stiffness: 200 },
+          default: { duration: 0.3 },
+        }}
+        initial={{
+          scale: 0,
+          opacity: 0,
+          translateY: '-100%',
+        }}
+        animate={{
+          scale: 1,
+          opacity: 1,
+          translateY: 0,
+        }}
+        className={classNames(`col-start-3 col-span-8`)}
+      >
         <CoinBar />
-      </div>
-      <div className={classNames(`col-start-3 col-span-4`)}>
+      </motion.div>
+      <motion.div
+        transition={{
+          delay: 0.5,
+          x: { type: 'spring', stiffness: 100 },
+          default: { duration: 0.3 },
+        }}
+        initial={{
+          scale: 0,
+          opacity: 0,
+          translateX: '-100%',
+        }}
+        animate={{
+          scale: 1,
+          opacity: 1,
+          translateX: 0,
+        }}
+        className={classNames(`col-start-3 col-span-4`)}
+      >
         <MainContent />
-      </div>
-      <div className={classNames(`col-start-7 col-span-4`)}>
+      </motion.div>
+      <motion.div
+        transition={{
+          delay: 0.5,
+          x: { type: 'spring', stiffness: 100 },
+          default: { duration: 0.3 },
+        }}
+        initial={{
+          scale: 0,
+          opacity: 0,
+          translateX: '100%',
+        }}
+        animate={{
+          scale: 1,
+          opacity: 1,
+          translateX: 0,
+        }}
+        className={classNames(`col-start-7 col-span-4`)}
+      >
         <Ticker />
-      </div>
-      <div className={classNames(`col-start-3 col-span-4`)}>
+      </motion.div>
+      <motion.div
+        transition={{
+          delay: 0.8,
+          x: { type: 'spring', stiffness: 100 },
+          default: { duration: 0.3 },
+        }}
+        initial={{
+          scale: 0,
+          opacity: 0,
+          translateY: '-100%',
+        }}
+        animate={{
+          scale: 1,
+          opacity: 1,
+          translateY: 0,
+        }}
+        className={classNames(`col-start-3 col-span-4`)}
+      >
         <Orderbook />
-      </div>
-      <div className={classNames(`col-start-7 col-span-4`)}>
+      </motion.div>
+      <motion.div
+        transition={{
+          delay: 0.8,
+          x: { type: 'spring', stiffness: 100 },
+          default: { duration: 0.3 },
+        }}
+        initial={{
+          scale: 0,
+          opacity: 0,
+          translateY: '-100%',
+        }}
+        animate={{
+          scale: 1,
+          opacity: 1,
+          translateY: 0,
+        }}
+        className={classNames(`col-start-7 col-span-4`)}
+      >
         <Transaction />
-      </div>
+      </motion.div>
     </div>
   );
 };
