@@ -17,6 +17,7 @@ import {
 import stringify from 'fast-json-stable-stringify';
 import { atomSelectCoinDefault } from '../../atom/selectCoinDefault.atom';
 import useSetDefaultCoin from '../../hooks/useSetDefaultCoin';
+import { BadWord } from '../../word/BadWord';
 // import Tetrapod from 'tetrapod-klleon';
 
 const ChatRoom = () => {
@@ -80,10 +81,15 @@ const ChatRoom = () => {
           onKeyUpCapture={(e) => {
             if (e.key === 'Enter') {
               // 키보드 센드
-              // console.log(Tetrapod.isBad(keyword, false));
 
               if (keyword === '') {
                 return;
+              }
+              let filterKeyword = keyword;
+              for (let i = 0; i < BadWord.length; i++) {
+                if (filterKeyword.indexOf(BadWord[i]) !== -1) {
+                  filterKeyword = filterKeyword.replace(BadWord[i], '***');
+                }
               }
               const data: TypeWebSocketChatSend = {
                 type: 'CHAT_MESSAGE',
@@ -94,13 +100,13 @@ const ChatRoom = () => {
                     avatar: userInfo.userInfo?.imagePath || '',
                     userId: userInfo?.userInfo?.id?.toString() || '1',
                   },
-                  message: keyword,
+                  message: filterKeyword,
                 },
               };
 
-              // const sendData = stringify(data);
-              // wsChat?.send(sendData);
-              // setKeyword('');
+              const sendData = stringify(data);
+              wsChat?.send(sendData);
+              setKeyword('');
             }
           }}
           placeholder={`${

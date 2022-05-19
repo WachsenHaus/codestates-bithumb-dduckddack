@@ -15,7 +15,6 @@ import {
   atomDrawStBars,
   selectorDrawStBars,
 } from '../atom/tvChart.atom';
-import { testDummy } from '../components/TvChart/dummy';
 
 const CONST_KR_UTC = 9 * 60 * 60 * 1000;
 
@@ -81,7 +80,6 @@ const useParsingAndUpdateWebSocketChart = (
    * 주기적으로 변경하는 차트데이터는 set
    */
   useEffect(() => {
-    // drawStBars && candleRef.current?.setData(testDummy);
     drawStBars && candleRef.current?.setData(drawStBars);
 
     /**
