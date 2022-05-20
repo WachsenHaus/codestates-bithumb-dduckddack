@@ -54,7 +54,7 @@ const RoutePage = () => {
         },
       };
 
-      DDUCKDDACK_AXIOS.defaults.headers.common['Authorization'] = accessToken;
+      DDUCKDDACK_AXIOS.defaults.headers.common['Authorization'] = refreshToken;
 
       // getDrawImage(Number(id),);
       setUserInfo(userInfo);

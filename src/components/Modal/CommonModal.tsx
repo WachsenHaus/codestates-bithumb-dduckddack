@@ -14,6 +14,7 @@ import signLoading from '../../asset/img/signLoading.json';
 import successSign from '../../asset/img/successSign.json';
 import nonUser from '../../asset/img/nonUser.json';
 import LottieDiv from '../Common/LottieDiv';
+import { DDUCKDDACK_AXIOS } from '../../App';
 
 type Inputs = {
   email: string;
@@ -96,19 +97,21 @@ const CommonModal = () => {
           return;
         }
         const { email, id, imagePath, nickName } = userInfo;
-        if (email && id && imagePath && nickName) {
+        if (email && id && nickName) {
           localStorage.setItem('accessToken', accessToken);
           localStorage.setItem('refreshToken', refreshToken);
           localStorage.setItem('email', email);
           localStorage.setItem('id', id.toString());
           localStorage.setItem('nickName', nickName);
-          localStorage.setItem('imagePath', imagePath);
+          imagePath && localStorage.setItem('imagePath', imagePath);
+          imagePath === undefined && localStorage.setItem('imagePath', '');
           setUserInfo({
             accessToken: accessToken,
             refreshToken: refreshToken,
             userInfo: userInfo,
           });
-
+          DDUCKDDACK_AXIOS.defaults.headers.common['Authorization'] =
+            refreshToken;
           return true;
         }
       } else {

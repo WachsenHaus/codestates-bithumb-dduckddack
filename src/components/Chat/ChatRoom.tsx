@@ -80,8 +80,6 @@ const ChatRoom = () => {
           }}
           onKeyUpCapture={(e) => {
             if (e.key === 'Enter') {
-              // 키보드 센드
-
               if (keyword === '') {
                 return;
               }
@@ -98,7 +96,7 @@ const ChatRoom = () => {
                   user: {
                     username: userInfo?.userInfo?.nickName || '익명',
                     avatar: userInfo.userInfo?.imagePath || '',
-                    userId: userInfo?.userInfo?.id?.toString() || '1',
+                    userId: userInfo?.userInfo?.id?.toString() || '0',
                   },
                   message: filterKeyword,
                 },

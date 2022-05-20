@@ -350,7 +350,7 @@ const SiginUpPage = () => {
                     color: 'red',
                   }}
                 >
-                  5~10글자 숫자,영문,한글로 구성해주세요
+                  6~10글자 숫자,영문,한글로 구성해주세요
                 </FormHelperText>
               </SignUpRow>
             )}

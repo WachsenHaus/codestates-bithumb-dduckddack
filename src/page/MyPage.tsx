@@ -1,4 +1,10 @@
-import { TextField, Button, Input, Avatar } from '@mui/material';
+import {
+  TextField,
+  Button,
+  Input,
+  Avatar,
+  FormHelperText,
+} from '@mui/material';
 import axios from 'axios';
 import classNames from 'classnames';
 import React, { useEffect, useRef, useState } from 'react';
@@ -11,6 +17,7 @@ import { atomUserInfo } from '../atom/user.atom';
 import MainWrapper from '../components/Common/MainWrapper';
 import CONST_ROUTE from '../Routes';
 import { dduckddackResponseVO } from '../type/api';
+import defaultAvatar from '../asset/img/default.png';
 
 type Inputs = {
   email: string;
@@ -36,7 +43,9 @@ const MyPage = () => {
 
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useRecoilState(atomUserInfo);
-  const [profileImg, setProfileImg] = useState<string | undefined>('');
+  const [profileImg, setProfileImg] = useState<string | undefined>(
+    defaultAvatar
+  );
 
   useEffect(() => {
     if (userInfo.userInfo?.email) {
@@ -77,10 +86,14 @@ const MyPage = () => {
       }
     );
     if (result.data.status === 'ok') {
+      const prevUserInfo = JSON.parse(JSON.stringify(userInfo.userInfo));
+      prevUserInfo.nickName = watch('nickName');
+      prevUserInfo.imagePath = profileImg;
+
       setUserInfo((prevData) => {
         return {
           ...prevData,
-          userInfo: {},
+          userInfo: prevUserInfo,
         };
       });
       navigate('/');
@@ -120,18 +133,30 @@ const MyPage = () => {
                   label="ID"
                 />
               </div>
-
               <div className={classNames(``)}>
                 <TextField
                   {...register('nickName', {
-                    pattern: /^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{1,10}$/,
+                    pattern: /^([a-zA-Z0-9ㄱ-ㅎ|ㅏ-ㅣ|가-힣]).{5,10}$/,
                   })}
                   required
                   fullWidth
                   type="text"
                   label="닉네임"
+                  error={errors.nickName?.type === 'pattern'}
                 />
               </div>
+              {errors.nickName?.message !== undefined && (
+                <div>
+                  <FormHelperText
+                    sx={{
+                      color: 'red',
+                    }}
+                  >
+                    6~10글자 숫자,영문,한글로 구성해주세요
+                  </FormHelperText>
+                </div>
+              )}
+
               <div className={classNames(``)}>
                 <TextField
                   {...register('password1', {
