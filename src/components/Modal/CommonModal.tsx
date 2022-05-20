@@ -36,6 +36,7 @@ const CommonModal = () => {
     setValue,
     setFocus,
     setError,
+    clearErrors,
     formState: { errors },
   } = useForm<Inputs>();
 
@@ -59,6 +60,8 @@ const CommonModal = () => {
           modalType: 'sign',
           modalPayload: undefined,
         });
+        setValue('email', '');
+        setValue('password', '');
       }, 1300);
     } else {
       setFlag(true);
@@ -105,8 +108,7 @@ const CommonModal = () => {
             refreshToken: refreshToken,
             userInfo: userInfo,
           });
-          setValue('email', '');
-          setValue('password', '');
+
           return true;
         }
       } else {
@@ -134,6 +136,7 @@ const CommonModal = () => {
           });
           setValue('email', '');
           setValue('password', '');
+          setErrorMsg('');
         }
       }}
       className={classNames(
@@ -224,40 +227,39 @@ const CommonModal = () => {
                     회원가입
                   </Button>
                 </div>
-                <div
-                  className={classNames(
-                    `col-start-2`,
-                    `w-full flex justify-center items-center`,
-                    `hidden`,
-                    modal.modalState &&
-                      (modal.modalType === 'sign' ||
-                        modal.modalType === 'image')
-                      ? `block`
-                      : `hidden`
+
+                {modal.modalState &&
+                  (modal.modalType === 'sign' ||
+                    modal.modalType === 'image') && (
+                    <div
+                      className={classNames(
+                        `col-start-2`,
+                        `w-full flex justify-center items-center`
+                      )}
+                    >
+                      {isLoading === false && (
+                        <LottieDiv
+                          className={classNames(`w-full h-full`)}
+                          jsonData={signLoading}
+                          loop
+                        />
+                      )}
+                      {isLoading && isSuccess && (
+                        <LottieDiv
+                          className={classNames(`w-full h-full`)}
+                          jsonData={successSign}
+                          loop
+                        />
+                      )}
+                      {isLoading && isSuccess === false && (
+                        <LottieDiv
+                          className={classNames(`w-full h-full`)}
+                          jsonData={nonUser}
+                          loop
+                        />
+                      )}
+                    </div>
                   )}
-                >
-                  {isLoading === false && (
-                    <LottieDiv
-                      className={classNames(`w-full h-full`)}
-                      jsonData={signLoading}
-                      loop
-                    />
-                  )}
-                  {isLoading && isSuccess && (
-                    <LottieDiv
-                      className={classNames(`w-full h-full`)}
-                      jsonData={successSign}
-                      loop
-                    />
-                  )}
-                  {isLoading && isSuccess === false && (
-                    <LottieDiv
-                      className={classNames(`w-full h-full`)}
-                      jsonData={nonUser}
-                      loop
-                    />
-                  )}
-                </div>
               </div>
             </form>
           </div>
