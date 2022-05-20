@@ -1,124 +1,202 @@
-# 목차
-
 ```
-1. 배포링크
-2. 프로젝트 실행 방법
-3. 사용한 기술 스택
-4. 구현한 기능 목록
-5. 구현 방법 및 구현하면서 어려웠던 점
-6. Prototype 소개(Figma)
-7. 성능최적화
-8. 과제를 통해 얻고자 했던점
-9. ETC
+목차
+0. 프로그램 소개
+1. 배포 링크
+2. 위키 링크
+3. 피그마 링크
+4. 기술발표
+5. Q&A
 ```
-## 배포링크
-www.cointalk.wachsenhaus.com
+#
+###### 만든이
+<table>
+    <tr>
+        <td align="center">
+            <a href="https://github.com/"><img  width="100px" src="https://avatars.githubusercontent.com/u/59411545?v=4" /></a>
+        </td>
+        <td align="center">
+            <a href="https://github.com/"><img  width="100px" src="https://avatars.githubusercontent.com/u/57323359?v=4" /></a>
+        </td>
+        <td align="center">
+            <a href="https://github.com/"><img  width="100px" src="https://avatars.githubusercontent.com/u/73471529?v=4" /></a>
+        </td>
+        <td align="center">
+            <a href="https://github.com/"><img  width="100px" src="https://avatars.githubusercontent.com/u/53042885?v=4" /></a>
+        </td>  
+    </tr>
+    <tr>
+        <td align="center">최영훈(팀장)</td>
+        <td align="center">박철훈</td>
+        <td align="center">유하얀</td>
+        <td align="center">김영수</td>
+    </tr>
+    <tr>
+        <td align="center">Front</td>
+        <td align="center">User Domain</td>
+        <td align="center">Chat, News Domain</td>
+        <td align="center">Gateway,Kafka,Slack,Data Lake,Paper Domain</td>
+    </tr>
+</table>
 
 
-## 프로젝트 실행 방법
+# 프로그램 소개
 
+### 💰 coinTalk
+
+*우리가 만든 프로그램은 !!!!* 
 ```
-npm i --force // npm 패키지를 인스톨해주세요
-npm run start // 프로젝트를 실행해주세요.
+코인에 대한 실시간 가격 / 차트 정보를 확인하고 차트에 드로잉툴을 이용해 이미지를 만들 수 있고
+차트데이터를 저장하는 기능을 제공하고 채팅방에 공유하며 커뮤니케이션 할 수 있는 프로그램입니다.
 ```
+# 배포
+[코인톡 바로가기](https://cointalk.wachsenhaus.com)  
+<table>
+    <tr>
+        <td align="center">메인</td>
+        <td align="center">거래소</td>
+    </tr>
+    <tr>
+        <td align="center">
+            <a href="https://cointalk.wachsenhaus.com/"><img  width="640px" src="https://user-images.githubusercontent.com/59411545/169392256-1c18615e-971d-44dc-b2e2-c6e9e766b069.gif" />메인</a>
+        </td>
+        <td align="center">
+            <a href="https://cointalk.wachsenhaus.com/trade"><img  width="640px" src="https://user-images.githubusercontent.com/59411545/169392274-fcd81c85-2518-499a-a121-68fea176b2de.gif" />거래소</a>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">채팅</td>
+        <td align="center">뉴스</td>
+    </tr>
+    <tr>
+        <td align="center">
+            <a href="https://cointalk.wachsenhaus.com/chat"><img  width="640px" src="https://user-images.githubusercontent.com/59411545/169392289-a8ab383b-270e-4e73-9e08-ac5f6ee0e14a.gif" />채팅</a>
+        </td>
+        <td align="center">
+            <a href="https://cointalk.wachsenhaus.com/news"><img  width="640px" src="https://user-images.githubusercontent.com/59411545/169392302-17a0cffc-88b3-4834-8e3a-238a00477e13.gif" />뉴스</a>
+        </td>
+    </tr>
+</table>
 
-## 사용한 스택
-- CSS / UI 도구
-  - tailwincss
-  - Material UI
-  - Framer.motion
-  - lightweight-charts
-- 자바스크립트 유틸도구
-  - moment
-  - immer
-  - lodash
-  - uuid
-  - classnames
-  - hangul-js
-- 주 사용 프레임워크 및 라이브러리
-  - React
-  - Typescript
-  - Recoil
-- 기타 도구
-  - Notion
-  - Figma
+# 위키
+[위키 바로가기](https://github.com/dduckddack-coinTalk/coinTalk/wiki)
+<table>
+    <tr>
+        <td align="center">위키</td>
+    </tr>
+    <tr>
+        <td align="center">
+            <a href="[https://cointalk.wachsenhaus.com/](https://github.com/dduckddack-coinTalk/coinTalk/wiki)"><img  width="640px" src="https://user-images.githubusercontent.com/59411545/169443128-fd748657-96ca-40ee-b068-70f50a75c348.gif" />메인</a>
+        </td>
+    </tr>
+</table>
 
-<img src="https://user-images.githubusercontent.com/59411545/165929665-1f3b5138-94da-4c7c-9a3e-9a23666af797.png" width="400" height="400">  
+# 피그마
+[피그마 바로가기](https://www.figma.com/proto/ONa4Cdcphe8xCPxzgPSGVV/bitthumb-frontend?page-id=0%3A1&node-id=66%3A1226&viewport=226%2C536%2C0.12&scaling=scale-down&starting-point-node-id=66%3A1226)
+<table>
+    <tr>
+        <td align="center">피그마</td>
+    </tr>
+    <tr>
+        <td align="center">
+            <a href="[https://cointalk.wachsenhaus.com/](https://github.com/dduckddack-coinTalk/coinTalk/wiki)"><img  width="640px" src="https://user-images.githubusercontent.com/59411545/169443610-0dd9fb85-7f6b-411e-a7c1-b0d43ed60287.gif" />메인</a>
+        </td>
+    </tr>
 
+</table>
 
-## 구현한 기능 목록
-
-1. 체결내역, 호가창, 전체코인목록에 가격반영내용이 실시간으로 애니메이션과 함께 보여집니다.
-2. 원화코인, 즐겨찾기 기능이 구현되었습니다. 즐겨찾기 정보는 쿠키로 보관되면 1일의 유효기간을 가집니다.
-3. 초성 검색이 지원됩니다. 한글자음,코인 심볼,코인 영문이름으로 검색이 가능합니다.
-
-## 구현 방법 및 구현하면서 어려웠던 점
-
-### 구현 방법
-
-1. 처음 시험용 과제는 주어진 API를 사용하여 개발하였다면, 이번 실습 1,2,3주차 과제는 `리버스 엔지니어`링 관점으로 접근하였습니다.
-   실제 빗썸에서 사용하는 `웹소켓`과 `REST API`를 `분석`하고 최대한 동일한 기능으로 구현하였습니다.
-
-2. Recoil을 사용하였고, `atom`과 `selector`의 기능을 적극 활용하여 `데이터가 변경(구독)`된다면 자동으로 랜더링되게 구현하였습니다.
-
-3. 컴포넌트의 **데이터 플로우 그래프**를 설계하며 진행하였습니다.  
-
-
-### 어려웠던 점
-
-1. 리액트의 **선언형 패러다임**을 따르려고 노력했습니다. 함수화하고 변수명을 짓는 부분에서 고민이 많이 되었습니다.
-
-선언형 프로그램이란 ? 문제를 해결할때 어떻게 하는것보다 무엇을 해야되는지에 중점을 두면서 프로그램을 만드는 방법
-![image](https://user-images.githubusercontent.com/59411545/165925987-54b71807-e263-48b0-97ff-a4ede885210f.png)
-
-
-2. TradingVeiew의 **LightWeight** 라이브러리를 사용하였는데, Coin의 `Volume` 을 차트에 표기하려고했지만. `Y축 Value가 Coin,Volume의 단위`가 각기 달라, 표기가 깨지는 증상을 발견했습니다.
-   해당이슈를 무료버전으로 해결하려고했지만. 상위 등급의 라이브러리로 변경해야되는것을 알고 포기했습니다.
-
-3. 즐겨찾기 정보를 `Cookie`에 저장하는데 빗썸과 동일한 형태를 유지하려고 `암호화`, `복호화` 코드를 작성하는 부분이 어려웠습니다.
-
-
-**최영훈 쿠키**  
-![image](https://user-images.githubusercontent.com/59411545/165926172-b8f96b8d-93d3-4e06-8fed-b0d7f04c6670.png)  
-
-**빗썸의 쿠키**  
-![image](https://user-images.githubusercontent.com/59411545/165926265-b825b591-c2ca-4480-b82f-aaad0455daa8.png)  
-
-
-4. **성능 이슈 recoil의 selecotr와 promise 이슈가 어려웠습니다.**
-
-### 피그마 프로토타이핑 툴
-
-<img src="https://user-images.githubusercontent.com/59411545/165928146-5bc8b2e6-8f11-449b-81fb-296928cb30a1.png" width="400" height="400">
-
-
-# 성능 최적화 고민
-
-1. 객체 깊은 복사  [객체깊은복사](https://bi9choi.notion.site/CS-9838e5c82d9449b398728e4d4da2b2bc)
-   
-2. 브라우저에서 비동기는 멀티 스레딩일까 아닐까?
-   1. `promise,setTimeout`의 진짜 정체
-   2. 마이크로 `태스크큐는 바쁘면 안된다.`
-   3. 리코일 selector의 성능이슈  
-   [노션](https://bi9choi.notion.site/3ec8074e516b4d1ca7c8d3d3f41721df)
-      
-3. react.memo로 성능 최적화  
-   [노션](https://bi9choi.notion.site/React-memo-67dc4828e9584a5e8b3e28632f0268fd)
-4. 리코일 메모리 누수  
-   [노션](https://bi9choi.notion.site/eeeaae13fba142488f4ec171effdb5cd)
-5. Web worker를 사용
-
-## 팀별과제를 통해 얻고자 했던 점
+***
+# 사용한 기술 스택
+프론트  
+<img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=TypeScript&logoColor=white">
+<img src="https://img.shields.io/badge/CRA-09D3AC?style=for-the-badge&logo=Create React App&logoColor=white">
+<img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=for-the-badge&logo=Tailwind CSS&logoColor=white">
+<img width="100px" src="https://user-images.githubusercontent.com/59411545/169446081-ab473d25-2184-42ac-93c0-f63f59f6535e.png">
+<img src="https://img.shields.io/badge/AWS Amplify-FF9900?style=for-the-badge&logo=AWS Amplifyt&logoColor=white">
 
 
 
-## 아쉬웠던 점
+***
+유저 도메인  
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=Java&logoColor=white">
+<img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white">
+<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white">
+***
+채팅 도메인  
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=Java&logoColor=white">
+<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white">
+<img src="https://img.shields.io/badge/Apache Kafka-231F20?style=for-the-badge&logo=Apache Kafka&logoColor=white">  
+Webflux
+rsocket
+****
+뉴스 도메인  
+*Rest API*  
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=Java&logoColor=white">
+<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white">
+<img src="https://img.shields.io/badge/Apache Kafka-231F20?style=for-the-badge&logo=Apache Kafka&logoColor=white">
+<img src="https://img.shields.io/badge/ReactiveMongoDb-47A248?style=for-the-badge&logo=MySQL&logoColor=white">
+<img width="100px" src="https://user-images.githubusercontent.com/59411545/169445137-3e30cae5-c662-4670-ab1d-1c0798f058d0.jpeg">  
+
+*Crawling*  
+<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=white">
+<img width="100px" src="https://user-images.githubusercontent.com/59411545/169445004-89d312bd-63ae-48f2-ad57-54c13baa761b.png" />  
+
+*DB*  
+<img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=MySQL&logoColor=white"> 
+
+***
+게이트웨이 도메인  
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=Java&logoColor=white">
+<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white">
+<img src="https://img.shields.io/badge/Spring Gateway-6DB33F?style=for-the-badge&logo=Spring&logoColor=white">  
+***
+도화지  도메인  
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=Java&logoColor=white">
+<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white">
+<img src="https://img.shields.io/badge/InfluxDB-22ADF6?style=for-the-badge&logo=InfluxDB&logoColor=white">
+<img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon S3&logoColor=white">  
+***
+슬렉 봇  도메인  
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=Java&logoColor=white">
+<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white">
+<img src="https://img.shields.io/badge/Apache Kafka-231F20?style=for-the-badge&logo=Apache Kafka&logoColor=white">
+<img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white">  
+***
+데이터레이크  도메인  
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=Java&logoColor=white">
+<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white">
+<img src="https://img.shields.io/badge/InfluxDB-22ADF6?style=for-the-badge&logo=InfluxDB&logoColor=white">  
+# 아키텍쳐
+<img src="https://user-images.githubusercontent.com/57323359/169324737-fb01c8c2-ce42-4edf-abd5-8e0915addf1e.png"  />
+*** 
 
 
+# 요구 사항 정의 및 구현 목록
+- [x] 메인 페이지 - 코인 거래량 Top5의 간단 정보를 보여준다.
+- [x] 메인 페이지 - 전체 채팅 목록을 보여준다.
+- [x] 거래소 - 실시간 체결 내역을 보여준다.
+- [x] 거래소 - 실시간 호가창을 보여준다.
+- [x] 거래소 - 코인의 초성, 영문, 심볼, 이름검색을 지원한다.
+- [x] 거래소 - 코인을 브라우저에 즐겨찾기 한다.
+- [x] 거래소 - 코인을 원하는 기준으로 정렬 한다.
+- [x] 거래소 - 차트 1분, 10분, 30분, 1시간봉 기능
+- [x] 채팅 - 로그인한 회원은 채팅을 입력할 수 있고 코인별로 구성된 채팅방에 입장할 수 있다.
+- [x] 채팅 - 채팅방에 이미지를 전송하고 표시한다.
+- [x] 채팅(Option) - 욕설을 필터링한다. 해당 기능은 서버가 아닌 클라이언트에서 구현한다.
+- [ ] 채팅(Option) - 댓글에 좋아요를 누른다.
+- [x] 회원 - 로그인 기능
+- [x] 회원 - 회원가입 기능
+- [x] 회원 - 회원가입시 실제 이메일을 인증한다.
+- [x] 회원 - 회원의 정보를 수정한다.
+- [x] 회원 - 회원의 프로필을 업로드하여 사용한다.
+- [x] 회원 - 리프레쉬,액세스 토큰을 활용하여 사용자 인증을 진행한다.
+- [x] 회원 - 회원 탈퇴 기능을 구현한다.
+- [ ] 회원(Option) - OAuth 로그인한다.
+- [ ] 회원(Option) - Recaptcha 자동 가입방지를 구현한다.
+- [ ] 회원(Option) - 회원의 인기도를 구분지어 채팅방에 효과를 제공한다.
+- [x] 도화지 - 차트위에 그림을 그려 서버에 이미지와,시간,코인의 종류들을 저장한다
+- [x] 도화지 - 저장된 도화지 데이터를 기반으로 이미지와, 해당 시간 때의 차트 데이터를 불러온다.
+- [x] 뉴스 - 코인의 뉴스들을 크롤링하여 뉴스 페이지에 보여준다.
+- [x] 뉴스 - 채팅방에 최신 뉴스가 보여진다.
 
-## 느낀점
 
-
-
-## 궁금한 점
 
