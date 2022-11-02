@@ -1,46 +1,35 @@
 @keyframes ask-effect {
   from {
     opacity: 1;
-    /* background-color: blue; */
   }
   to {
     opacity: 0.1;
-    /* background-color: white; */
   }
 }
 
 @keyframes bid-effect {
   from {
     opacity: 1;
-    /* background-color: red; */
   }
   to {
     opacity: 0.1;
-    /* background-color: white; */
   }
 }
 
 @keyframes up-effect {
   0% {
-    /* opacity: 0; */
-    /* border-color: red; */
   }
   100% {
     opacity: 0;
-    /* border-color: white; */
   }
 }
 
 @keyframes down-effect {
   0% {
-    /* opacity: 0; */
-    /* border-color: blue; */
   }
   100% {
     opacity: 0;
     transform: scale(0);
-
-    /* border-color: white; */
   }
 }
 

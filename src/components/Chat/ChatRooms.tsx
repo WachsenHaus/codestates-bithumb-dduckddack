@@ -16,50 +16,19 @@ const ChatRooms = () => {
   const [client, setClient] = useState<CompatClient>();
 
   useEffect(() => {
-    // const url = './chatting/ws-stomp';
     let socket = new SockJs('/chatting/ws-stomp');
 
     const mClient = Stomp.over(socket);
 
-    console.log(mClient);
     mClient.connect(
       {},
-      () => {
-        console.log('연결은된듯.');
-        // mClient.subscribe(
-        //   '/chatting/sub/chat/room/',
-        //   (msg) => {
-        //     console.log(msg);
-        //   },
-        //   {
-        //     id: 'e4916e72-fc9e-4c44-9810-864c39338890',
-        //   }
-        // );
-      },
+      () => {},
       (err: any) => {
         console.log(err);
       }
     );
-
-    // mClient.activate();
-
-    // client.connect()
     setClient(mClient);
   }, []);
-
-  // useEffect(() => {
-  //   if (client) {
-  //     const subscription = client.subscribe(
-  //       '/chatting/sub/chat/room/',
-  //       (msg) => {
-  //         console.log(msg);
-  //       },
-  //       {
-  //         id: 'e4916e72-fc9e-4c44-9810-864c39338890',
-  //       }
-  //     );
-  //   }
-  // }, [client]);
 
   return (
     <div
@@ -69,8 +38,6 @@ const ChatRooms = () => {
         `p-10`
       )}
     >
-      {/* <div>헤더</div> */}
-      {/* <ChartSearch /> */}
       <div
         onClick={async () => {
           const result = await axios.get<TypeChatRoom[]>('/chatting/rooms');
@@ -115,9 +82,6 @@ const ChatRooms = () => {
       >
         방 입장
       </div>
-      {/* {rooms?.map((item) => (
-        <ChatRoomDetail {...item} />
-      ))} */}
     </div>
   );
 };

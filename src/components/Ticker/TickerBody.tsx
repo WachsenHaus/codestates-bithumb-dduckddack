@@ -36,7 +36,6 @@ import CONST_ROUTE from '../../Routes';
 
 export const RenderFavoriteColumn = (e: TableRowProps) => {
   const [drawTicker, setDrawTicker] = useRecoilState(atomPriceInfoUseCoins);
-  // console.log(rowData);
 
   const onToggleCoin = useCallback(
     (
@@ -74,9 +73,6 @@ export const RenderFavoriteColumn = (e: TableRowProps) => {
     <div
       onClick={onClick}
       className="flex justify-center items-center h-full hover:cursor-pointer  hover:scale-110"
-      // whileHover={{
-      //   scale: 1.1,
-      // }}
     >
       {e.rowData.isFavorite ? (
         <StarRateIcon

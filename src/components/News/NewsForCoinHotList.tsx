@@ -20,7 +20,6 @@ const NewsForCoinHotList = () => {
     <div className={classNames(`h-full w-full`)}>
       <ul
         className={classNames(
-          //   `2xl:h-full xl:h-full`,
           `h-full`,
           `2xl:max-h-full xl:max-h-128`,
           `flex flex-col justify-between py-2`,

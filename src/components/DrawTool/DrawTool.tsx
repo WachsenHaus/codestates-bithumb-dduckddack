@@ -293,14 +293,6 @@ const ImgItem = () => {
               alt={`Chart Draw ${index}`}
               className={classNames(`w-16 h-16 hover:cursor-pointer`)}
               onClick={async () => {
-                // setModal({
-                //   modalState: true,
-                //   modalType: 'chartImage',
-                //   modalPayload: {
-                //     src: item.image,
-                //     data: []!,
-                //   },
-                // });
                 const stData = await getDataLake(item.coin, item.time);
                 setModal({
                   modalState: true,

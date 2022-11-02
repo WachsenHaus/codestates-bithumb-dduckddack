@@ -22,7 +22,7 @@ const App = () => {
   });
   return (
     <RecoilRoot>
-      <DebugObserver />
+      {/* <DebugObserver /> */}
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <StyledEngineProvider>
           <ThemeProvider theme={darkTheme}>

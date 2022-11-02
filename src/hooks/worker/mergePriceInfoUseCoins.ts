@@ -19,7 +19,6 @@ self.onmessage = function (e) {
   } else if (ticker.m === 'C0101') {
     return;
   } else {
-    // coinList;
     let isUp;
     const currentPrice = Number(ticker.e) || Number(detail.e);
     const prevPrice = Number(coinList[isExist].e);

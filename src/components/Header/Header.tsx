@@ -31,35 +31,16 @@ const Header = () => {
       className={classNames(`shadow-2xl`)}
     >
       <Toolbar>
-        {/* <motion.div
-          whileHover={{
-            scaleX: 0.9,
-          }}
-          className={classNames(`w-full h-full bg-no-repeat ml-4`)}
-          style={{
-            marginTop: '-1.2rem',
-            width: '179px',
-            height: '52px',
-            flexGrow: 0,
-            backgroundImage: `url(${CI})`,
-            backgroundPosition: '29px 14px',
-          }}
-          onClick={() => {
-            navigate(CONST_ROUTE.HOME);
-          }}
-        /> */}
         <motion.div
           whileHover={{
             scaleX: 0.9,
           }}
           className={classNames(`w-full h-full bg-no-repeat ml-4`)}
           style={{
-            // marginTop: '-1.2rem',
             width: '179px',
             height: '52px',
             flexGrow: 0,
             backgroundImage: `url(${LOGO})`,
-            // backgroundPosition: '29px 14px',
           }}
           onClick={() => {
             navigate(CONST_ROUTE.HOME);

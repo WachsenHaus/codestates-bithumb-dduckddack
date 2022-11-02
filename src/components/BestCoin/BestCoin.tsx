@@ -13,8 +13,7 @@ import {
 import { Line } from 'react-chartjs-2';
 import _ from 'lodash';
 import { ReactNode, useEffect, useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { atomPriceInfoUseCoins } from '../../atom/total.atom';
+
 import {
   convertStringPriceToKRW,
   convertStringPriceWON,
@@ -206,7 +205,6 @@ const BestCoinRowVolume = ({ children }: { children?: ReactNode }) => {
         `flex justify-center items-center`,
         `text-xs`,
         `text-bithumb`
-        // `text-sm`
       )}
     >
       {children}
@@ -215,8 +213,6 @@ const BestCoinRowVolume = ({ children }: { children?: ReactNode }) => {
 };
 
 const BestCoin = ({ className }: { className?: string }) => {
-  // const coins = useRecoilValue(atomPriceInfoUseCoins);
-
   useSetDefaultCoin();
   const [drawData, chartData] = useGetTopChart('u24');
 

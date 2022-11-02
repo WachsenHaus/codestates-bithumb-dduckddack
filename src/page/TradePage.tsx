@@ -1,12 +1,8 @@
 import { Box } from '@mui/material';
 import classNames from 'classnames';
 import { motion } from 'framer-motion';
-import React, { useEffect, useRef } from 'react';
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
-import { atomDrawCoinBar } from '../atom/coinBar.atom';
-import { atomOrderBook } from '../atom/orderBook.atom';
-import { atomDrawTransaction, atomDrawChart } from '../atom/total.atom';
-import { atomSubscribeWebSocket } from '../atom/ws.atom';
+import React from 'react';
+
 import CoinBar from '../components/CoinBar/CoinBar';
 import MainContent from '../components/MainContent';
 import Orderbook from '../components/Orderbook/Orderbook';

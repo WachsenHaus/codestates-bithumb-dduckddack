@@ -22,22 +22,8 @@ const OrderbookRow = ({
   quantityRatio: string;
   index?: any;
 }) => {
-  // console.log(quantityRatio);
-  // const scrollRef = useRef<HTMLDivElement>(null);
-  // useEffect(() => {
-  //   if (scrollRef && index === 0) {
-  //     scrollRef?.current?.scrollIntoView({
-  //       behavior: 'smooth',
-  //       block: 'center',
-  //       inline: 'nearest',
-  //     });
-  //   }
-  // }, [index]);
   return (
-    <div
-      className={classNames(`flex justify-around items-center w-full`)}
-      // ref={scrollRef}
-    >
+    <div className={classNames(`flex justify-around items-center w-full`)}>
       <div
         className={classNames(
           `w-1/2`,
@@ -49,7 +35,6 @@ const OrderbookRow = ({
       >
         <span
           className={classNames(
-            // `will-change-transform`,
             `text-left`,
             `${
               eventType === 'ask'
@@ -80,7 +65,6 @@ const OrderbookRow = ({
             `absolute left-0 z-0`,
             `h-full`,
             `${orderType === 'ask' ? 'bg-downBox' : 'bg-upBox'}`
-            // `bg-cop`
           )}
           style={{
             width: `${quantityRatio}%`,

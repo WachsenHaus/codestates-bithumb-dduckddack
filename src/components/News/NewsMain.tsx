@@ -23,19 +23,9 @@ const NewsMain = () => {
     if (news.state === 'hasValue') {
       if (news.contents?.message) {
         setTotalPages(news.contents?.message.totalPages);
-        // setTotalElements(news.contents?.message.totalElements);
       }
     }
   }, [news]);
-
-  // useEffect(() => {
-  //   setNewsConfig((prevData) => {
-  //     return {
-  //       ...prevData,
-  //       page: 0,
-  //     };
-  //   });
-  // }, []);
 
   useEffect(() => {
     if (newsConfig.keyword === keyword) {
@@ -109,8 +99,6 @@ const NewsMain = () => {
           <div className={classNames(`w-full h-full`)}>
             <LottieDiv jsonData={NoDataJSON} loop />
           </div>
-
-          // <div>검색결과가없습니다</div>
         )}
 
       {/* 알 수 없는 에러 */}

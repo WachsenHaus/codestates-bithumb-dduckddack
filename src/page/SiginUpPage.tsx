@@ -82,7 +82,6 @@ const SiginUpPage = () => {
     onUserCreate(sendData);
   };
 
-  // const [mailFlag, setMailFlag] = useState(false);
   const [mailSenderStartFlag, setMailSenderStartFlag] = useState(false);
   const [mailSenderEndFlag, setMailSenderEndFlag] = useState(false);
   const [mailSender, setMailSender] = useState(false);
@@ -90,8 +89,6 @@ const SiginUpPage = () => {
   const [mailVerifyStartFlag, setMailVerifyStartFlag] = useState(false);
   const [mailVerifyEndFlag, setMailVerifyEndFlag] = useState(false);
   const [mailVerify, setMailVerify] = useState(false);
-
-  // const [mailVerifyCode, setMailVerifyCode] = useState<any>();
 
   const onSendEmail = async (email: string) => {
     try {

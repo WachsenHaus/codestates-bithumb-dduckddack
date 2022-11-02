@@ -116,7 +116,7 @@ const useGenerateDrawCanvas = (
       // 작업플래그 설정,
 
       saveWrapperRef.current.style.transform = 'translateX(-100%)';
-      // saveWrapperRef.current.style.opacity = '0';
+
       await html2canvas(saveWrapperRef.current)
         .then((canvas) => {
           if (saveWrapperRef.current) {
@@ -170,7 +170,6 @@ const useGenerateDrawCanvas = (
         })
         .finally(() => {
           if (saveWrapperRef.current) {
-            //  저장될때 어떻게할까,
             saveWrapperRef.current.removeChild(header);
             saveWrapperRef.current.style.transform = 'translateX(0%)';
             saveWrapperRef.current.style.opacity = '1';
@@ -179,17 +178,6 @@ const useGenerateDrawCanvas = (
         });
     }
     return true;
-    // const prev = JSON.parse(JSON.stringify(drawAxisDatas));
-    // 드로우 배열에 넣는다.
-
-    // setDrawAxisDatas([]);
-    // // 트레이딩뷰 좌표 기억
-    // if (chartRef.current) {
-    //   const range = chartRef.current?.timeScale().getVisibleLogicalRange();
-    //   if (range) {
-    //     setRecordRange(range);
-    //   }
-    // }
   };
 
   const onErase = () => {

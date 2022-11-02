@@ -59,25 +59,15 @@ export const useGenerateSocket = (type: TypeWebSocketTypes) => {
 
   useEffect(() => {
     if (wsSubscribe) {
-      // console.log('생성');
     }
     return () => {
       if (wsSubscribe) {
-        // console.log('종료');
         wsSubscribe?.close();
         setWsSubscribe(undefined);
       }
     };
   }, [wsSubscribe]);
 
-  // const generateOnCloser: any | null = useCallback(
-  //   (type: TypeWebSocketTypes) => (ev: CloseEvent) => {
-  //     console.info(`Close WebSocket ${type} ${ev}`);
-  //     console.info(ev);
-  //     setWsSubscribe(undefined);
-  //   },
-  //   [setWsSubscribe]
-  // );
   const generateOnCloser: any | null =
     (type: TypeWebSocketTypes) => (ev: CloseEvent) => {
       console.info(`Close WebSocket ${type} ${ev}`);

@@ -29,10 +29,8 @@ const useGenerateChart = () => {
   useEffect(() => {
     if (wrapperRef.current) {
       chartRef.current = createChart(wrapperRef.current, {
-        // height: wrapperRef.current.getBoundingClientRect().height,
-        // width: wrapperRef.current.getBoundingClientRect().width,
         height: 350,
-        // width: 600,
+
         crosshair: {
           mode: 0,
         },
@@ -61,19 +59,6 @@ const useGenerateChart = () => {
           timeVisible: true,
         },
       });
-      // wrapperRef.current.addEventListener(
-      //   'resize',
-      //   onResize(chartRef, wrapperRef)
-      // );
-      // window.addEventListener('resize', onResize(chartRef, wrapperRef));
-      // wrapperRef.current.addEventListener(
-      //   'load',
-      //   onResize(chartRef, wrapperRef)
-      // );
-      // wrapperRef.current.addEventListener(
-      //   'load',
-      //   onResize(chartRef, wrapperRef)
-      // );
 
       candleChart.current = chartRef.current.addCandlestickSeries();
       candleChart.current.applyOptions({

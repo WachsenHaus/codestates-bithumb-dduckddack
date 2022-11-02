@@ -78,8 +78,6 @@ const TvDrawingChart = () => {
           `w-full h-full relative z-20 bg-nightBlack  drop-shadow-3xl`,
           `p-5`,
           `border-none`
-          // `box-border`,
-          // `rounded-3xl `
         )}
         ref={saveWrapperRef}
       >

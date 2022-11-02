@@ -119,8 +119,6 @@ const CoinBar = () => {
         </div>
       </CoinColumn>
     </MainWrapper>
-
-    // </AnimatePresence>
   );
 };
 

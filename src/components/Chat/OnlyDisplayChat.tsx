@@ -1,6 +1,4 @@
-import { Avatar } from '@mui/material';
 import classNames from 'classnames';
-import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import {
@@ -61,7 +59,6 @@ const OnlyDisplayChat = ({ className }: { className?: string }) => {
               return (
                 <ChatRow
                   type="ALL"
-                  // key={item.id || index}
                   key={`${item.timestamp}_${item.id}`}
                   userId={item.payload?.user.userId}
                   index={index}
